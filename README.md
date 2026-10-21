@@ -40,8 +40,8 @@ cd /home/ubuntu/medrec
 常驻（关终端也不死；重启网页不会打断正在跑的批次）：
 
 ```bash
-setsid nohup /home/ubuntu/anaconda3/envs/vl-env/bin/python \\
-  /home/ubuntu/medrec/webui/server.py \\
+setsid nohup /home/ubuntu/anaconda3/envs/vl-env/bin/python \
+  /home/ubuntu/medrec/webui/server.py \
   > /home/ubuntu/medrec/workspace/webui.log 2>&1 < /dev/null &
 ```
 
@@ -158,6 +158,25 @@ bin/medrec doctor                     # 产线自检：列数 / 服务 / 产物�
 
 ## 10. 换一台机器怎么装
 
+**最省事：一行命令**（slim 框架包 1.5 MB，模型权重安装时在线拉）：
+
+```bash
+export MEDREC_PAT=<你的 GitHub PAT>        # 仓库设成公开后这一行可以去掉
+curl -fsSL -H "Authorization: Bearer $MEDREC_PAT" -H "Accept: application/octet-stream" \
+  https://api.github.com/repos/Iris11-15/MedrecScan-Understand/releases/assets/661145943 \
+  | bash -s -- --dry-run                  # 先只看计划；确认后去掉 --dry-run 再跑一次
+```
+
+它做四件事：下载 slim 包 → `sha256sum -c` 校验 → 解压 → `STRATA_SOURCE=modelscope bash install.sh --weights-online`。
+包里**没有模型权重**：OCR 权重 ≈5 GB 和 Strata 都在安装时从 modelscope 现下
+（实测 39.9–48.8 MB/s；HuggingFace 国内实测 ~0.01 MB/s，所以默认走 modelscope）。
+
+- GitHub 太慢或不通：先把包 scp 到目标机，再 `MEDREC_LOCAL_PKG=/path/medrec-deploy-1.0.1-r54-slim-2xl40.tar.gz bash bootstrap.sh`（校验与安装照跑）。
+- 要离线整包（权重在包里，3.64 GB 两个分卷）：`MEDREC_FAT=1 bash bootstrap.sh`，脚本会自动取两卷、逐个校验、`cat` 合并。
+- 目标机要求：恰好 2 张 L40/L40S、Ubuntu 20.04+、conda、空闲 ≥90 GB（只要 OCR 和宽表就加 `--skip-strata`，约 15 GB）。
+
+### 手动装（离线整包 / 想自己验包时）
+
 看 `deploy/QUICKSTART.txt`（三步：`sha256sum -c` 验包 → `bash install.sh --dry-run` 应 preflight 7/7 → `bash install.sh`）。
 要点：装抽取模型要 **≥105 GB** 空闲盘；只要 OCR 和宽表就加 `--skip-strata`（15 GB）；
 内存不够 62 GB 时装 `STRATA_MODEL=auto bash install.sh` 让它按内存挑档；装完 `bash health.sh` 自检。
@@ -166,6 +185,14 @@ bin/medrec doctor                     # 产线自检：列数 / 服务 / 产物�
 
 包在本仓库的 **Releases**（tag `v1.0.1-r54`）。GitHub 单个 Release 资产上限实测 **2 GiB**
 （API 报 `size must be less than 2147483648`），3.64 GB 的整包传不上去 ⇒ 以**两个分卷**发布：
+
+| 资产 | 是什么 |
+|---|---|
+| `medrec-deploy-1.0.1-r54-slim-2xl40.tar.gz` | **推荐**：框架 1.5 MB（1,534,649 B / `2cedc7ed…92aec`），权重安装时在线拉 |
+| `…slim-2xl40.tar.gz.sha256` | 上面那个包的校验行 |
+| `bootstrap.sh` | 一行安装的入口脚本（asset_id 661145943） |
+| `…2xl40.tar.gz.part00` + `.part01` | 离线整包 3.64 GB（权重在包里），下载后 `cat` 合并 |
+| `SHA256SUMS.parts` / `…2xl40.tar.gz.sha256` | 分卷校验行 / 合并后整包校验行 |
 
 ```bash
 cat medrec-deploy-1.0.1-r54-2xl40.tar.gz.part00 \
