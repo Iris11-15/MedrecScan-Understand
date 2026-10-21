@@ -1,0 +1,25 @@
+# 患者数据与产物：一律不进库（红线⑨）
+/run/
+/workspace/
+/jobs/
+/logs/
+/models/
+/backup/
+/memory/
+/reports/
+# 部署包体 3.6 GB 走 scp/网盘，不进 git
+/deploy/*.tar.gz
+/deploy/*.sha256
+# 杂项
+__pycache__/
+*.pyc
+*.bak
+*.bak.*
+*.bak-*
+*.pre-*
+*.orig
+*~
+.DS_Store
+*.bad-*
+/log/
+/*.out
