@@ -1,0 +1,67 @@
+# config/label_vocab.yaml —— 病历首页上**可能出现的标签写法**种子表
+#
+# 用途：阶段③的确定性配对策略（cell / block / coord）靠这张表在单元格文本里
+#       认出「标签 + 值」粘连的写法（实测奉化首页 OCR 出来是 "姓名潘满兴" 这种无分隔粘连）。
+# 这不是最终映射表：最终映射（模板列 ↔ 首页实际标签）由 tools/pass1_mapping.py 产出，
+# 落 config/field_mapping.yaml + docs/column_mapping.md，人工确认后才生效。
+#
+# canonical = 我们认为的标准写法；aliases = 首页上可能出现的其它写法。
+version: "2026-10-09.1"
+
+labels:
+  - {canonical: 住院号,     aliases: [住院病历号, 住院号, 病案号, 住院流水号]}
+  - {canonical: 病案号,     aliases: [病案号, 病历号, 病案编号]}
+  - {canonical: 姓名,       aliases: [姓名, 患者姓名, 病人姓名]}
+  - {canonical: 性别,       aliases: [性别]}
+  - {canonical: 出生日期,   aliases: [出生日期, 出生年月]}
+  - {canonical: 年龄,       aliases: [年龄, 年龄(岁)]}
+  - {canonical: 国籍,       aliases: [国籍]}
+  - {canonical: 民族,       aliases: [民族]}
+  - {canonical: 出生地,     aliases: [出生地]}
+  - {canonical: 籍贯,       aliases: [籍贯]}
+  - {canonical: 身份证号,   aliases: [身份证号, 身份证号码, 国籍/身份证号]}
+  - {canonical: 职业,       aliases: [职业]}
+  - {canonical: 婚姻,       aliases: [婚姻, 婚姻状况]}
+  - {canonical: 现住址,     aliases: [现住址, 现地址, 住址]}
+  - {canonical: 电话,       aliases: [电话, 联系电话, 本人电话]}
+  - {canonical: 邮编,       aliases: [邮编, 邮政编码]}
+  - {canonical: 户口地址,   aliases: [户口地址]}
+  - {canonical: 工作单位及地址, aliases: [工作单位及地址, 工作单位, 单位及地址]}
+  - {canonical: 单位电话,   aliases: [单位电话]}
+  - {canonical: 联系人姓名, aliases: [联系人姓名, 联系人, 紧急联系人]}
+  - {canonical: 关系,       aliases: [关系, 与患者关系]}
+  - {canonical: 联系人地址, aliases: [联系人地址, 地址]}
+  - {canonical: 联系人电话, aliases: [电话, 联系人电话]}
+  - {canonical: 入院途径,   aliases: [入院途径, 入院方式]}
+  - {canonical: 入院时间,   aliases: [入院时间, 入院日期, 住院时间, 入院日期及时间]}
+  - {canonical: 入院科别,   aliases: [入院科别, 入院科室]}
+  - {canonical: 转科科别,   aliases: [转科科别]}
+  - {canonical: 出院时间,   aliases: [出院时间, 出院日期, 出院日期及时间]}
+  - {canonical: 出院科别,   aliases: [出院科别, 出院科室]}
+  - {canonical: 实际住院,   aliases: [实际住院, 住院天数, 实际住院天数]}
+  - {canonical: 门急诊诊断, aliases: [门(急)诊断, 门急诊诊断, 入院诊断, 出院诊断]}
+  - {canonical: 疾病编码,   aliases: [疾病编码, ICD编码]}
+  - {canonical: 医疗付费方式, aliases: [医疗付费方式, 付费方式, 医保类型]}
+  - {canonical: 健康卡号,   aliases: [健康卡号]}
+  - {canonical: 离院方式,   aliases: [离院方式, 出院方式]}
+  - {canonical: 非医嘱离院, aliases: [非医嘱离院, 非医嘱出院, 自动出院原因]}
+  - {canonical: 死亡患者尸检, aliases: [死亡患者尸检]}
+  # 下面两条不是模板列，但它们是首页上真实存在的**栏目标签**。加进词表是为了让
+  # cell/block 策略在这些边界处切断取值 —— 实测奉化 008「非医嘱出院原因」取到
+  # 「5. 死亡 9. 其他是否有出院31天内再住院计划 ① 1. 无 2. 有，」（跨栏串栏）。
+  - {canonical: 是否有出院31天内再住院计划, aliases: [是否有出院31天内再住院计划, 31天内再住院计划]}
+  - {canonical: 手术及操作, aliases: [手术及操作, 手术操作]}
+  - {canonical: 病案质量,   aliases: [病案质量, 病历质量]}
+  - {canonical: 质控医师,   aliases: [质控医师]}
+  - {canonical: 质控护士,   aliases: [质控护士]}
+  - {canonical: 质控日期,   aliases: [质控日期]}
+  - {canonical: 科主任,     aliases: [科主任]}
+  - {canonical: 主治医师,   aliases: [主治医师]}
+  - {canonical: 住院医师,   aliases: [住院医师]}
+  - {canonical: 责任护士,   aliases: [责任护士]}
+  - {canonical: 编码员,     aliases: [编码员]}
+
+# 首程记录里要找的两节（原文照抄，不改写）
+progress_sections:
+  主诉: [主诉, 患者主诉, 主要症状体征]
+  查体: [查体, 体格检查, 专科查体, 体检]

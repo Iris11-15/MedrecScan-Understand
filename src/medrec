@@ -1,0 +1,400 @@
+#!/usr/bin/env bash
+# ============================================================
+# medrec —— 病历识别/结构化流水线的统一 CLI
+#
+#   PDF/图片 -> 拆页 -> 分层识别 -> 适配 -> 编译 -> F3 变量级路由
+#
+# ★ v2：第 5 步从 `structure.py`（自由抽取 + 别名归并）
+#   换成了「规则层 + 三层升级」的变量级路由（498 列直接对列抽）。
+#   旧链的结构性上限是别名表覆盖的 57 列；新链实测 90.1%。
+#
+# 子命令
+#   doctor                     检查环境与前置文件（不跑数据，秒级）
+#   env                        打印当前生效的解释器/端口/路径
+#   pdf2png   <输入...> --out D            PDF -> 逐页 PNG
+#   recognize <图片目录> --out-dir D      分层识别（layered.py + vLLM；也接受 --out）
+#   pages     <raw目录> --out D           适配成 F2 页数组（默认 --merge）
+#   compile   <pages.json> --out D        F2 编译
+#   route     <compiled根目录> [参数...]  F3 变量级路由（批量，推荐）
+#   route-one <compiled目录>  [参数...]  F3 单份（调试用，发模型）
+#   route-dry <compiled目录>  [参数...]  F3 单份，**不发模型**，只看切批与 token
+#   wide      <route输出目录>  [参数...]  拼成 498 列宽表（登记表）
+#   run       <输入目录>                  ★ 一条命令跑完六阶段宽表产线（= bin/medrec run）
+#                                   24 列（含 主诉/查体）→ run/wide/<批次>/06_table/wide.csv
+#                                   事中采样 / 前置闸门 / RUN_META / 阶段速度表都在这一条里
+#   run-legacy <输入目录>                 旧五步链（pdf2png→recognize→pages→compile→route→wide，498 列）
+#   stages    <批次>                      ★ 只读：重打一个批次的「各阶段速度」表（跑一半也能查）
+#   check     <批次> [--compare B]        ★ 只读：核对产物（命中数/页数/日期/逐格 sha 差异率）
+#
+# 全部参数都会原样透传给底层脚本；本入口只负责
+#   ① 固定解释器（绕开 PATH 里 FSL 抢 python/python3 的坑）
+#   ② 给 recognize 补上默认的 vLLM 参数与显存上限
+#   ③ doctor / env 这两个纯查询
+#
+# 想当命令用：把本目录加进 PATH，或在 ~/.bashrc 里加
+#   export PATH="$HOME/medrec/src:$PATH"
+# ============================================================
+set -uo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# ---------- 可覆盖的配置 ----------
+PY="${MEDREC_PY:-/home/ubuntu/anaconda3/envs/vl-env/bin/python}"
+VLLM_URL="${VLLM_URL:-http://127.0.0.1:8110}"
+# 大模型：升级门控判 low 的那批列走它（必需）
+# 2026-10-07 换代：vLLM :8102(qwen-27b) 已停 → Strata :8080。
+# Strata 的 base_url 带 /v1；`f3_escalate._norm_base` 带不带 /v1 都吃。
+LLM_URL="${LLM_URL:-http://127.0.0.1:8080/v1}"
+LLM_MODEL="${LLM_MODEL:-qwen3.8-flash-next-iq3_s}"
+# 小模型：layer=small/small+llm/rule+small 的那批走它
+SMALL_URL="${SMALL_URL:-http://127.0.0.1:8101}"
+SMALL_MODEL="${SMALL_MODEL:-qwen-small}"
+# OCR：PaddleX 产线（GPU0，:8100）。recognize 的默认后端跟着换。
+VL_URL="${VL_URL:-http://127.0.0.1:8100}"
+# ★ 分层开关，**默认 off**。
+#   同一批 22 例真实病历实测（两两只改一个变量）：
+#       噪声底（同配置连跑两次）   8 格 / 10956 = 0.07%
+#       切批方式（同模型重分组） 200 格 / 10956 = 1.8%
+#       换 8B（同切批换模型）    187 状态 + 70 值 = 2.3%
+#   8 是噪声底，200/187 是它的 25~30 倍 —— 都是真效应，不是抖动。
+#   所以开分层不是「快 12.5%」，是「换掉 2.8% 的答案」，而谁对谁错没金标准。
+#   注册表要的是一套**一致**的答案 → 默认必须能复现 → off。
+F3_SPLIT="${F3_SPLIT:-off}"
+# 2026-10-07：Strata 默认一次只处理一个请求，8 是旧 vLLM 的实测结论。
+# 未重新实测前按 1 起步（strata_probe.py --replay 实测后再调）。
+F3_WORKERS="${F3_WORKERS:-1}"
+VL_LIMIT="${VL_LIMIT:-80}"
+GPU_INIT_MB="${FLAGS_initial_gpu_memory_in_mb:-4096}"
+GPU_FRAC="${FLAGS_fraction_of_gpu_memory_to_use:-0.45}"
+
+if [ -t 1 ]; then
+  C_OK=$'\033[32m'; C_BAD=$'\033[31m'; C_WARN=$'\033[33m'; C_DIM=$'\033[2m'; C_OFF=$'\033[0m'
+else
+  C_OK=''; C_BAD=''; C_WARN=''; C_DIM=''; C_OFF=''
+fi
+ok()   { echo "  ${C_OK}✓${C_OFF} $*"; }
+bad()  { echo "  ${C_BAD}✗${C_OFF} $*"; }
+warn() { echo "  ${C_WARN}!${C_OFF} $*"; }
+dim()  { echo "    ${C_DIM}$*${C_OFF}"; }
+die()  { echo "${C_BAD}[x]${C_OFF} $*" >&2; exit 2; }
+
+usage() {
+  # 打印开头那段注释（从第 2 行到第一个非注释行），去掉末尾那行再剥掉 "# "
+  # —— 不用写死行号：注释块长短变了也不会把脚本代码打出来
+  sed -n '2,/^[^#]/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
+}
+
+_has_flag() {                       # _has_flag --foo "${args[@]}"
+  local f="$1"; shift
+  local a
+  for a in "$@"; do [ "$a" = "$f" ] && return 0; done
+  return 1
+}
+
+# ---------------------------------------------------------------- env
+cmd_env() {
+  echo "解释器     : $PY"
+  echo "脚本目录   : $HERE"
+  echo "OCR  vLLM  : $VLLM_URL"
+  echo "F3 大模型  : $LLM_URL  模型 $LLM_MODEL"
+  echo "F3 小模型  : $SMALL_URL  模型 $SMALL_MODEL"
+  echo "F3 分层    : $F3_SPLIT   （off=全部走大模型，结果可复现；默认 off）"
+  echo "F3 并发    : $F3_WORKERS"
+  echo "VL 块上限  : $VL_LIMIT"
+  echo "识别显存   : initial=${GPU_INIT_MB}MB fraction=${GPU_FRAC}"
+  echo
+  echo "（改法：MEDREC_PY= / VLLM_URL= / LLM_URL= / LLM_MODEL= / SMALL_URL= / SMALL_MODEL= /" 
+  echo "        F3_SPLIT= / F3_WORKERS= / VL_LIMIT= 前缀赋值）"
+}
+
+# ---------------------------------------------------------------- doctor
+cmd_doctor() {
+  local fail=0
+  echo "== medrec doctor（只看环境，不跑数据）"
+  echo
+
+  echo "1) 解释器"
+  if [ -x "$PY" ]; then ok "$PY"; else bad "找不到可执行解释器：$PY"; fail=1; fi
+
+  echo "2) 同目录脚本"
+  local f
+  # vl_service.py 必须在内：layered.py 第 69 行直接 `import vl_service`
+  for f in layered.py vl_service.py pdf2png.py to_pages.py compile.py order.py tables.py textio.py \
+         route_f3.py f3_escalate.py f3_prompt_gen.py f3_batch.py f3_to_wide.py; do
+    if [ -f "$HERE/$f" ]; then ok "$f"; else bad "缺 $f"; fail=1; fi
+  done
+
+  echo "3) 依赖（在这个解释器里）"
+  if [ -x "$PY" ]; then
+    local mod
+    for mod in pypdfium2 requests PIL; do
+      if "$PY" -c "import $mod" >/dev/null 2>&1; then ok "$mod"; else bad "缺 $mod"; fail=1; fi
+    done
+    local paddlex_ok=0
+    "$PY" -c "import paddlex, paddleocr" >/dev/null 2>&1 && paddlex_ok=1
+    if [ "$paddlex_ok" = 1 ]; then ok "paddlex / paddleocr"; else bad "paddlex 或 paddleocr 不在这个解释器里"; fail=1; fi
+  else
+    warn "解释器不可用，跳过依赖检查"
+  fi
+
+  echo "4) layered.py 的表格提示词补丁"
+  if [ -f "$HERE/layered.py" ]; then
+    # 注意：grep -c 无匹配时会「打印 0 且返回非 0」，所以不能写 `|| echo 0`
+    # （那会把变量拼成两行 0\n0，下面 -ge 就会报 "integer expression expected"）
+    local n; n="$(grep -c 'Table Recognition' "$HERE/layered.py" 2>/dev/null)"
+    case "$n" in ''|*[!0-9]*) n=0 ;; esac
+    if [ "$n" -ge 1 ]; then ok "已打补丁（命中 $n 处）"; else bad "未打补丁：表格块会退化成纯文本"; fail=1; fi
+  fi
+
+  echo "5) 服务"
+  local u name
+  for u in "$LLM_URL|F3 大模型（必需）"; do
+    name="${u#*|}"; u="${u%|*}"
+    # LLM_URL 现在默认**带 /v1**（Strata 的 base_url 就是 …/v1）。
+    # 原来这里无条件拼 `$u/v1/models` → 变成 `/v1/v1/models`，服务活着也报不可达。
+    base="${u%/}"; base="${base%/v1}"
+    if curl -sf -m 4 "$base/v1/models" >/dev/null 2>&1; then
+      ok "$name  $u"
+    else
+      bad "$name 不可达：$u"; dim "启动示例：curl -s $base/v1/models  （看日志里的报错）"; fail=1
+    fi
+  done
+  # OCR 现在是 PaddleX 产线（:8100）：健康检查是 GET /health，**没有 /v1/models**
+  # （根路径 404，Swagger 在 /docs）。要回 vLLM 后端就自己 curl $VLLM_URL/v1/models。
+  if curl -sf -m 4 "${VL_URL%/}/health" >/dev/null 2>&1; then
+    ok "OCR PaddleX（必需）  $VL_URL"
+  else
+    bad "OCR PaddleX 不可达：$VL_URL"
+    dim "启动示例：curl -s ${VL_URL%/}/health   推理是 POST ${VL_URL%/}/layout-parsing"
+    fail=1
+  fi
+  # ★ 服务端口通了 ≠ **引擎拼出来的那个 URL** 通。
+  #   这里踩过一个真坑：入口的 `LLM_URL` 是**不带 `/v1`** 的（doctor 自己拼
+  #   `$u/v1/models`），而 `f3_escalate._chat_url()` 原来要求**带 `/v1`**，
+  #   桥接时拼出 `…:8102/chat/completions` —— 实测 **53/53 个请求全 404**，
+  #   而上面那两行是**绿的**。所以这里直接问引擎"你会打哪个 URL"，并真发一次。
+  local chat code
+  chat="$(env QWEN_URL="$LLM_URL" "$PY" -c "
+import sys; sys.path.insert(0, '$HERE')
+import f3_escalate as E
+print(E._chat_url())
+" 2>/dev/null)"
+  if [ -z "$chat" ]; then
+    warn "问不出引擎的端点（f3_escalate 没装上？）"
+  elif ! case "$chat" in */v1/chat/completions) true ;; *) false ;; esac; then
+    bad "引擎拼出的端点形状不对：$chat"; fail=1
+  else
+    code="$(curl -s -o /dev/null -w '%{http_code}' -m 15 -X POST "$chat" \
+            -H 'Content-Type: application/json' \
+            -d "{\"model\":\"$LLM_MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":1}" \
+            2>/dev/null)"
+    if [ "$code" = "200" ]; then
+      ok "引擎端点真能出字（HTTP 200）  $chat"
+    else
+      bad "引擎端点返回 HTTP $code：$chat"; fail=1
+      dim "  404 多半是少了 /v1（base 带不带都该被 _norm_base 补上）"
+      local lbase="${LLM_URL%/}"; lbase="${lbase%/v1}"
+      dim "  手工对照：curl -s $lbase/v1/models | head -c 200"
+    fi
+  fi
+
+  # 小模型**不是必需**：不在的话 route 会自动不分层（实测避免 16% 的墙钟白开销），
+  # 所以这里只 warn，不算未就绪。
+  if curl -sf -m 4 "$SMALL_URL/v1/models" >/dev/null 2>&1; then
+    ok "F3 小模型（可选）  $SMALL_URL"
+  else
+    warn "F3 小模型不可达：$SMALL_URL"
+    dim "不影响跑通 —— 小模型层会自动并回大模型（三层退化为两层）"
+  fi
+
+  echo "6) 显存"
+  if command -v nvidia-smi >/dev/null 2>&1; then
+    nvidia-smi --query-gpu=index,memory.used,memory.free --format=csv,noheader | sed 's/^/    /'
+  else
+    warn "没有 nvidia-smi"
+  fi
+
+  echo
+  if [ "$fail" = 0 ]; then
+    echo "${C_OK}== 就绪：可以直接 medrec run <输入目录>${C_OFF}"
+  else
+    echo "${C_BAD}== 有未就绪项（上面标 ✗ 的）${C_OFF}"
+  fi
+  return "$fail"
+}
+
+# ---------------------------------------------------------------- 转发
+cmd_pdf2png() { exec "$PY" "$HERE/pdf2png.py" "$@"; }
+
+cmd_recognize() {
+  # 把 --out 当 --out-dir 的别名（layered.py 原生叫 --out-dir；其他子命令都叫 --out，
+  # 不统一最容易敲错，所以这里两种都收）
+  local args=() a
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --out) args+=(--out-dir); shift
+             [ $# -gt 0 ] && { args+=("$1"); shift; } ;;
+      *)     args+=("$1"); shift ;;
+    esac
+  done
+  # 默认走 PaddleX 产线（:8100 /layout-parsing）。要回 vLLM 后端显式给
+  # --vl-backend vllm --vl-url $VLLM_URL。
+  _has_flag --vl-backend      "${args[@]}" || args+=(--vl-backend paddle)
+  _has_flag --vl-url          "${args[@]}" || args+=(--vl-url "$VL_URL")
+  _has_flag --vl-limit        "${args[@]}" || args+=(--vl-limit "$VL_LIMIT")
+  _has_flag --no-vl-autostart "${args[@]}" || args+=(--no-vl-autostart)
+  FLAGS_initial_gpu_memory_in_mb="$GPU_INIT_MB" \
+  FLAGS_fraction_of_gpu_memory_to_use="$GPU_FRAC" \
+    exec "$PY" "$HERE/layered.py" "${args[@]}"
+}
+
+cmd_pages() {
+  local args=("$@")
+  _has_flag --merge "${args[@]}" || _has_flag --split "${args[@]}" || args+=(--merge)
+  exec "$PY" "$HERE/to_pages.py" "${args[@]}"
+}
+
+cmd_compile()   { exec "$PY" "$HERE/compile.py" "$@"; }
+# ---- F3 变量级路由 ----------------------------------------------------
+# `route`     批量：收一批 compiled 目录一起跑（**并发才是成本杠杆**）
+# `route-one` 单份：调试用，发模型
+# `route-dry` 单份：不联网，只看切批与 token
+cmd_route() {
+  local cases="" out="" rest=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --out|--outdir) out="${2:-}"; shift 2 ;;
+      -*)             rest+=("$1"); shift ;;
+      *)              [ -z "$cases" ] && cases="$1" || rest+=("$1"); shift ;;
+    esac
+  done
+  [ -n "$cases" ] || die "用法: medrec route <compiled 根目录> [--out 输出目录] [--workers N]"
+  [ -d "$cases" ] || die "目录不存在：$cases"
+  [ -n "$out" ] || out="$(cd "$cases/.." && pwd)/structured"
+  _has_flag --workers "${rest[@]}" || rest+=(--workers "$F3_WORKERS")
+  # 小模型端点不在就不传它，让 route 自己判断（分不分层是它决定的）
+  exec env QWEN_URL="$LLM_URL" QWEN_MODEL="$LLM_MODEL" \
+       QWEN_SMALL_URL="$SMALL_URL" QWEN_SMALL_MODEL="$SMALL_MODEL" \
+       F3_SPLIT="$F3_SPLIT" \
+       "$PY" "$HERE/f3_batch.py" --cases "$cases" --outdir "$out" "${rest[@]}"
+}
+
+cmd_route_one() {
+  local dir="" out="" rest=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --out) out="${2:-}"; shift 2 ;;
+      -*)    rest+=("$1"); shift ;;
+      *)     [ -z "$dir" ] && dir="$1" || rest+=("$1"); shift ;;
+    esac
+  done
+  [ -n "$dir" ] || die "用法: medrec route-one <compiled 目录> [--out 结果.json]"
+  [ -d "$dir" ] || die "目录不存在：$dir"
+  [ -n "$out" ] || out="$dir/../$(basename "$dir").f3.json"
+  local rule="${out%.json}.rule.json"
+  # 第 1 步：规则层（纯 CPU，几百毫秒）
+  env QWEN_URL="$LLM_URL" QWEN_MODEL="$LLM_MODEL" \
+      "$PY" "$HERE/route_f3.py" --sections "$dir/sections_text.json" \
+      --blocks "$dir/compiled.json" --tables "$dir/tables.json" \
+      --out "$rule" || exit $?
+  # 第 2 步：升级（发模型；结果落 $out）
+  exec env QWEN_URL="$LLM_URL" QWEN_MODEL="$LLM_MODEL" \
+       QWEN_SMALL_URL="$SMALL_URL" QWEN_SMALL_MODEL="$SMALL_MODEL" \
+       F3_SPLIT="$F3_SPLIT" \
+       "$PY" "$HERE/f3_escalate.py" --sections "$dir/sections_text.json" \
+       --tables "$dir/tables.json" --rule "$rule" --out "$out" "${rest[@]}"
+}
+
+cmd_route_dry() {
+  local dir="" rest=()
+  for a in "$@"; do
+    case "$a" in
+      -*) rest+=("$a") ;;
+      *)  [ -z "$dir" ] && dir="$a" || rest+=("$a") ;;
+    esac
+  done
+  [ -n "$dir" ] || die "用法: medrec route-dry <compiled 目录>"
+  local rule="/tmp/$(basename "$dir").rule.json"
+  "$PY" "$HERE/route_f3.py" --sections "$dir/sections_text.json" \
+    --blocks "$dir/compiled.json" --tables "$dir/tables.json" --out "$rule" || exit $?
+  exec env QWEN_URL="$LLM_URL" QWEN_MODEL="$LLM_MODEL" \
+       "$PY" "$HERE/f3_escalate.py" --sections "$dir/sections_text.json" \
+       --tables "$dir/tables.json" --rule "$rule" --dry "${rest[@]}"
+}
+
+cmd_wide() {
+  local indir="" out="" rest=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --out) out="${2:-}"; shift 2 ;;
+      -*)    rest+=("$1"); shift ;;
+      *)     [ -z "$indir" ] && indir="$1" || rest+=("$1"); shift ;;
+    esac
+  done
+  [ -n "$indir" ] || die "用法: medrec wide <route 的输出目录> [--out 宽表.xlsx]"
+  [ -n "$out" ] || out="$indir/../登记表.xlsx"
+  exec "$PY" "$HERE/f3_to_wide.py" --indir "$indir" --out "$out" "${rest[@]}"
+}
+# round31 §5 —— `medrec run` 前门改指**六阶段宽表产线**（bin/medrec → wide.tools.run_steps）。
+#   为什么：PATH 里的 medrec = 本脚本（~/.bashrc:192 把 ~/medrec/src 加进 PATH），
+#   而 `bash medrec run <目录>` 此前落到 batch_run.sh = 旧五步链（498 列宽表）。
+#   round24–28 的全部速度/精确度基线（2.672 / 3.839 / 3.774 / 2.667 / 2.735 s/例、
+#   907/960、主诉/查体 39/40）都是**六阶段链**的数，旧链既没有阶段速度表也没有
+#   RUN_META ⇒ 前门与基线不是同一条链（workspace/round31/chain_diff.md §1、§8）。
+#   旧链**没有删**：`medrec run-legacy` / `medrec doctor-legacy` 原样可用。
+#   回滚：cp -p workspace/round31/backup/medrec.pre src/medrec
+cmd_run() {
+  local wide="$HERE/../bin/medrec"
+  [ -x "$wide" ] || { echo "${C_BAD}[x]${C_OFF} 找不到六阶段产线入口：$wide" >&2; return 2; }
+  echo "[i] medrec run = 六阶段宽表产线（locate→s1→s2→s3→s4→s5→s6，24 列含 主诉/查体）"
+  echo "    入口 $wide；旧五步链（498 列）= medrec run-legacy"
+  exec "$wide" run "$@"
+}
+
+cmd_run_legacy() { exec env PY="$PY" VLLM_URL="$VLLM_URL" LLM_URL="$LLM_URL" LLM_MODEL="$LLM_MODEL" \
+                      SMALL_URL="$SMALL_URL" SMALL_MODEL="$SMALL_MODEL" \
+                      VL_URL="$VL_URL" \
+                      F3_SPLIT="$F3_SPLIT" F3_WORKERS="$F3_WORKERS" \
+                      VL_LIMIT="$VL_LIMIT" bash "$HERE/batch_run.sh" "$@"; }
+
+# round31 §9.4 —— doctor 前门 = bin/medrec doctor（含「文档 vs 现网」对照器）；
+# 旧链体检（F3 小模型 / layered 补丁 / 识别显存）保留为 doctor-legacy。
+cmd_doctor_wide() {
+  local wide="$HERE/../bin/medrec"
+  [ -x "$wide" ] || { echo "${C_BAD}[x]${C_OFF} 找不到六阶段产线入口：$wide" >&2; return 2; }
+  echo "[i] medrec doctor = 六阶段产线体检（含 §9.4 文档 vs 现网对照）；旧链体检 = medrec doctor-legacy"
+  exec "$wide" doctor "$@"
+}
+
+# round31 §5.5 —— `medrec stages <批次>` / `medrec check <批次>`：只读，不跑数据。
+#   前门必须转发，否则用户按任务书敲 `medrec stages` 会落到「未知子命令」。
+cmd_wide_query() {  # cmd_wide_query <subcmd> <args...>
+  local wide="$HERE/../bin/medrec"
+  [ -x "$wide" ] || { echo "${C_BAD}[x]${C_OFF} 找不到六阶段产线入口：$wide" >&2; return 2; }
+  exec "$wide" "$@"
+}
+
+# ---------------------------------------------------------------- 入口
+CMD="${1:-help}"
+[ $# -gt 0 ] && shift
+
+case "$CMD" in
+  help|-h|--help) usage ;;
+  env)            cmd_env ;;
+  doctor)         cmd_doctor_wide ;;
+  doctor-legacy)  cmd_doctor ;;
+  pdf2png)        cmd_pdf2png "$@" ;;
+  recognize)      cmd_recognize "$@" ;;
+  pages)          cmd_pages "$@" ;;
+  compile)        cmd_compile "$@" ;;
+  route)          cmd_route "$@" ;;
+  route-one)      cmd_route_one "$@" ;;
+  route-dry)      cmd_route_dry "$@" ;;
+  wide)           cmd_wide "$@" ;;
+  structure)      die "structure 已在 v2 移除 —— 用 medrec route（批量）或 route-one（单份）" ;;
+  run)            cmd_run "$@" ;;
+  run-legacy)     cmd_run_legacy "$@" ;;
+  stages)         cmd_wide_query stages "$@" ;;
+  check)          cmd_wide_query check "$@" ;;
+  *)              echo "${C_BAD}[x]${C_OFF} 未知子命令：$CMD" >&2; echo; usage >&2; exit 2 ;;
+esac

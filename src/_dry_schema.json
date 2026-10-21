@@ -1,0 +1,164 @@
+{
+  "type": "object",
+  "properties": {
+    "尿酸(mg/dL)": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    },
+    "糖化血红蛋白检查时间": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    },
+    "葡萄糖（mmol/L）": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    },
+    "血常规检查时间": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    },
+    "出院主要诊断": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    },
+    "出院其它诊断": {
+      "type": "object",
+      "properties": {
+        "值": {
+          "type": "string"
+        },
+        "块": {
+          "type": "string"
+        },
+        "状态": {
+          "type": "string",
+          "enum": [
+            "有值",
+            "明确没有",
+            "未提及"
+          ]
+        }
+      },
+      "required": [
+        "值",
+        "块",
+        "状态"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "尿酸(mg/dL)",
+    "糖化血红蛋白检查时间",
+    "葡萄糖（mmol/L）",
+    "血常规检查时间",
+    "出院主要诊断",
+    "出院其它诊断"
+  ],
+  "additionalProperties": false
+}

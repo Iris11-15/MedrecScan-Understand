@@ -1,0 +1,44 @@
+medrec 部署包 medrec-deploy-1.0.0-r52-2xl40 —— 2×L40 目标机一键安装
+==================================================================
+
+0) 先验包没坏（sha256 与 bundle 同目录，一起发过去的）：
+     sha256sum -c medrec-deploy-1.0.0-r52-2xl40.tar.gz.sha256
+   ★ 这个 sidecar 是权威值；DELIVERY.md 里的 sha 只是快照（那份文档在包内，改它就变）。
+
+1) 把 medrec-deploy-1.0.0-r52-2xl40.tar.gz 拷到目标机任意目录，解压：
+     tar -xzf medrec-deploy-1.0.0-r52-2xl40.tar.gz && cd medrec-deploy-1.0.0-r52-2xl40
+
+★ 磁盘先看清：装 Strata 需要 ≥105 GB 空闲（包+解压 15 GB + Strata 90 GB）；
+  只要 OCR+宽表不要 Strata 就 15 GB（第 3 步加 --skip-strata）。
+
+2) 先只看计划、不落任何盘：
+     bash install.sh --dry-run
+   （全新目录下这条应该 rc=0、preflight 7/7；不是 7/7 就先按 [FAIL] 后面的补救改，别硬装）
+
+3) 真装（默认：包内 assets 出权重 + 代跑 conda create/pip 装三个环境 + 从 GitHub 抓 Strata + 起服务 + 跑 2 例冒烟）：
+     bash install.sh
+   国内网络慢时加镜像：
+     PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple bash install.sh
+   ★ 慢是正常：解包 ~6 min、pip 三个环境 735 个包、Strata 权重 86 GB。别以为卡死；
+     进度看 install.sh 的 [OK]/[..] 行，装坏了 bash install.sh --rollback
+
+4) 权重不走包（走网络现下，约 5 GB）：
+     bash install.sh --weights-online
+
+5) 只装不跑 / 只要 OCR 不要 Strata：
+     bash install.sh --no-start --skip-strata
+
+5b) 目标机内存不够 62 GB 时装 Strata（默认档位 IQ3_S 要 62 GB 主机内存）：
+      STRATA_MODEL=auto bash install.sh        # 让它按内存挑档，挑中哪档会明打一行
+      STRATA_MODEL=IQ3_XXS bash install.sh     # 或自己指定（IQ3_XXS 60 / IQ2_XS 48 / Q2_0 48 GB）
+    ★ 默认【不会】自动降档：内存不够就直接停，不悄悄换个差的模型（档位表见 DELIVERY.md §1.6）。
+
+6) 装坏了回滚（只删本次安装自建的东西，恢复被改的配置备份）：
+     bash install.sh --rollback
+
+装完自检与调参：
+     bash health.sh                       # 三个服务在不在、绑的是不是 127.0.0.1
+     bash tune.sh --level L0,L1,L2        # 只读探测，产出 workspace/tuning.json，不改配置不重启服务
+     bash tune.sh --sweep --bench-dir /path/to/病历目录    # 压测扫参，20-60 min，默认不跑
+
+细节与已知未验证项：DELIVERY.md（§5 未知项 / §6 待裁决）

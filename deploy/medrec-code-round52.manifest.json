@@ -1,0 +1,1205 @@
+{
+ "package": "medrec-code-round52.tar.gz",
+ "built": "2026-10-20T11:50:08+0800",
+ "compressor": "pigz -9",
+ "archive_sha256": "8c17a7f0fdaeb461ebdc94d2d6c8682e134ea490362d523fe175ed7a4254f9bd",
+ "archive_bytes": 792077,
+ "file_count": 138,
+ "entry_count": 149,
+ "total_bytes": 2477507,
+ "build_seconds": 0.0,
+ "files": [
+  {
+   "archive": "medrec-code/src",
+   "source": "/home/ubuntu/medrec/src",
+   "kind": "dir",
+   "size": 12288,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/src/sections",
+   "source": "/home/ubuntu/medrec/src/sections",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/src/wide",
+   "source": "/home/ubuntu/medrec/src/wide",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/src/MANIFEST.txt",
+   "source": "/home/ubuntu/medrec/src/MANIFEST.txt",
+   "kind": "file",
+   "size": 1894,
+   "mode": "0o600",
+   "sha256": "52a419fdbd26a47ff9b09d90c2c980ded1fcd9a49ca31be5162c9847c004c008"
+  },
+  {
+   "archive": "medrec-code/src/README-batch.md",
+   "source": "/home/ubuntu/medrec/src/README-batch.md",
+   "kind": "file",
+   "size": 6381,
+   "mode": "0o664",
+   "sha256": "85761089ef9b084153464f976f2edc4763b7ece18ea995f1014352a9f5e381ed"
+  },
+  {
+   "archive": "medrec-code/src/UPGRADE-F5.md",
+   "source": "/home/ubuntu/medrec/src/UPGRADE-F5.md",
+   "kind": "file",
+   "size": 20657,
+   "mode": "0o644",
+   "sha256": "7eb3f2d4d78a7ce4ee561c028c67db32278f9420a9c51e9dffa32f3210a673ba"
+  },
+  {
+   "archive": "medrec-code/src/_cxw_test",
+   "source": "/home/ubuntu/medrec/src/_cxw_test",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-code/src/_dry_schema.json",
+   "source": "/home/ubuntu/medrec/src/_dry_schema.json",
+   "kind": "file",
+   "size": 3135,
+   "mode": "0o664",
+   "sha256": "c58a9bf3ac0145bb07ad9a641114c2311c4de20b42aeed6f6aea6e14d0778b70"
+  },
+  {
+   "archive": "medrec-code/src/_dry_system.txt",
+   "source": "/home/ubuntu/medrec/src/_dry_system.txt",
+   "kind": "file",
+   "size": 1584,
+   "mode": "0o664",
+   "sha256": "0d89b755d9b8e3a60f4e9b149ba3aa79f7e77002f01d31268cad07964188537a"
+  },
+  {
+   "archive": "medrec-code/src/arbiter.py",
+   "source": "/home/ubuntu/medrec/src/arbiter.py",
+   "kind": "file",
+   "size": 6135,
+   "mode": "0o664",
+   "sha256": "c14197a255a5f7abc343978a51f2aeac4a7f6097dbba2d99b670b5af01c87dc4"
+  },
+  {
+   "archive": "medrec-code/src/batch_run.sh",
+   "source": "/home/ubuntu/medrec/src/batch_run.sh",
+   "kind": "file",
+   "size": 16534,
+   "mode": "0o775",
+   "sha256": "34aef5a56c0447f607890ce170e8687cae55034c87ad06b9577a6b0c1490d808"
+  },
+  {
+   "archive": "medrec-code/src/client_example.py",
+   "source": "/home/ubuntu/medrec/src/client_example.py",
+   "kind": "file",
+   "size": 7595,
+   "mode": "0o600",
+   "sha256": "d17916c9231d360464f460b8ab63d0daf9762c5d687d3c7b5fcdcbd11d4ee913"
+  },
+  {
+   "archive": "medrec-code/src/compile.py",
+   "source": "/home/ubuntu/medrec/src/compile.py",
+   "kind": "file",
+   "size": 17220,
+   "mode": "0o664",
+   "sha256": "6145d951a12f36cd11e89abd32293127d489287ad6943b4341883ce8a4356236"
+  },
+  {
+   "archive": "medrec-code/src/f3_batch.py",
+   "source": "/home/ubuntu/medrec/src/f3_batch.py",
+   "kind": "file",
+   "size": 35110,
+   "mode": "0o664",
+   "sha256": "fc40239ae3d535b3401f5c271a8b0cf027adf24a9470361d702d6d66357d464f"
+  },
+  {
+   "archive": "medrec-code/src/f3_escalate.py",
+   "source": "/home/ubuntu/medrec/src/f3_escalate.py",
+   "kind": "file",
+   "size": 40785,
+   "mode": "0o664",
+   "sha256": "d27e64f4218d27b9fece1aa0b11698a44b6eb13760676b7a5d13aaa073a5310b"
+  },
+  {
+   "archive": "medrec-code/src/f3_fill_policy.py",
+   "source": "/home/ubuntu/medrec/src/f3_fill_policy.py",
+   "kind": "file",
+   "size": 24173,
+   "mode": "0o644",
+   "sha256": "31b1675d8b5fd70b29e4254d9b06a518a5490a7c04631a97576b6a86d42023b9"
+  },
+  {
+   "archive": "medrec-code/src/f3_ocr_yield.py",
+   "source": "/home/ubuntu/medrec/src/f3_ocr_yield.py",
+   "kind": "file",
+   "size": 7764,
+   "mode": "0o644",
+   "sha256": "05104a632dbc9db52ff646efac343c13d6bd4523520ed480308ba4f4d7be63a0"
+  },
+  {
+   "archive": "medrec-code/src/f3_prompt_gen.py",
+   "source": "/home/ubuntu/medrec/src/f3_prompt_gen.py",
+   "kind": "file",
+   "size": 16484,
+   "mode": "0o664",
+   "sha256": "85fbe2f17357a28c728ea5fbc990ccb391ee3fd88839e7c3dbb9c24891da6490"
+  },
+  {
+   "archive": "medrec-code/src/f3_schema.json",
+   "source": "/home/ubuntu/medrec/src/f3_schema.json",
+   "kind": "file",
+   "size": 1506,
+   "mode": "0o644",
+   "sha256": "c77e3fe19268a53493dc0bf1573e7903132fb30bcce821fe2eed4a165afc3468"
+  },
+  {
+   "archive": "medrec-code/src/f3_system.txt",
+   "source": "/home/ubuntu/medrec/src/f3_system.txt",
+   "kind": "file",
+   "size": 24086,
+   "mode": "0o644",
+   "sha256": "a0eb30cf29972139ac863bc5e906b34f9b009b28c6db08221d5757a8ad354078"
+  },
+  {
+   "archive": "medrec-code/src/f3_to_wide.py",
+   "source": "/home/ubuntu/medrec/src/f3_to_wide.py",
+   "kind": "file",
+   "size": 28249,
+   "mode": "0o644",
+   "sha256": "4162386e43f91bebe0e3b1db641aab1b6b064c258f824e4954623c2c6b39251c"
+  },
+  {
+   "archive": "medrec-code/src/f3_zero_hit_diag.py",
+   "source": "/home/ubuntu/medrec/src/f3_zero_hit_diag.py",
+   "kind": "file",
+   "size": 8169,
+   "mode": "0o644",
+   "sha256": "827d28f4130db0ac77fca251bd46ef6f3cf8ada2e5d9eec205708285c353284b"
+  },
+  {
+   "archive": "medrec-code/src/f4_alias.json",
+   "source": "/home/ubuntu/medrec/src/f4_alias.json",
+   "kind": "file",
+   "size": 3389,
+   "mode": "0o644",
+   "sha256": "c112a700408773334cbe9c95097b78f0b4f0867e75a06353e1a5062c5d33c69f"
+  },
+  {
+   "archive": "medrec-code/src/f4_check.py",
+   "source": "/home/ubuntu/medrec/src/f4_check.py",
+   "kind": "file",
+   "size": 16071,
+   "mode": "0o644",
+   "sha256": "e49f4963b9f446b9e8eb804f8d9e5549d76bf1d13fc86a8ba711fa89f8ae0bd7"
+  },
+  {
+   "archive": "medrec-code/src/f4_columns.json",
+   "source": "/home/ubuntu/medrec/src/f4_columns.json",
+   "kind": "file",
+   "size": 34194,
+   "mode": "0o644",
+   "sha256": "551917e2d19dc12d5b6a5fe7673a298602a61e84546a587edb60c4d8bde841ab"
+  },
+  {
+   "archive": "medrec-code/src/f4_table.py",
+   "source": "/home/ubuntu/medrec/src/f4_table.py",
+   "kind": "file",
+   "size": 23559,
+   "mode": "0o664",
+   "sha256": "b0428d603462ee42c6281799e42bb49a4038115f4cd8e64c91a5de2776210cc8"
+  },
+  {
+   "archive": "medrec-code/src/f6.sh",
+   "source": "/home/ubuntu/medrec/src/f6.sh",
+   "kind": "file",
+   "size": 1214,
+   "mode": "0o775",
+   "sha256": "3a0beeea10098a314f7fdc40b02387335bb468c245b5acca800120935a0eb831"
+  },
+  {
+   "archive": "medrec-code/src/f6_prep.py",
+   "source": "/home/ubuntu/medrec/src/f6_prep.py",
+   "kind": "file",
+   "size": 2028,
+   "mode": "0o664",
+   "sha256": "445cb82851cb4a6e44e7e9db34a0a370e3885b37fe6ccb63d79f679c32355e07"
+  },
+  {
+   "archive": "medrec-code/src/field_ocr.py",
+   "source": "/home/ubuntu/medrec/src/field_ocr.py",
+   "kind": "file",
+   "size": 11634,
+   "mode": "0o600",
+   "sha256": "b15ece6abc1f24e7a5cbb664e32d5125424b7ad49675b000729429d0438b3e10"
+  },
+  {
+   "archive": "medrec-code/src/gold.py",
+   "source": "/home/ubuntu/medrec/src/gold.py",
+   "kind": "file",
+   "size": 4290,
+   "mode": "0o664",
+   "sha256": "3f351f7bd59f6d81daf4b3b14c8b8cc0d41b59993ab115bc1515651d4c9d1d2c"
+  },
+  {
+   "archive": "medrec-code/src/install.sh",
+   "source": "/home/ubuntu/medrec/src/install.sh",
+   "kind": "file",
+   "size": 3327,
+   "mode": "0o664",
+   "sha256": "f4072b044797a775999831e1769b815935337cb954cad75b3beb7603917889f1"
+  },
+  {
+   "archive": "medrec-code/src/laya_forms.json",
+   "source": "/home/ubuntu/medrec/src/laya_forms.json",
+   "kind": "file",
+   "size": 8817,
+   "mode": "0o664",
+   "sha256": "1b9ca648bde29c642c1c566c3d8dcf9817a91dddfa5e1be47b992749a7079d89"
+  },
+  {
+   "archive": "medrec-code/src/laya_forms.json.exp-v2",
+   "source": "/home/ubuntu/medrec/src/laya_forms.json.exp-v2",
+   "kind": "file",
+   "size": 8826,
+   "mode": "0o664",
+   "sha256": "5995289cf0fead81c79230152ccaf791f2841dec2a7be558c637e32958f5c762"
+  },
+  {
+   "archive": "medrec-code/src/laya_service.py",
+   "source": "/home/ubuntu/medrec/src/laya_service.py",
+   "kind": "file",
+   "size": 16214,
+   "mode": "0o664",
+   "sha256": "42de07fa3352be4deda07b1770992c13e435af60278d71d4ce65d84cd64a4617"
+  },
+  {
+   "archive": "medrec-code/src/layered.py",
+   "source": "/home/ubuntu/medrec/src/layered.py",
+   "kind": "file",
+   "size": 32594,
+   "mode": "0o600",
+   "sha256": "2daae8a1e6da0b3aac1e3f1ab883873d42a2a6d5d18396f8a748ef442dbaed4d"
+  },
+  {
+   "archive": "medrec-code/src/medrec",
+   "source": "/home/ubuntu/medrec/src/medrec",
+   "kind": "file",
+   "size": 18966,
+   "mode": "0o775",
+   "sha256": "30957f2bc9c27c3a2f40a6e0c39cce590e1257eac024dccdbd1bc3ba203d3dd0"
+  },
+  {
+   "archive": "medrec-code/src/order.py",
+   "source": "/home/ubuntu/medrec/src/order.py",
+   "kind": "file",
+   "size": 17475,
+   "mode": "0o664",
+   "sha256": "aa68561dbf5dbf0fd24fe99bfead3d9beb647a03f83dba9efd636121c6a54ed6"
+  },
+  {
+   "archive": "medrec-code/src/pdf2png.py",
+   "source": "/home/ubuntu/medrec/src/pdf2png.py",
+   "kind": "file",
+   "size": 22162,
+   "mode": "0o644",
+   "sha256": "6e34983580e41cff8367fc1be42442212c1727a0b567d96047ff5d18681bcf68"
+  },
+  {
+   "archive": "medrec-code/src/route.py",
+   "source": "/home/ubuntu/medrec/src/route.py",
+   "kind": "file",
+   "size": 8456,
+   "mode": "0o664",
+   "sha256": "d7d328b655ffb738b26aef28602af3405fce41d9dcc1a6d58fc98726f9135d4c"
+  },
+  {
+   "archive": "medrec-code/src/route_f3.py",
+   "source": "/home/ubuntu/medrec/src/route_f3.py",
+   "kind": "file",
+   "size": 72515,
+   "mode": "0o664",
+   "sha256": "77fd19ca825c202dc11c9e2030a8e81cb62ff4ccb91ad42a361a3cd1368ee6cc"
+  },
+  {
+   "archive": "medrec-code/src/section_alias.json",
+   "source": "/home/ubuntu/medrec/src/section_alias.json",
+   "kind": "file",
+   "size": 5636,
+   "mode": "0o664",
+   "sha256": "76111c4bd329fd55e75bc762e73b84c9fba023eb4f5f7f82951136644adfce84"
+  },
+  {
+   "archive": "medrec-code/src/smoke_test.py",
+   "source": "/home/ubuntu/medrec/src/smoke_test.py",
+   "kind": "file",
+   "size": 4413,
+   "mode": "0o600",
+   "sha256": "63c72f3a20d34fe7c42b43c587f228ea4d8421d6031d893d3bacf23313033b42"
+  },
+  {
+   "archive": "medrec-code/src/stack.py",
+   "source": "/home/ubuntu/medrec/src/stack.py",
+   "kind": "file",
+   "size": 35163,
+   "mode": "0o600",
+   "sha256": "45c5cb65456fe61b3602448b41e19f4b8a144495b177500ad9f6534f26b45142"
+  },
+  {
+   "archive": "medrec-code/src/strata_probe.py",
+   "source": "/home/ubuntu/medrec/src/strata_probe.py",
+   "kind": "file",
+   "size": 11680,
+   "mode": "0o664",
+   "sha256": "763c1b7c0bd8c7445ffe87a00d5207b28d5fab3de98dd3e03a849dd5c5891e48"
+  },
+  {
+   "archive": "medrec-code/src/strata_rehearsal.py",
+   "source": "/home/ubuntu/medrec/src/strata_rehearsal.py",
+   "kind": "file",
+   "size": 5569,
+   "mode": "0o664",
+   "sha256": "dce4da97be0b988db8a49bbc134b5cbc9694ff5761126460d0ee5370ef7dc616"
+  },
+  {
+   "archive": "medrec-code/src/structure.py",
+   "source": "/home/ubuntu/medrec/src/structure.py",
+   "kind": "file",
+   "size": 31500,
+   "mode": "0o664",
+   "sha256": "d7636342327293aa10f424a0e546e9d7b89e5d3f12440e85b0c0591ca7dba914"
+  },
+  {
+   "archive": "medrec-code/src/tables.py",
+   "source": "/home/ubuntu/medrec/src/tables.py",
+   "kind": "file",
+   "size": 14796,
+   "mode": "0o664",
+   "sha256": "55374cfc6714d6d7e3a33a001695f94540cba3763fc319b415d7bc780f2cec8e"
+  },
+  {
+   "archive": "medrec-code/src/test_fill_policy.py",
+   "source": "/home/ubuntu/medrec/src/test_fill_policy.py",
+   "kind": "file",
+   "size": 14118,
+   "mode": "0o644",
+   "sha256": "636e0077d55b394c275e8c920e02ae325fad6f71b4cf563f293a213b1251e679"
+  },
+  {
+   "archive": "medrec-code/src/textio.py",
+   "source": "/home/ubuntu/medrec/src/textio.py",
+   "kind": "file",
+   "size": 2446,
+   "mode": "0o664",
+   "sha256": "071bbaeae50b16339fa282a87f37b4a7b620c7afe71753dfdf32ed2549e96725"
+  },
+  {
+   "archive": "medrec-code/src/to_pages.py",
+   "source": "/home/ubuntu/medrec/src/to_pages.py",
+   "kind": "file",
+   "size": 8803,
+   "mode": "0o664",
+   "sha256": "f5e3ad2112db7732bc96b65604933f56c7e6a73f0137f8587de35b65fe28c08b"
+  },
+  {
+   "archive": "medrec-code/src/to_xlsx.py",
+   "source": "/home/ubuntu/medrec/src/to_xlsx.py",
+   "kind": "file",
+   "size": 15341,
+   "mode": "0o644",
+   "sha256": "324c44d8ec8e0ebb03c7cc28c1551ef5e75a3e153115f996ea1bb2cf77dd6720"
+  },
+  {
+   "archive": "medrec-code/src/union_merge.py",
+   "source": "/home/ubuntu/medrec/src/union_merge.py",
+   "kind": "file",
+   "size": 879,
+   "mode": "0o664",
+   "sha256": "7e4ae9726ca42cbbadd264f818e2f5acacf2242c5834d6562cac109fecbcc4fc"
+  },
+  {
+   "archive": "medrec-code/src/usage_examples.py",
+   "source": "/home/ubuntu/medrec/src/usage_examples.py",
+   "kind": "file",
+   "size": 7571,
+   "mode": "0o600",
+   "sha256": "efd885cd7ab481c8050ef7e318f2948b0716aa53a38d521ec87a1a769de485b7"
+  },
+  {
+   "archive": "medrec-code/src/variables.json",
+   "source": "/home/ubuntu/medrec/src/variables.json",
+   "kind": "file",
+   "size": 5637,
+   "mode": "0o664",
+   "sha256": "37209a00fbf4aec2962e3e612501633ee3833c06f44f32b636f1b2d18f0d6123"
+  },
+  {
+   "archive": "medrec-code/src/variables_f3.json",
+   "source": "/home/ubuntu/medrec/src/variables_f3.json",
+   "kind": "file",
+   "size": 217828,
+   "mode": "0o644",
+   "sha256": "ebf5168c5eb4e04451f9c172fc2060b6719a6b5ea3d530b5231080c84953f081"
+  },
+  {
+   "archive": "medrec-code/src/visualize.py",
+   "source": "/home/ubuntu/medrec/src/visualize.py",
+   "kind": "file",
+   "size": 16894,
+   "mode": "0o600",
+   "sha256": "c98c55377137b0758f7a0c100b2c83b7c37fe02f0c49c8fa3df8dd1e5259958f"
+  },
+  {
+   "archive": "medrec-code/src/vl_service.py",
+   "source": "/home/ubuntu/medrec/src/vl_service.py",
+   "kind": "file",
+   "size": 12519,
+   "mode": "0o600",
+   "sha256": "ac90f65b74ed738c40174cb71a926e63bb89726bf22d5958b1921b48df5b2e14"
+  },
+  {
+   "archive": "medrec-code/src/webui.html",
+   "source": "/home/ubuntu/medrec/src/webui.html",
+   "kind": "file",
+   "size": 41206,
+   "mode": "0o600",
+   "sha256": "6a17c5cfc0c0b89b56a2d3bf8090a42c6e387607c613a61c58449bac0cc23467"
+  },
+  {
+   "archive": "medrec-code/src/webui.py",
+   "source": "/home/ubuntu/medrec/src/webui.py",
+   "kind": "file",
+   "size": 30448,
+   "mode": "0o600",
+   "sha256": "dbe7a2f1f8f7984093afbab903b40c3d5b32ce5a016bd240be1425cb370e8b72"
+  },
+  {
+   "archive": "medrec-code/src/wsl_vllm.sh",
+   "source": "/home/ubuntu/medrec/src/wsl_vllm.sh",
+   "kind": "file",
+   "size": 3311,
+   "mode": "0o600",
+   "sha256": "60b4b1d26482b9de3a98bd28cb2bd977af55ee2f9c4958322679a56141d2033b"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools",
+   "source": "/home/ubuntu/medrec/src/wide/tools",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/src/wide/__init__.py",
+   "source": "/home/ubuntu/medrec/src/wide/__init__.py",
+   "kind": "file",
+   "size": 554,
+   "mode": "0o600",
+   "sha256": "09cd01ab9687bec6581036908c47425c70e1871b6e14c7b1759f66e15e074281"
+  },
+  {
+   "archive": "medrec-code/src/wide/common.py",
+   "source": "/home/ubuntu/medrec/src/wide/common.py",
+   "kind": "file",
+   "size": 11952,
+   "mode": "0o600",
+   "sha256": "e14d8f19fd390ccb364decab06066ae06397626438e677f5d5c4535acea8d27d"
+  },
+  {
+   "archive": "medrec-code/src/wide/frontpage_rules.py",
+   "source": "/home/ubuntu/medrec/src/wide/frontpage_rules.py",
+   "kind": "file",
+   "size": 14346,
+   "mode": "0o644",
+   "sha256": "be703e22c091fbaf1556cd2acc5c9ba3d8db7020db8d26523e1db32653acdd14"
+  },
+  {
+   "archive": "medrec-code/src/wide/img2pdf.py",
+   "source": "/home/ubuntu/medrec/src/wide/img2pdf.py",
+   "kind": "file",
+   "size": 9265,
+   "mode": "0o664",
+   "sha256": "2717acf9ff20c5679cc2221c2a1942205aab4ca14dd15d1c36c28d5a5cb7075c"
+  },
+  {
+   "archive": "medrec-code/src/wide/input_normalize.py",
+   "source": "/home/ubuntu/medrec/src/wide/input_normalize.py",
+   "kind": "file",
+   "size": 57697,
+   "mode": "0o664",
+   "sha256": "8d8bec9e17ebb8d66e8df35de1e695b5f1984234fdc42a2785c1217deadf25b3"
+  },
+  {
+   "archive": "medrec-code/src/wide/reserved.py",
+   "source": "/home/ubuntu/medrec/src/wide/reserved.py",
+   "kind": "file",
+   "size": 3468,
+   "mode": "0o600",
+   "sha256": "6722c79f3e723dae181d92ba818cd33da321b626cd1f7b142cb0f10954928471"
+  },
+  {
+   "archive": "medrec-code/src/wide/s1_ocr.py",
+   "source": "/home/ubuntu/medrec/src/wide/s1_ocr.py",
+   "kind": "file",
+   "size": 80253,
+   "mode": "0o600",
+   "sha256": "a4aecfaf513cc55fef91863f5b2e5587a0a37e9bbfd90edbad63cf6d3165d97f"
+  },
+  {
+   "archive": "medrec-code/src/wide/s2_preprocess.py",
+   "source": "/home/ubuntu/medrec/src/wide/s2_preprocess.py",
+   "kind": "file",
+   "size": 16923,
+   "mode": "0o600",
+   "sha256": "7b37c715388f754c752e4135051f8bc0b504d83068b49ae09d8624f3beb94d3f"
+  },
+  {
+   "archive": "medrec-code/src/wide/s3_extract.py",
+   "source": "/home/ubuntu/medrec/src/wide/s3_extract.py",
+   "kind": "file",
+   "size": 27243,
+   "mode": "0o600",
+   "sha256": "a4108ef8ee1dc6aa027de5e22e3c59e1b90bd15eca90f3099fbe7ada109ce838"
+  },
+  {
+   "archive": "medrec-code/src/wide/s4_normalize.py",
+   "source": "/home/ubuntu/medrec/src/wide/s4_normalize.py",
+   "kind": "file",
+   "size": 44577,
+   "mode": "0o600",
+   "sha256": "f3f16ed2472e65539c6d7e42b782729d16895db7cc2177d78f244e122106f3f9"
+  },
+  {
+   "archive": "medrec-code/src/wide/s5_qc.py",
+   "source": "/home/ubuntu/medrec/src/wide/s5_qc.py",
+   "kind": "file",
+   "size": 21259,
+   "mode": "0o600",
+   "sha256": "a73dfcca50fe6840f42bf389c94f199765dd9699829061c0b65c0917da0fa309"
+  },
+  {
+   "archive": "medrec-code/src/wide/s6_table.py",
+   "source": "/home/ubuntu/medrec/src/wide/s6_table.py",
+   "kind": "file",
+   "size": 51725,
+   "mode": "0o600",
+   "sha256": "e193738d4f253493e7540bb526a7881a2a3e1198d2a8e02948e43958862b397c"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/build_page_index.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/build_page_index.py",
+   "kind": "file",
+   "size": 4283,
+   "mode": "0o600",
+   "sha256": "df426267123a86e4f6be38c7b0fd7ae6eb33e5dfd5c64ef5424911b8118e182f"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/locate_pages.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/locate_pages.py",
+   "kind": "file",
+   "size": 66605,
+   "mode": "0o600",
+   "sha256": "ed5355e6df4f232a7652ed748faa5df73fa4794d61db5ce3c9a76e7e8a0ab467"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/map_pages_from_old.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/map_pages_from_old.py",
+   "kind": "file",
+   "size": 15449,
+   "mode": "0o600",
+   "sha256": "aef46d646ae60f75518040e586f0c7acdadc0ad564ac9829ed0614ddbc7d1ba4"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/ocr_healthcheck.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/ocr_healthcheck.py",
+   "kind": "file",
+   "size": 28291,
+   "mode": "0o664",
+   "sha256": "970cacb7ac08e523b45eb47267bfeca0de5bbfffc2a0bf6b03c1f901b382685c"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/pass1_mapping.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/pass1_mapping.py",
+   "kind": "file",
+   "size": 19746,
+   "mode": "0o600",
+   "sha256": "0990924fcf43fdc70e8e54be60ef7df702562ec16ecd9a74787286354d33d670"
+  },
+  {
+   "archive": "medrec-code/src/wide/tools/run_steps.py",
+   "source": "/home/ubuntu/medrec/src/wide/tools/run_steps.py",
+   "kind": "file",
+   "size": 35569,
+   "mode": "0o664",
+   "sha256": "6b9082b3e90d10368fcf243e4de8eb217bb4540631a8dcf3e3fbcb136cce929b"
+  },
+  {
+   "archive": "medrec-code/bin",
+   "source": "/home/ubuntu/medrec/bin",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/bin/diag-conda-proxy.sh",
+   "source": "/home/ubuntu/medrec/bin/diag-conda-proxy.sh",
+   "kind": "file",
+   "size": 2459,
+   "mode": "0o664",
+   "sha256": "6a9e0cb564c7adc79ee2d232c7c26427a788d3635715d2e336f02d1637e91989"
+  },
+  {
+   "archive": "medrec-code/bin/diag-net-reachability.sh",
+   "source": "/home/ubuntu/medrec/bin/diag-net-reachability.sh",
+   "kind": "file",
+   "size": 2350,
+   "mode": "0o664",
+   "sha256": "c03a26f8e576ef4730b0118de71a899b5423d89f076e63ec6f2993fecb955883"
+  },
+  {
+   "archive": "medrec-code/bin/medrec",
+   "source": "/home/ubuntu/medrec/bin/medrec",
+   "kind": "file",
+   "size": 1649,
+   "mode": "0o755",
+   "sha256": "00ecb745dd51588abbd22761a5c1248344b4b447e7226dd4044d2eb4a39b4bcd"
+  },
+  {
+   "archive": "medrec-code/bin/medrec_cli.py",
+   "source": "/home/ubuntu/medrec/bin/medrec_cli.py",
+   "kind": "file",
+   "size": 125890,
+   "mode": "0o644",
+   "sha256": "fb2f7942fe2f513b3869b3ade587b26dce2a10a7b694342e1f954ab708cdcce7"
+  },
+  {
+   "archive": "medrec-code/bin/medrec_stage.py",
+   "source": "/home/ubuntu/medrec/bin/medrec_stage.py",
+   "kind": "file",
+   "size": 1342,
+   "mode": "0o644",
+   "sha256": "7e61d7952a3156b6772b1d8b5b2796392ed59de2ab77f080c13a859ccbe70804"
+  },
+  {
+   "archive": "medrec-code/scripts",
+   "source": "/home/ubuntu/medrec/scripts",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/scripts/00-stop-all-and-verify.ps1",
+   "source": "/home/ubuntu/medrec/scripts/00-stop-all-and-verify.ps1",
+   "kind": "file",
+   "size": 9585,
+   "mode": "0o666",
+   "sha256": "fe16347d09574584773f096224390e6230cc9926e4b570b6607cb23ef5f9e953"
+  },
+  {
+   "archive": "medrec-code/scripts/01-setup-envs.sh",
+   "source": "/home/ubuntu/medrec/scripts/01-setup-envs.sh",
+   "kind": "file",
+   "size": 11578,
+   "mode": "0o666",
+   "sha256": "f67ad22a5c2400d89708b775c4199499c484173050596c60b2667af854c77177"
+  },
+  {
+   "archive": "medrec-code/scripts/02-download-models.sh",
+   "source": "/home/ubuntu/medrec/scripts/02-download-models.sh",
+   "kind": "file",
+   "size": 8672,
+   "mode": "0o666",
+   "sha256": "493b88cddd37435d6787e1adb89c87faa8f29726906fa95c7ef6e1739afa09db"
+  },
+  {
+   "archive": "medrec-code/scripts/10-start-ocr.sh",
+   "source": "/home/ubuntu/medrec/scripts/10-start-ocr.sh",
+   "kind": "file",
+   "size": 13998,
+   "mode": "0o666",
+   "sha256": "79ffd9cf6b711997174a08317525c79223b9374df5ccbfb80ff8278a56bc1599"
+  },
+  {
+   "archive": "medrec-code/scripts/11-start-qwen.sh",
+   "source": "/home/ubuntu/medrec/scripts/11-start-qwen.sh",
+   "kind": "file",
+   "size": 14529,
+   "mode": "0o666",
+   "sha256": "d0468fbeb01b1929baa6da77990318fc5d29592414f5a47d71129b9afc2b537f"
+  },
+  {
+   "archive": "medrec-code/scripts/12-start-laya.sh",
+   "source": "/home/ubuntu/medrec/scripts/12-start-laya.sh",
+   "kind": "file",
+   "size": 3994,
+   "mode": "0o666",
+   "sha256": "c2fb9c9cbdb3630b32611a65e0418d4b68a3c22be373fa887350ef7ac8fd2b6b"
+  },
+  {
+   "archive": "medrec-code/scripts/13-svc-all.sh",
+   "source": "/home/ubuntu/medrec/scripts/13-svc-all.sh",
+   "kind": "file",
+   "size": 25094,
+   "mode": "0o666",
+   "sha256": "8e617da54e9f12ec29190359e907cbc7f4bebdbcc9f0dab725b66aaac529d209"
+  },
+  {
+   "archive": "medrec-code/scripts/15-check.sh",
+   "source": "/home/ubuntu/medrec/scripts/15-check.sh",
+   "kind": "file",
+   "size": 20486,
+   "mode": "0o666",
+   "sha256": "21a8a23debb0253bfb8f780c6d078f73d75c7023583deffcf74855f10aeaef7b"
+  },
+  {
+   "archive": "medrec-code/scripts/20-smoke.sh",
+   "source": "/home/ubuntu/medrec/scripts/20-smoke.sh",
+   "kind": "file",
+   "size": 11025,
+   "mode": "0o666",
+   "sha256": "554949d18f11ddb865f954fb2f71ae2f057bb6d16c28a2f38683dfada14dd759"
+  },
+  {
+   "archive": "medrec-code/scripts/22-score-pipeline.py",
+   "source": "/home/ubuntu/medrec/scripts/22-score-pipeline.py",
+   "kind": "file",
+   "size": 12269,
+   "mode": "0o777",
+   "sha256": "34f92fd23a2e896524339eb63059e2f31b767cba86dec0c0dbcdf995ebfda89b"
+  },
+  {
+   "archive": "medrec-code/scripts/DEPLOY-v2-хЕихеЧщГич╜▓ц╡БчиЛ.md",
+   "source": "/home/ubuntu/medrec/scripts/DEPLOY-v2-хЕихеЧщГич╜▓ц╡БчиЛ.md",
+   "kind": "file",
+   "size": 42889,
+   "mode": "0o666",
+   "sha256": "d0d005a2d655cd9e497f3d2b7676a04e59e22ea5f72b8105a89d55c7d7a9ec45"
+  },
+  {
+   "archive": "medrec-code/scripts/DEPLOY-v2-全套部署流程.md",
+   "source": "/home/ubuntu/medrec/scripts/DEPLOY-v2-全套部署流程.md",
+   "kind": "file",
+   "size": 42889,
+   "mode": "0o644",
+   "sha256": "d0d005a2d655cd9e497f3d2b7676a04e59e22ea5f72b8105a89d55c7d7a9ec45"
+  },
+  {
+   "archive": "medrec-code/scripts/MEDRECш┐РшбМцУНф╜ЬцЙЛхЖМ.md",
+   "source": "/home/ubuntu/medrec/scripts/MEDRECш┐РшбМцУНф╜ЬцЙЛхЖМ.md",
+   "kind": "file",
+   "size": 24748,
+   "mode": "0o666",
+   "sha256": "d21dcd482f6b9adb096f5e57d93b46d5b40ebf4d27da3fad4bea8e62011a3d88"
+  },
+  {
+   "archive": "medrec-code/scripts/clear-proxy.sh",
+   "source": "/home/ubuntu/medrec/scripts/clear-proxy.sh",
+   "kind": "file",
+   "size": 6762,
+   "mode": "0o666",
+   "sha256": "54c09b484e2ca6bdde0f91288b58e3bce1906b38c3a5c69ea958d6bed8951d47"
+  },
+  {
+   "archive": "medrec-code/scripts/config.env",
+   "source": "/home/ubuntu/medrec/scripts/config.env",
+   "kind": "file",
+   "size": 17831,
+   "mode": "0o664",
+   "sha256": "8446f729557e7d818e39fdb93224069b90ca3d12feb68e9bfc47938115111280"
+  },
+  {
+   "archive": "medrec-code/scripts/f3_fill_policy.py",
+   "source": "/home/ubuntu/medrec/scripts/f3_fill_policy.py",
+   "kind": "file",
+   "size": 18620,
+   "mode": "0o644",
+   "sha256": "897af39fccca8af06999b8547e15955de8c81594e2ef24ffa03690e9deeab0e6"
+  },
+  {
+   "archive": "medrec-code/scripts/f3_to_wide.py",
+   "source": "/home/ubuntu/medrec/scripts/f3_to_wide.py",
+   "kind": "file",
+   "size": 24076,
+   "mode": "0o644",
+   "sha256": "16751c80dc565163471669ef70dc38a3ecc2e6eadd12bbb31e14971d5435975e"
+  },
+  {
+   "archive": "medrec-code/scripts/f3_zero_hit_diag.py",
+   "source": "/home/ubuntu/medrec/scripts/f3_zero_hit_diag.py",
+   "kind": "file",
+   "size": 8169,
+   "mode": "0o644",
+   "sha256": "827d28f4130db0ac77fca251bd46ef6f3cf8ada2e5d9eec205708285c353284b"
+  },
+  {
+   "archive": "medrec-code/scripts/laya_forms.json",
+   "source": "/home/ubuntu/medrec/scripts/laya_forms.json",
+   "kind": "file",
+   "size": 8817,
+   "mode": "0o666",
+   "sha256": "1b9ca648bde29c642c1c566c3d8dcf9817a91dddfa5e1be47b992749a7079d89"
+  },
+  {
+   "archive": "medrec-code/scripts/laya_service.py",
+   "source": "/home/ubuntu/medrec/scripts/laya_service.py",
+   "kind": "file",
+   "size": 13843,
+   "mode": "0o777",
+   "sha256": "76e4da7dd1f77006fd4b0f087f59211062db6d234f7028e75c7fe4e18d440ef8"
+  },
+  {
+   "archive": "medrec-code/scripts/mcp_memory.py",
+   "source": "/home/ubuntu/medrec/scripts/mcp_memory.py",
+   "kind": "file",
+   "size": 3685,
+   "mode": "0o775",
+   "sha256": "584c4646a5493ae8464ee5e2931c8b4ab392efd4207fbde5ab0126769e94f49a"
+  },
+  {
+   "archive": "medrec-code/scripts/mem.py",
+   "source": "/home/ubuntu/medrec/scripts/mem.py",
+   "kind": "file",
+   "size": 5584,
+   "mode": "0o775",
+   "sha256": "cbc76f931806c9c341e04bc21c2cb78163c4ea75041e0e2a9d14da6dc21ca6d3"
+  },
+  {
+   "archive": "medrec-code/scripts/pdf2png.py",
+   "source": "/home/ubuntu/medrec/scripts/pdf2png.py",
+   "kind": "file",
+   "size": 22162,
+   "mode": "0o644",
+   "sha256": "6e34983580e41cff8367fc1be42442212c1727a0b567d96047ff5d18681bcf68"
+  },
+  {
+   "archive": "medrec-code/scripts/pipeline.py",
+   "source": "/home/ubuntu/medrec/scripts/pipeline.py",
+   "kind": "file",
+   "size": 11626,
+   "mode": "0o775",
+   "sha256": "8394d761caa113129f4f8baccb8928077d53b45c1f10132712df1f69f2f226c1"
+  },
+  {
+   "archive": "medrec-code/scripts/run_f3.sh",
+   "source": "/home/ubuntu/medrec/scripts/run_f3.sh",
+   "kind": "file",
+   "size": 1121,
+   "mode": "0o775",
+   "sha256": "7722fb187cd8ed254cd584490df05a9e2733c68c9a4c43021e0d04f3ee6dd750"
+  },
+  {
+   "archive": "medrec-code/scripts/run_f3_union.sh",
+   "source": "/home/ubuntu/medrec/scripts/run_f3_union.sh",
+   "kind": "file",
+   "size": 564,
+   "mode": "0o775",
+   "sha256": "37143ffb3c628f350e000bf124f20fa5323b370d20114da48543521ac42e7fbe"
+  },
+  {
+   "archive": "medrec-code/scripts/serve.sh",
+   "source": "/home/ubuntu/medrec/scripts/serve.sh",
+   "kind": "file",
+   "size": 1143,
+   "mode": "0o775",
+   "sha256": "7ecd81a2d00b06e08dd360b3721433460d35dfd1abc78d48f96b6511d2a1a7a4"
+  },
+  {
+   "archive": "medrec-code/scripts/serve_recognition.sh",
+   "source": "/home/ubuntu/medrec/scripts/serve_recognition.sh",
+   "kind": "file",
+   "size": 683,
+   "mode": "0o775",
+   "sha256": "3b64831bb85b68aa68f4071c245bfbf2faf08e93f17c2674fcb1bd1c60a04c1d"
+  },
+  {
+   "archive": "medrec-code/scripts/start-agent.sh",
+   "source": "/home/ubuntu/medrec/scripts/start-agent.sh",
+   "kind": "file",
+   "size": 4262,
+   "mode": "0o755",
+   "sha256": "9bdeadfd99837f3e3f397c1fe5c1fa6f759fa1cfc5463933683972f27848ff37"
+  },
+  {
+   "archive": "medrec-code/scripts/start-ovis.sh",
+   "source": "/home/ubuntu/medrec/scripts/start-ovis.sh",
+   "kind": "file",
+   "size": 4530,
+   "mode": "0o755",
+   "sha256": "391a8743e2f7972f5ca3f739619dbe0b79188994c60aeb912332773d96c1d338"
+  },
+  {
+   "archive": "medrec-code/scripts/test_fill_policy.py",
+   "source": "/home/ubuntu/medrec/scripts/test_fill_policy.py",
+   "kind": "file",
+   "size": 13699,
+   "mode": "0o644",
+   "sha256": "1ed8966f7284e114d3c1193ae5d6943ffb531f1c48c17131868866c784a8ca71"
+  },
+  {
+   "archive": "medrec-code/scripts/update-agents-status.py",
+   "source": "/home/ubuntu/medrec/scripts/update-agents-status.py",
+   "kind": "file",
+   "size": 5651,
+   "mode": "0o775",
+   "sha256": "4ecff03e9455f5df7196123110bd5fbc808bc161ef11146a535a38ea1e2b5e96"
+  },
+  {
+   "archive": "medrec-code/config",
+   "source": "/home/ubuntu/medrec/config",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/config/columns.yaml",
+   "source": "/home/ubuntu/medrec/config/columns.yaml",
+   "kind": "file",
+   "size": 14394,
+   "mode": "0o600",
+   "sha256": "ae33aa9938e5abc686b6f86e1e6df3c851f00757e1e4681c805bfbe945958dc1"
+  },
+  {
+   "archive": "medrec-code/config/field_mapping.yaml",
+   "source": "/home/ubuntu/medrec/config/field_mapping.yaml",
+   "kind": "file",
+   "size": 26879,
+   "mode": "0o600",
+   "sha256": "c172deb4a91ef94034acf3af5f329c05c2a5a770b5be0a50adbcff526f1a7ebb"
+  },
+  {
+   "archive": "medrec-code/config/label_vocab.yaml",
+   "source": "/home/ubuntu/medrec/config/label_vocab.yaml",
+   "kind": "file",
+   "size": 4595,
+   "mode": "0o600",
+   "sha256": "074cf75edcd47eda0bb8fd841e680f6093f3641987f469d6b43501b5fb25f9e1"
+  },
+  {
+   "archive": "medrec-code/config/locate_prior.yaml",
+   "source": "/home/ubuntu/medrec/config/locate_prior.yaml",
+   "kind": "file",
+   "size": 3647,
+   "mode": "0o600",
+   "sha256": "38610ee21a628767890e7285a50c1282650e4106eb010dbca1d5ca09b0ac858d"
+  },
+  {
+   "archive": "medrec-code/config/pipeline.yaml",
+   "source": "/home/ubuntu/medrec/config/pipeline.yaml",
+   "kind": "file",
+   "size": 23525,
+   "mode": "0o600",
+   "sha256": "03367ed2527c240f5a3e5b7ab1ef683400ea6c16fc82b61a6bcc7030ae56a0d2"
+  },
+  {
+   "archive": "medrec-code/webui",
+   "source": "/home/ubuntu/medrec/webui",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/webui/static",
+   "source": "/home/ubuntu/medrec/webui/static",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/webui/table_formats",
+   "source": "/home/ubuntu/medrec/webui/table_formats",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/webui/README.md",
+   "source": "/home/ubuntu/medrec/webui/README.md",
+   "kind": "file",
+   "size": 5796,
+   "mode": "0o664",
+   "sha256": "00029c37cb74ed8ed81a04043b0c2921b7e77b542ff16be4fee6c0f3dffd9bad"
+  },
+  {
+   "archive": "medrec-code/webui/artifacts.py",
+   "source": "/home/ubuntu/medrec/webui/artifacts.py",
+   "kind": "file",
+   "size": 4984,
+   "mode": "0o664",
+   "sha256": "613d493a144d3e68222441931d7302a6f7c2efa6d8a54b47da4a56d81d650640"
+  },
+  {
+   "archive": "medrec-code/webui/audit.py",
+   "source": "/home/ubuntu/medrec/webui/audit.py",
+   "kind": "file",
+   "size": 2010,
+   "mode": "0o664",
+   "sha256": "280e2bc8e55554d330f2b1145ca8c8d50cbd9cbce408a0d19e9679bd0b975aeb"
+  },
+  {
+   "archive": "medrec-code/webui/guards.py",
+   "source": "/home/ubuntu/medrec/webui/guards.py",
+   "kind": "file",
+   "size": 13917,
+   "mode": "0o664",
+   "sha256": "bba1d613f5ceb07a628f0448954d7aca138bf9de108a5a7856bda03a34fae27c"
+  },
+  {
+   "archive": "medrec-code/webui/ingest.py",
+   "source": "/home/ubuntu/medrec/webui/ingest.py",
+   "kind": "file",
+   "size": 53041,
+   "mode": "0o664",
+   "sha256": "1fbbe5e8fee38ccf10dfeaca4b374281e84c6463b3e469f037cd6da05c8313d1"
+  },
+  {
+   "archive": "medrec-code/webui/jobs.py",
+   "source": "/home/ubuntu/medrec/webui/jobs.py",
+   "kind": "file",
+   "size": 14393,
+   "mode": "0o664",
+   "sha256": "a0e6b2bca55e6f6773509623e040e5125cddef74f85dc2f5c8ef19343986b5c7"
+  },
+  {
+   "archive": "medrec-code/webui/pii.py",
+   "source": "/home/ubuntu/medrec/webui/pii.py",
+   "kind": "file",
+   "size": 4034,
+   "mode": "0o664",
+   "sha256": "3b68cbc1195a916a85732cde65404f730e3c3731c009a8aac4ceb5fa61e9577a"
+  },
+  {
+   "archive": "medrec-code/webui/server.py",
+   "source": "/home/ubuntu/medrec/webui/server.py",
+   "kind": "file",
+   "size": 42616,
+   "mode": "0o664",
+   "sha256": "ef76686d7b2acece380dbefeb68b03a4119d21a0c0a6486fa60c082289f7ebe3"
+  },
+  {
+   "archive": "medrec-code/webui/static/index.html",
+   "source": "/home/ubuntu/medrec/webui/static/index.html",
+   "kind": "file",
+   "size": 44675,
+   "mode": "0o664",
+   "sha256": "2f472cf5f897dd62363663e0a530cd21ab9d4a09dff2d1883c046f2c6a217be2"
+  },
+  {
+   "archive": "medrec-code/webui/table_formats/__init__.py",
+   "source": "/home/ubuntu/medrec/webui/table_formats/__init__.py",
+   "kind": "file",
+   "size": 1169,
+   "mode": "0o664",
+   "sha256": "bd34ecd8902f57e2675666263635768c691e0f72a74668a45875897482193eea"
+  },
+  {
+   "archive": "medrec-code/webui/table_formats/_selftest.py",
+   "source": "/home/ubuntu/medrec/webui/table_formats/_selftest.py",
+   "kind": "file",
+   "size": 2397,
+   "mode": "0o664",
+   "sha256": "2bdd4c9725fbc3830fbe65acd12f304450428ea851631c69550da34b1b32d26a"
+  },
+  {
+   "archive": "medrec-code/webui/table_formats/_skeleton.py",
+   "source": "/home/ubuntu/medrec/webui/table_formats/_skeleton.py",
+   "kind": "file",
+   "size": 1892,
+   "mode": "0o664",
+   "sha256": "691c818d87714c7a732d720a55f1e5864536bc6c2e160d2841269a362a048ce7"
+  },
+  {
+   "archive": "medrec-code/webui/table_formats/base.py",
+   "source": "/home/ubuntu/medrec/webui/table_formats/base.py",
+   "kind": "file",
+   "size": 1734,
+   "mode": "0o664",
+   "sha256": "0c022f4ab38ebcc4848784c85417ecf60015364199f2f5583fea10015991104d"
+  },
+  {
+   "archive": "medrec-code/webui/table_formats/wide.py",
+   "source": "/home/ubuntu/medrec/webui/table_formats/wide.py",
+   "kind": "file",
+   "size": 2442,
+   "mode": "0o664",
+   "sha256": "15c4e1e36f5df37691fbbee1e60a33c2d20567fcd4e122a81dcadf306b1b3637"
+  },
+  {
+   "archive": "medrec-code/docs",
+   "source": "/home/ubuntu/medrec/docs",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-code/docs/HOWTO.md",
+   "source": "/home/ubuntu/medrec/docs/HOWTO.md",
+   "kind": "file",
+   "size": 34211,
+   "mode": "0o600",
+   "sha256": "ffefcb43970841c0c8873e88cde9bd27918bca10c9d6eeba366f01bb32a1d107"
+  },
+  {
+   "archive": "medrec-code/docs/REPORT_TEMPLATE.md",
+   "source": "/home/ubuntu/medrec/docs/REPORT_TEMPLATE.md",
+   "kind": "file",
+   "size": 3739,
+   "mode": "0o664",
+   "sha256": "6618b7db68e90cc090797d9c08dacfe63905e03dfc552b4141154048a6bab732"
+  },
+  {
+   "archive": "medrec-code/docs/column_mapping.md",
+   "source": "/home/ubuntu/medrec/docs/column_mapping.md",
+   "kind": "file",
+   "size": 17585,
+   "mode": "0o600",
+   "sha256": "d74569618a16a2f2f0ae3322791d903bacaaa8461ef010f420bae5d0f491566f"
+  },
+  {
+   "archive": "medrec-code/docs/conda-proxy-troubleshoot.md",
+   "source": "/home/ubuntu/medrec/docs/conda-proxy-troubleshoot.md",
+   "kind": "file",
+   "size": 7352,
+   "mode": "0o644",
+   "sha256": "140143a773bc6d989582c40216cbed4544e3317421c18927bb4eadeb1044fc90"
+  },
+  {
+   "archive": "medrec-code/docs/handover.md",
+   "source": "/home/ubuntu/medrec/docs/handover.md",
+   "kind": "file",
+   "size": 5770,
+   "mode": "0o664",
+   "sha256": "097a8ecbf4a9e5e5b5cd0d288e9d0b600216a58b479d2fab94b60e694d0980cb"
+  },
+  {
+   "archive": "medrec-code/docs/interfaces.md",
+   "source": "/home/ubuntu/medrec/docs/interfaces.md",
+   "kind": "file",
+   "size": 14661,
+   "mode": "0o664",
+   "sha256": "03fdef3d46e9acc200226a3cae524d179be15f8f6fabf9871492b16dba40f344"
+  },
+  {
+   "archive": "medrec-code/docs/security.md",
+   "source": "/home/ubuntu/medrec/docs/security.md",
+   "kind": "file",
+   "size": 9620,
+   "mode": "0o664",
+   "sha256": "9034ecbef317b18124d62030a33eb1c7b97fcd959c5694a6e6ec0651cbb35ac0"
+  }
+ ]
+}

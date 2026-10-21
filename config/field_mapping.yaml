@@ -1,0 +1,1347 @@
+version: 2026-10-09.3
+generated: 2026-10-09T13:37:56+0800
+batch: smoke
+n_cases_scanned: 12
+n_cases_no_frontpage: 0
+status: draft
+columns:
+- id: adm_no
+  header: 住院号
+  seed_labels:
+  - 住院号
+  - 住院病历号
+  - 住院流水号
+  labels_found:
+  - label: 病案号
+    hits: 29
+    n_cases: 12
+    empty_value_hits: 0
+    examples:
+    - 02487757
+    - 02488321
+    - 02488016
+    by_variant:
+      plain: 16
+      layout: 13
+  status: draft
+- id: patient_name
+  header: 姓名
+  seed_labels:
+  - 姓名
+  - 患者姓名
+  - 病人姓名
+  labels_found:
+  - label: 姓名
+    hits: 54
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - <3 chars redacted>
+    - <3 chars redacted>
+    - <3 chars redacted>
+    by_variant:
+      plain: 12
+      layout: 42
+  status: draft
+- id: case_no
+  header: 病案号
+  seed_labels:
+  - 病案号
+  - 病历号
+  - 病案编号
+  - 病人ID
+  labels_found:
+  - label: 病案号
+    hits: 29
+    n_cases: 12
+    empty_value_hits: 0
+    examples:
+    - 02487757
+    - 02488321
+    - 02488016
+    by_variant:
+      plain: 16
+      layout: 13
+  status: draft
+- id: admit_time_raw
+  header: 入院时间（住院时间）
+  seed_labels:
+  - 入院时间
+  - 入院日期
+  - 住院时间
+  - 入院日期及时间
+  labels_found:
+  - label: 入院时间
+    hits: 52
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 2023-11-14 21:39
+    - 2023-11-20 14:54
+    - 2023-11-17 10:10
+    by_variant:
+      plain: 12
+      layout: 40
+  status: draft
+- id: patient_name_dup
+  header: 姓名
+  seed_labels: []
+  labels_found: []
+  status: no_label_found
+- id: age
+  header: 年龄
+  seed_labels:
+  - 年龄
+  - 年龄(岁)
+  labels_found:
+  - label: 年龄
+    hits: 169
+    n_cases: 12
+    empty_value_hits: 3
+    examples:
+    - 76岁 国籍 中国
+    - 不足1周岁的）
+    - '- 月 新生儿出生体重 - 克 新生儿入院体重 - 克'
+    by_variant:
+      plain: 36
+      layout: 133
+  status: draft
+- id: native_place
+  header: 籍贯
+  seed_labels:
+  - 籍贯
+  - 出生地
+  labels_found:
+  - label: 出生地
+    hits: 51
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 浙江省湖州市安吉县
+    - 浙江省嘉兴市桐乡市
+    - 浙江省台州市玉环市
+    by_variant:
+      plain: 12
+      layout: 39
+  - label: 籍贯
+    hits: 51
+    n_cases: 12
+    empty_value_hits: 1
+    examples:
+    - 浙江省湖州市安吉县
+    - 浙江省嘉兴市桐乡市
+    - 浙江省台州市
+    by_variant:
+      plain: 12
+      layout: 39
+  status: draft
+- id: id_card
+  header: 身份证号
+  seed_labels:
+  - 身份证号
+  - 身份证号码
+  labels_found:
+  - label: 身份证号
+    hits: 51
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 330***********************************.丧
+    - 330***********************************3.
+    - 330***********************************丧偶
+    by_variant:
+      plain: 12
+      layout: 39
+  status: draft
+- id: sex
+  header: 性别
+  seed_labels:
+  - 性别
+  labels_found:
+  - label: 性别
+    hits: 55
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 1 1.男 2.女 出生日期 1947-08-09
+    - ☐ 1.男 2.女 出生日期 1947-08-09
+    - 1. 男 2. 女 出生日期 1954-12-20
+    by_variant:
+      plain: 12
+      layout: 43
+  status: draft
+- id: patient_phone
+  header: 本人电话号码
+  seed_labels:
+  - 电话
+  - 联系电话
+  - 本人电话
+  labels_found:
+  - label: 电话
+    hits: 153
+    n_cases: 12
+    empty_value_hits: 7
+    examples:
+    - <21 chars redacted>
+    - <11 chars redacted>
+    - <11 chars redacted>
+    by_variant:
+      plain: 35
+      layout: 118
+  status: draft
+- id: address
+  header: 地址
+  seed_labels:
+  - 现住址
+  - 现地址
+  - 住址
+  - 户口地址
+  labels_found:
+  - label: 现住址
+    hits: 57
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - <17 chars redacted>
+    - <15 chars redacted>
+    - <12 chars redacted>
+    by_variant:
+      plain: 12
+      layout: 45
+  - label: 户口地址
+    hits: 46
+    n_cases: 10
+    empty_value_hits: 2
+    examples:
+    - <18 chars redacted>
+    - <8 chars redacted>
+    - <6 chars redacted>
+    by_variant:
+      plain: 10
+      layout: 36
+  status: draft
+- id: contact_name
+  header: 联系人姓名
+  seed_labels:
+  - 联系人姓名
+  - 联系人
+  - 紧急联系人
+  labels_found:
+  - label: 联系人姓名
+    hits: 48
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - <21 chars redacted>
+    - <26 chars redacted>
+    - <2 chars redacted>
+    by_variant:
+      plain: 12
+      layout: 36
+  status: draft
+- id: contact_phone
+  header: 联系人电话
+  seed_labels:
+  - 联系人电话
+  labels_found:
+  - label: 电话
+    hits: 153
+    n_cases: 12
+    empty_value_hits: 7
+    examples:
+    - <21 chars redacted>
+    - <11 chars redacted>
+    - <11 chars redacted>
+    by_variant:
+      plain: 35
+      layout: 118
+  status: draft
+- id: insurance_type
+  header: 医保类型
+  seed_labels:
+  - 医疗付费方式
+  - 付费方式
+  - 医保类型
+  labels_found:
+  - label: 医疗付费方式
+    hits: 91
+    n_cases: 12
+    empty_value_hits: 0
+    examples:
+    - '1. 城镇职工基本医疗保险 2. 城镇居民基本医疗保险 3. 新型农村合作医疗 '
+    - 1.城镇职工基本医疗保险2.城镇居民基本医疗保险3.新型农村合作医疗4.贫困救助
+    - 1.城镇职工基本医疗保险2.城镇居民基本医疗保险3.新型农村合作医疗4.贫困救助
+    by_variant:
+      plain: 15
+      layout: 76
+  status: draft
+- id: ethnicity
+  header: 民族
+  seed_labels:
+  - 民族
+  labels_found:
+  - label: 民族
+    hits: 60
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 汉族
+    - 汉族\n
+    by_variant:
+      plain: 12
+      layout: 48
+  status: draft
+- id: admit_route
+  header: 入院途径
+  seed_labels:
+  - 入院途径
+  - 入院方式
+  labels_found:
+  - label: 入院途径
+    hits: 84
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 1 1.急诊 2.门诊 3.其他医疗机构转入 9.其他
+    - ☐ 1.急诊 2.门诊 3.其他医疗机构转入 9.其他
+    - 2. 急诊 2. 门诊 3. 其他医疗机构转入 9. 其他
+    by_variant:
+      plain: 12
+      layout: 72
+  status: draft
+- id: admit_dept
+  header: 入院科别
+  seed_labels:
+  - 入院科别
+  - 入院科室
+  labels_found:
+  - label: 入院科别
+    hits: 49
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 神经内科病区 病房 41
+    - 神经内科病区 病房 11
+    - 神经内科病区
+    by_variant:
+      plain: 12
+      layout: 37
+  status: draft
+- id: discharge_dept
+  header: 出院科别
+  seed_labels:
+  - 出院科别
+  - 出院科室
+  labels_found:
+  - label: 出院科别
+    hits: 51
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 神经内科病区 病房 29
+    - 神经内科病区 病房 11
+    - 神经内科病区
+    by_variant:
+      plain: 12
+      layout: 39
+  status: draft
+- id: is_death
+  header: 是否死亡
+  seed_labels:
+  - 是否死亡
+  labels_found: []
+  status: no_label_found
+- id: discharge_date
+  header: 出院日期
+  seed_labels:
+  - 出院时间
+  - 出院日期
+  - 出院日期及时间
+  labels_found:
+  - label: 出院时间
+    hits: 52
+    n_cases: 12
+    empty_value_hits: 2
+    examples:
+    - 2023-11-27 10:00
+    - 2023-11-28 00:00
+    - 2025年01月23日 15时
+    by_variant:
+      plain: 12
+      layout: 40
+  - label: 出院日期
+    hits: 5
+    n_cases: 3
+    empty_value_hits: 0
+    examples:
+    - 2025/1/23 姚冰芳
+    - 2025/1/15 王德荣
+    - 2025/1/15 范银仙
+    by_variant:
+      plain: 3
+      layout: 2
+  status: draft
+- id: discharge_mode
+  header: 离院方式
+  seed_labels:
+  - 离院方式
+  - 出院方式
+  labels_found:
+  - label: 离院方式
+    hits: 65
+    n_cases: 10
+    empty_value_hits: 2
+    examples:
+    - ① 1. 医嘱离院 2. 医嘱转院，拟接收医疗机构名称：3. 医嘱转社区卫生服务
+    - ①
+    - ①1. 医嘱离院 2. 医嘱转院，拟接收医疗机构名称：—\n3. 医嘱转社区卫生
+    by_variant:
+      plain: 3
+      layout: 62
+  status: draft
+- id: non_medical_discharge_reason
+  header: 非医嘱出院原因
+  seed_labels:
+  - 非医嘱离院
+  - 非医嘱出院
+  - 自动出院原因
+  labels_found:
+  - label: 非医嘱离院
+    hits: 95
+    n_cases: 12
+    empty_value_hits: 0
+    examples:
+    - 5. 死亡9. 其他是否有出院31天内再住院计划1 1. 无 2. 有，目的：颅
+    - 5. 死亡9. 其他
+    - 5. 死亡 9. 其他
+    by_variant:
+      plain: 7
+      layout: 88
+  status: draft
+unmapped_labels:
+- label: '-'
+  hits: 170
+  n_cases: 8
+  llm_proposed_column: null
+- label: 疾病编码
+  hits: 53
+  n_cases: 12
+  llm_proposed_column: null
+- label: 手术及操作医师
+  hits: 38
+  n_cases: 12
+  llm_proposed_column: null
+- label: 疾病编码 -
+  hits: 37
+  n_cases: 4
+  llm_proposed_column: null
+- label: 出院诊断
+  hits: 31
+  n_cases: 12
+  llm_proposed_column: null
+- label: 切口愈合等级
+  hits: 28
+  n_cases: 12
+  llm_proposed_column: null
+- label: 麻醉方式
+  hits: 28
+  n_cases: 12
+  llm_proposed_column: null
+- label: 手术及操作编码
+  hits: 26
+  n_cases: 12
+  llm_proposed_column: null
+- label: 手术及操作日期
+  hits: 26
+  n_cases: 12
+  llm_proposed_column: null
+- label: 手术级别
+  hits: 26
+  n_cases: 12
+  llm_proposed_column: null
+- label: 手术及操作名称
+  hits: 26
+  n_cases: 12
+  llm_proposed_column: null
+- label: 入院病情
+  hits: 25
+  n_cases: 12
+  llm_proposed_column: null
+- label: /
+  hits: 25
+  n_cases: 4
+  llm_proposed_column: null
+- label: 麻醉医师
+  hits: 20
+  n_cases: 10
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因
+  hits: 14
+  n_cases: 4
+  llm_proposed_column: null
+- label: 病理诊断
+  hits: 13
+  n_cases: 3
+  llm_proposed_column: null
+- label: 术者
+  hits: 12
+  n_cases: 12
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因 -
+  hits: 12
+  n_cases: 3
+  llm_proposed_column: null
+- label: 病理诊断 -
+  hits: 12
+  n_cases: 3
+  llm_proposed_column: null
+- label: I 助
+  hits: 10
+  n_cases: 8
+  llm_proposed_column: null
+- label: II 助
+  hits: 10
+  n_cases: 8
+  llm_proposed_column: null
+- label: 转科科别 -
+  hits: 10
+  n_cases: 3
+  llm_proposed_column: null
+- label: 编码员
+  hits: 10
+  n_cases: 5
+  llm_proposed_column: null
+- label: 住院医师
+  hits: 9
+  n_cases: 5
+  llm_proposed_column: null
+- label: 住院病案首页
+  hits: 9
+  n_cases: 6
+  llm_proposed_column: null
+- label: 病理号 -
+  hits: 8
+  n_cases: 2
+  llm_proposed_column: null
+- label: 职业 农民
+  hits: 8
+  n_cases: 6
+  llm_proposed_column: null
+- label: 实习医师
+  hits: 8
+  n_cases: 6
+  llm_proposed_column: null
+- label: 麻醉者
+  hits: 8
+  n_cases: 2
+  llm_proposed_column: null
+- label: 门（急）诊诊断 脑血管病
+  hits: 7
+  n_cases: 1
+  llm_proposed_column: null
+- label: 工作单位及地址 --
+  hits: 7
+  n_cases: 2
+  llm_proposed_column: null
+- label: 无切口
+  hits: 6
+  n_cases: 1
+  llm_proposed_column: null
+- label: 医疗机构
+  hits: 6
+  n_cases: 6
+  llm_proposed_column: 7.就诊医院
+- label: 主治医师
+  hits: 6
+  n_cases: 5
+  llm_proposed_column: null
+- label: 国籍 中国
+  hits: 6
+  n_cases: 4
+  llm_proposed_column: null
+- label: 邮编
+  hits: 6
+  n_cases: 2
+  llm_proposed_column: null
+- label: 住院医师 袁利锋
+  hits: 6
+  n_cases: 2
+  llm_proposed_column: null
+- label: 门（急）诊诊断 头晕
+  hits: 6
+  n_cases: 1
+  llm_proposed_column: null
+- label: 汉族
+  hits: 5
+  n_cases: 2
+  llm_proposed_column: 24.民族
+- label: 药物过敏
+  hits: 5
+  n_cases: 3
+  llm_proposed_column: null
+- label: 主治医师 钱海明
+  hits: 5
+  n_cases: 2
+  llm_proposed_column: null
+- label: 责任护士 黄小清
+  hits: 5
+  n_cases: 2
+  llm_proposed_column: null
+- label: 质控医师 钱海明
+  hits: 5
+  n_cases: 2
+  llm_proposed_column: null
+- label: I助
+  hits: 4
+  n_cases: 4
+  llm_proposed_column: null
+- label: II助
+  hits: 4
+  n_cases: 4
+  llm_proposed_column: null
+- label: 张鹏
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 王良雪
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 全麻插管
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 潘婷婷
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 高血压
+  hits: 4
+  n_cases: 4
+  llm_proposed_column: null
+- label: 科主任
+  hits: 4
+  n_cases: 3
+  llm_proposed_column: null
+- label: 责任护士
+  hits: 4
+  n_cases: 3
+  llm_proposed_column: null
+- label: 病房
+  hits: 4
+  n_cases: 2
+  llm_proposed_column: null
+- label: 胡栋敏
+  hits: 4
+  n_cases: 3
+  llm_proposed_column: null
+- label: 郭惠重
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 邮编 一
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控护士 黄小清
+  hits: 4
+  n_cases: 2
+  llm_proposed_column: null
+- label: 术后并发症
+  hits: 4
+  n_cases: 2
+  llm_proposed_column: null
+- label: 门 (急) 诊诊断 脑血管病
+  hits: 4
+  n_cases: 1
+  llm_proposed_column: null
+- label: 安吉县人民医院
+  hits: 3
+  n_cases: 3
+  llm_proposed_column: 7.就诊医院
+- label: 进修医师
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 血型
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 主任(副主任)医师
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 病案质量
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 进修医生
+  hits: 3
+  n_cases: 3
+  llm_proposed_column: null
+- label: 死亡患者尸检
+  hits: 3
+  n_cases: 1
+  llm_proposed_column: null
+- label: 陈小东
+  hits: 3
+  n_cases: 1
+  llm_proposed_column: null
+- label: 新生儿入院体重 一 克
+  hits: 3
+  n_cases: 1
+  llm_proposed_column: null
+- label: 关系 配偶
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 转科科别 一
+  hits: 3
+  n_cases: 1
+  llm_proposed_column: null
+- label: 术者 I 助 II 助
+  hits: 3
+  n_cases: 3
+  llm_proposed_column: null
+- label: 脑梗死个人史
+  hits: 3
+  n_cases: 3
+  llm_proposed_column: null
+- label: 关系 女
+  hits: 3
+  n_cases: 2
+  llm_proposed_column: null
+- label: 脑血管造影
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因 - 疾病编码 -
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 病理诊断 - 疾病编码 -
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 马秀英
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 出生日期
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 新生儿出生体重
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 职业
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 婚姻
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 浙江省湖州市安吉县天子湖
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: 14.地址
+- label: 工作单位及地址
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 地址
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: 14.地址
+- label: 神经内科病区
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 转科科别
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 急性上呼吸道感染
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因 一 疾病编码 一
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 地址 浙江省嘉兴市桐乡市洲泉镇青石村河
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: 14.地址
+- label: 转科科别 无
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 甲状腺结节
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 科主任 陈小东
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 主任(副主任)医师 陈小东
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 教授
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 徐永永
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控医师 陈小东
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 桐乡市第二人民医院
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: 7.就诊医院
+- label: 浙江省嘉兴市桐乡市
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: 14.地址
+- label: 内四(神经内科)
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 谢江丽
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控护士
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 天
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 胆囊结石
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 石振
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 便秘
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 颈动脉斑块
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 手术者
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 李小元
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 主要诊断
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 大脑动脉血栓形成引起的脑梗死
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 其他诊断
+  hits: 2
+  n_cases: 2
+  llm_proposed_column: null
+- label: 右侧大脑中动脉狭窄
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 血管性痴呆
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 下肢动脉硬化伴斑块形成
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 右侧股浅动脉闭塞 考虑
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 邮编 -
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 死亡患者尸检 -
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 科主任 朱勇
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 实习医师 -
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 编码员 郑
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 住院医师 朱佳佳
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 责任护士 韩文欣 进修医师
+  hits: 2
+  n_cases: 1
+  llm_proposed_column: null
+- label: 经皮颅内动脉取栓术
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 气管内插管
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 气管插管去除
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 潘似俊
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 脑动脉内溶栓术
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 董佳
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 颅脑损伤患者
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 是否有出院
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 工作单位及地址 梅溪镇管城村
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 关系 父子
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 地址 浙江省湖州市安吉县梅溪镇管城村
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 高同型半胱氨酸血症
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 双侧颈动脉硬化伴斑块形成
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 主任（副主任）医师
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 术者 助 助
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 责任护士 进修医师 实习医师 编 码 员
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 浙江省湖州市安吉县
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 月
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: '- 克'
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 退休
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 天子湖
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 浙江省南湖监狱
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 关系本人
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 门（急）诊诊断
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 具有心脏起搏器
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 老年性心脏瓣膜病
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 主动脉瓣生物瓣置换状态
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 双侧颈动脉硬化伴粥样斑块形成
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 医师
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 一 病理号 一
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 医疗机构 桐乡市第二人民医院
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 关系 子
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 门(急)诊诊断 头晕
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 冠状动脉粥样硬化性心脏病
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 心房颤动
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 单纯性肾囊肿
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 咳嗽
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 慢性支气管炎急性发作
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 病毒性上呼吸道感染
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 责任护士 陈飞英
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控护士 陈飞英
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 王德荣
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 中国
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 新生儿入院体重
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 农民
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 王伟忠
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 关系
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 子
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 门(急)诊诊断
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 头晕
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 前庭性眩晕
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 慢性缺血性脑血管病
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 李文斌
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控医师
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 质控日期
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因 疾病编码 一
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 病理号 一
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 心
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 新生儿出生体重 一 克
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 门(急)诊诊断 脑血管病
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 慢性胆囊炎
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 颈动脉硬化
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 脂肪肝
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 紧迫性尿失禁
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 责任护士 谢江丽
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: '- 手术者 I 助 II 助 /'
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 贫血
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 高脂血症
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肾功能不全
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 高尿酸血症
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 右眼结膜炎
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 玉环市人民医院
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 皮疹
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 椎动脉狭窄(右椎开口)
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 阵发性心房颤动
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 骨盆骨折
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 梅毒
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 左肝囊肿
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 左肾结石
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 左额骨骨瘤
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 低钾血症
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 一度房室传导阻滞
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 干眼综合征
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肝囊肿
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肋骨骨折
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 急性疼痛
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肺结节
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: -/
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 术后并发症- 疾病编码-
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 损伤、中毒的外部原因- 疾病编码-
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 病理诊断- 疾病编码-
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 责任护士黄小清进修医师实习医师编码员-
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 术后并发症 - 疾病编码 -
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 脑梗死（右侧基底节区及胶桥）
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 慢性支气管炎
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 颈内动脉斑块
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 颅内 动脉硬化
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肝淤血 考虑
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 不完全性右束支传导阻滞
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: D-二聚体升高
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 甲状腺功能检查的异常结果
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 肿瘤标记物升高
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 两侧 胸腔积液
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 纵隔淋巴结肿大
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 少量 心包积液
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 轻度 肺水肿
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+- label: 编码员 彭敏芳
+  hits: 1
+  n_cases: 1
+  llm_proposed_column: null
+label_collisions:
+- label: 电话
+  columns:
+  - contact_phone
+  - patient_phone
+- label: 病案号
+  columns:
+  - adm_no
+  - case_no
+pii_examples_masked: true

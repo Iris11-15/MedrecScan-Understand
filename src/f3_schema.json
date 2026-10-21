@@ -1,0 +1,96 @@
+{
+ "type": "object",
+ "properties": {
+  "相关": {
+   "type": "boolean"
+  },
+  "理由": {
+   "type": "string"
+  },
+  "条目": {
+   "type": "array",
+   "maxItems": 200,
+   "items": {
+    "type": "object",
+    "properties": {
+     "类别": {
+      "type": "string",
+      "enum": [
+       "主诉",
+       "一般情况",
+       "本次发病",
+       "诊断-入院",
+       "诊断-既往",
+       "诊断-出院",
+       "诊断-其他",
+       "溶栓",
+       "NIHSS",
+       "化验",
+       "检查",
+       "查体",
+       "用药",
+       "既往史",
+       "出院",
+       "护理",
+       "禁忌症",
+       "其他"
+      ]
+     },
+     "项目": {
+      "type": "string"
+     },
+     "值": {
+      "type": "string"
+     },
+     "出处": {
+      "type": "string"
+     },
+     "单位": {
+      "type": "string"
+     },
+     "参考范围": {
+      "type": "string"
+     },
+     "异常": {
+      "type": "string",
+      "enum": [
+       "↑",
+       "↓",
+       "正常"
+      ]
+     },
+     "剂量": {
+      "type": "string"
+     },
+     "频次": {
+      "type": "string"
+     },
+     "途径": {
+      "type": "string"
+     },
+     "时间": {
+      "type": "string"
+     },
+     "所见": {
+      "type": "string"
+     },
+     "结论": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "类别",
+     "项目",
+     "值",
+     "出处"
+    ],
+    "additionalProperties": false
+   }
+  }
+ },
+ "required": [
+  "相关",
+  "条目"
+ ],
+ "additionalProperties": false
+}

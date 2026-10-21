@@ -1,0 +1,34 @@
+迁移包（ASCII 路径版）
+========================================
+本包相对原始 zip 的唯一改动：
+
+1) 目录 jobs/示例/  ->  jobs/demo/   （命令行里不再出现中文名）
+2) 所有条目名重新写入并显式置 UTF-8 标志位（bit 11）
+   原始包该标志位为 0，按 CP936 解压会得到 jobs/绀轰缍/
+3) 文件内容逐字节未改动（含中文正文）
+
+解压到 ~/medrec/src（见 bootstrap.sh），无需再改目录名。
+
+条目清单：
+  app.ico                             17139 B  sha 5fcab8839bfc
+  client_example.py                    7595 B  sha d17916c9231d
+  field_ocr.py                        11634 B  sha b15ece6abc1f
+  jobs/demo/blocks.json               45987 B  sha 00b7b1af1fc4
+  jobs/demo/document.md                7912 B  sha 81d77839ea00
+  jobs/demo/meta.json                   399 B  sha 70648666360c
+  jobs/demo/prompt.txt                 8512 B  sha 74116af50546
+  layered.py                          23306 B  sha 1f6729087c31
+  requirements_windows_venv.txt        2619 B  sha 6ea57e44b99e
+  serve.ps1                            3738 B  sha 599c1579f72d
+  setup_env.ps1                        4291 B  sha 81301dfdb830
+  smoke_test.py                        4413 B  sha 63c72f3a20d3
+  stack.py                            35163 B  sha 196fbe5b1771
+  start.cmd                            1157 B  sha abc71f9560ae
+  start.ps1                            4314 B  sha a6e614f14876
+  stop.ps1                             2294 B  sha fecf73fcc0a9
+  usage_examples.py                    7571 B  sha efd885cd7ab4
+  visualize.py                        16894 B  sha c98c55377137
+  vl_service.py                       12519 B  sha 7988edb580b4
+  webui.html                          41206 B  sha 6a17c5cfc0c0
+  webui.py                            30448 B  sha 58428891e1c6
+  wsl_vllm.sh                          3311 B  sha 60b4b1d26482

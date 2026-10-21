@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# medrec —— 病历取数产线的一条命令入口（run / doctor）。
+#
+# 设计约束（round25）：
+#   * 参数**不写第二份**。端口 / 模型名 / K / CONC / PCONC / 止损窗口 / token 上限
+#     全部来自 scripts/config.env；run_root / backend / vllm_url 来自 config/pipeline.yaml。
+#     本脚本只 source config.env，其余一律交给 medrec_cli.py 现读。
+#   * 只读产线代码（src/**、config/**、scripts/**），不修改任何仓库文件。
+set -uo pipefail
+
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+BIN_DIR="$(cd "$(dirname "$SELF")" && pwd)"
+MEDREC_ROOT="${MEDREC_ROOT:-$(cd "$BIN_DIR/.." && pwd)}"
+CONFIG_ENV="$MEDREC_ROOT/scripts/config.env"
+
+[ -f "$CONFIG_ENV" ] || { echo "medrec: 找不到 $CONFIG_ENV" >&2; exit 2; }
+
+# shellcheck disable=SC1090
+set -a; . "$CONFIG_ENV" >/dev/null 2>&1; set +a
+medrec_clean_path 2>/dev/null || true
+
+# 产线 python：config.env 里没有 vl-env 这一项（它只定义 PY_OCR/PY_LLM/PY_LAYAD），
+# 所以这里给一个可覆盖的默认值；doctor 会把实际用的解释器打出来。
+MEDREC_PY="${MEDREC_PY:-/home/ubuntu/anaconda3/envs/vl-env/bin/python}"
+if [ ! -x "$MEDREC_PY" ]; then
+  MEDREC_PY="$(command -v python3 || true)"
+  [ -n "$MEDREC_PY" ] || { echo "medrec: 没有可用 python（试 MEDREC_PY=/path/to/python medrec ...）" >&2; exit 2; }
+fi
+
+# 本机 127.0.0.1:7897 是无效代理 —— 任何出网都要摘掉
+unset http_proxy https_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY
+export no_proxy='*' NO_PROXY='*'
+
+export MEDREC_ROOT MEDREC_BIN="$BIN_DIR"
+exec "$MEDREC_PY" -u "$BIN_DIR/medrec_cli.py" "$@"

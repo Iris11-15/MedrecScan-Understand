@@ -1,0 +1,10764 @@
+{
+ "一般情况": [
+  {
+   "idx": 1,
+   "col": "病案号",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:病案号|住院号|ID号)[：:、\\s]*([A-Za-z0-9\\-]{4,20})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "入院时间（住院时间）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "入院(?:时间|日期)[：:、\\s]*(\\d{4}[-年]\\d{1,2}[-月]\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "就诊医院",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "([\\u4e00-\\u9fa5]{2,12}(?:医院|医疗中心|卫生院))",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "姓名",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "姓名[：:、\\s]*([\\u4e00-\\u9fa5]{2,4}?)(?=\\s|出生|性别|年龄|民族|婚姻|职业|病区|床号|住院|日期|联系|关系|电话|地址|$|[^\\u4e00-\\u9fa5])",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "年龄",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:患者[\\u4e00-\\u9fa5·]{2,4}[，,、]\\s*[男女][，,、]\\s*(\\d{1,3})\\s*岁)|(?<!结婚)年龄[\\s:：、]*\\n*\\s*(\\d{1,3})\\s*岁?",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "PB-FIX4 patient-first + not-marriage-age"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "籍贯",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "籍贯[：:、\\s]*([\\u4e00-\\u9fa5]{2,15})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "身份证号",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "([1-9]\\d{5}(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])\\d{3}[\\dXx])",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "性别",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "男",
+     "女"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "本人电话号码",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:本人电话|联系电话|手机|联系方式)[\\s:：、]*((?:1[3-9]\\d{9})|(?:0\\d{2,3}[\\-]?\\d{7,8}))|((?:1[3-9]\\d{9}))\\s*分?联系电话",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "PB-RULE6 白名单/明确标签"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "地址",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:联系地址|现住址|户口地址|家庭住址|住址|地址)[\\s:：、]*([\\u4e00-\\u9fa5\\d\\-()（）]{4,40}?)(?=年龄|入院|出生|民族|性别|职业|婚姻|床号|住院号|电话|联系|$|[^\\u4e00-\\u9fa5\\d\\-()（）])",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "PB-FIX3 label-first + tail boundary"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "联系人姓名",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "联系人(?:姓名)?[\\s:：、]*([\\u4e00-\\u9fa5·]{2,4})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "联系人电话",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "联系人(?:电话)?[\\s:：、]*(?:[\\u4e00-\\u9fa5·]{2,4})?[\\s:：、]*((?:1[3-9]\\d{9})|(?:0\\d{2,3}[\\-]?\\d{7,8}))",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "序号",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "^\\s*(\\d+)\\s*$",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "标准化病案号",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "normalize",
+    "op": "normalize_from",
+    "from": "病案号",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "标准化入院时间",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "normalize",
+    "op": "normalize_from",
+    "from": "入院时间（住院时间）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 16,
+   "col": "标准化入院时间（住院时间）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "normalize",
+    "op": "normalize_from",
+    "from": "入院时间（住院时间）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "医保类型",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "manual",
+    "term_quality": "ok",
+    "term_quality_why": "PB-FIX3 template words unreliable -> manual"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "标准化就诊医院",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "normalize",
+    "op": "normalize_from",
+    "from": "就诊医院",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "质控打分",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "manual",
+    "note": "人工质控字段，抽取链路不填（原为指向自己的 normalize，循环引用）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "民族",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "terms": [
+     "汉族",
+     "回族",
+     "满族",
+     "蒙古族",
+     "壮族",
+     "维吾尔族",
+     "苗族",
+     "彝族",
+     "土家族",
+     "藏族",
+     "朝鲜族",
+     "侗族",
+     "瑶族",
+     "白族"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "PB-RULE6 白名单/明确标签",
+    "pattern": "民(?:\\s*)族[\\s:：、]*((?:汉|回|满|蒙古|壮|维吾尔|苗|彝|土家|藏|朝鲜|侗|瑶|白|布依|哈尼|哈萨克|黎|傣|畲|傈僳|高山|拉祜|水|东乡|纳西|景颇|柯尔克孜|土|达斡尔|仫佬|羌|布朗|撒拉|毛南|仡佬|锡伯|阿昌|普米|塔吉克|怒|乌兹别克|俄罗斯|鄂温克|德昂|保安|裕固|京|塔塔尔|独龙|鄂伦春|赫哲|门巴|珞巴|基诺)族)|(?<![民])族[\\s:：、]+((?:汉|回|满|蒙古|壮|维吾尔|苗|彝|土家|藏|朝鲜|侗|瑶|白|布依|哈尼|哈萨克|黎|傣|畲|傈僳|高山|拉祜|水|东乡|纳西|景颇|柯尔克孜|土|达斡尔|仫佬|羌|布朗|撒拉|毛南|仡佬|锡伯|阿昌|普米|塔吉克|怒|乌兹别克|俄罗斯|鄂温克|德昂|保安|裕固|京|塔塔尔|独龙|鄂伦春|赫哲|门巴|珞巴|基诺)族)",
+    "group": 1
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "入院途径",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "manual",
+    "term_quality": "ok",
+    "term_quality_why": "PB-FIX3 template words unreliable -> manual"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "入院科别",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "入院科别[：:、\\s]*([\\u4e00-\\u9fa5]{2,10})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "住院总费用（元）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "住院总费用[（(]?元?[）)]?[：:、\\s]*([\\d.]+)",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "西药费（元）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "西药费[（(]?元?[）)]?[：:、\\s]*([\\d.]+)",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "中成药费（元）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "中成药费[（(]?元?[）)]?[：:、\\s]*([\\d.]+)",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "用药总费用（元）",
+   "sheet": "一般情况",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "首页表"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "sum",
+    "cols": [
+     "西药费（元）",
+     "中成药费（元）"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "需查证",
+   "escalate_if": null
+  }
+ ],
+ "本次发病": [
+  {
+   "idx": 1,
+   "col": "临床症状(仅TIA需要填写)",
+   "sheet": "本次发病",
+   "layer": "llm",
+   "source_sections": [
+    "主诉",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 2,
+   "col": "症状持续时间(仅TIA需要填写)",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "主诉",
+    "现病史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(持续|历时)\\s*(\\d+)\\s*(分钟|分|小时|h|天|日)",
+    "group": 0,
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 3,
+   "col": "本次发作前7天内是否有1次早期发作(仅TIA需要填写)",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "现病史",
+    "主诉"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "发作",
+     "一过性",
+     "短暂性",
+     "反复发作"
+    ],
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 4,
+   "col": "发病时间",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "主诉",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(突发|出现|发作|始|开始)[^。；\\n]{0,15}?(\\d{4}[-年]\\d{1,2}[-月]\\d{1,2}[日]?|\\d{1,2}月\\d{1,2}日|\\d{1,2}[:：]\\d{2})",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 5,
+   "col": "症状出现的场所",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "现病史",
+    "主诉"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "家中",
+     "家里",
+     "睡眠中",
+     "睡醒",
+     "晨起",
+     "工作中",
+     "单位",
+     "路上",
+     "行走时",
+     "就餐时",
+     "厕所",
+     "户外"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 6,
+   "col": "是否醒来卒中",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "现病史",
+    "主诉",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "醒来",
+     "睡醒",
+     "晨起发现",
+     "起床时发现",
+     "睡眠中发病"
+    ],
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 7,
+   "col": "最后看起来正常时间(适用于醒来卒中)",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "现病史",
+    "主诉"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(最后.{0,4}正常|睡前|入睡)[^。；\\n]{0,20}?(\\d{1,2}[:：]\\d{2}|\\d{1,2}月\\d{1,2}日)",
+    "group": 2,
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 8,
+   "col": "症状被发现的时间--发现时刻(适用于醒来卒中)",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "现病史",
+    "主诉"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(发现|唤醒|叫醒)[^。；\\n]{0,15}?(\\d{1,2}[:：]\\d{2})",
+    "group": 2,
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 9,
+   "col": "到院时间（就诊时间）",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "病案首页",
+    "入院记录",
+    "现病史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(到院|就诊|入院|急诊)[^。；\\n]{0,10}?(\\d{1,2}[:：]\\d{2})",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 10,
+   "col": "入院方式",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "入院记录",
+    "病案首页",
+    "现病史"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "步行",
+     "自行步入",
+     "扶行",
+     "轮椅",
+     "平车",
+     "担架",
+     "120",
+     "救护车",
+     "急救车",
+     "转院"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 11,
+   "col": "主诉",
+   "sheet": "本次发病",
+   "layer": "rule+small",
+   "source_sections": [
+    "主诉",
+    "入院记录",
+    "现病史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:主诉[：:]\\s*)?([^\\n]{4,80})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": "规则未命中"
+  }
+ ],
+ "诊断-入院": [
+  {
+   "idx": 1,
+   "col": "入院诊断（初步诊断）",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "入院诊断（初步诊断）"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 2,
+   "col": "病因分型",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "病因分型"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 3,
+   "col": "病因分型备注",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 4,
+   "col": "梗死方位",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "梗死方位"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 5,
+   "col": "梗死部位",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "梗死部位"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 6,
+   "col": "DWI高信号部位",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "DWI高信号部位"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 7,
+   "col": "责任血管",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "责任血管"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 8,
+   "col": "被害血管",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "被害血管"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 9,
+   "col": "血管备注",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 10,
+   "col": "缺血性卒中",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "缺血性卒中"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 11,
+   "col": "缺血性卒中备注",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 12,
+   "col": "是否大血管闭塞",
+   "sheet": "诊断-入院",
+   "layer": "llm",
+   "source_sections": [
+    "入院记录",
+    "初步诊断",
+    "诊断",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "是否大血管闭塞"
+   },
+   "missing_means": "待确认"
+  }
+ ],
+ "诊断-既往": [
+  {
+   "idx": 1,
+   "col": "既往短暂性脑缺血发作",
+   "sheet": "诊断-既往",
+   "layer": "rule",
+   "source_sections": [
+    "既往史",
+    "诊断"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "短暂性脑缺血发作"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "既往卒中",
+   "sheet": "诊断-既往",
+   "layer": "rule",
+   "source_sections": [
+    "既往史",
+    "诊断"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "卒中"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "既往缺血性脑卒中发病次数",
+   "sheet": "诊断-既往",
+   "layer": "small",
+   "source_sections": [
+    "既往史",
+    "现病史"
+   ],
+   "extract": {
+    "kind": "small",
+    "field": "既往缺血性脑卒中发病次数"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 4,
+   "col": "既往脑梗",
+   "sheet": "诊断-既往",
+   "layer": "rule",
+   "source_sections": [
+    "既往史",
+    "诊断"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "脑梗"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "诊断-出院": [
+  {
+   "idx": 1,
+   "col": "出院主要诊断",
+   "sheet": "诊断-出院",
+   "layer": "llm",
+   "source_sections": [
+    "出院记录",
+    "出院诊断"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "出院主要诊断"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 2,
+   "col": "出院其它诊断",
+   "sheet": "诊断-出院",
+   "layer": "llm",
+   "source_sections": [
+    "出院记录",
+    "出院诊断"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "出院其它诊断"
+   },
+   "missing_means": "待确认"
+  }
+ ],
+ "诊断-其他": [
+  {
+   "idx": 1,
+   "col": "是否死亡",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "出院记录",
+    "病程记录",
+    "死亡记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "eq_literal",
+    "col": "离院方式",
+    "value": "死亡",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "离院方式",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "医嘱离院",
+     "医嘱转院",
+     "医嘱转社区",
+     "非医嘱离院",
+     "自动出院",
+     "死亡",
+     "转社区卫生服务机构"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "非医嘱出院原因",
+   "sheet": "诊断-其他",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "非医嘱出院原因"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 4,
+   "col": "住院天数（天）",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "入院记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "date_diff_days",
+    "a": "出院日期",
+    "b": "入院时间（住院时间）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "主治医师",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "入院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:主治医师|主管医师|经治医师)[：:、\\s]*([\\u4e00-\\u9fa5]{2,4}?)(?=\\s|签名|医师|主任|$|[^\\u4e00-\\u9fa5])",
+    "group": 1,
+    "reject": [
+     "查房",
+     "记录",
+     "首次",
+     "日常",
+     "病区",
+     "医师",
+     "主任",
+     "签名",
+     "死亡",
+     "出院",
+     "入院",
+     "会诊",
+     "讨论",
+     "抢救"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "手术及操作名称",
+   "sheet": "诊断-其他",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "手术及操作名称"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 7,
+   "col": "吸烟",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "既往史",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "吸烟",
+     "抽烟",
+     "烟龄",
+     "吸烟史",
+     "吸烟指数",
+     "每日吸烟"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "吸烟量（支/天）",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "既往史",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:每日|每天|日吸|约)?\\s*(\\d+)\\s*支(?:\\s*/\\s*(?:天|日|d))?",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "吸烟年数",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "既往史",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "吸(烟|了)(?:史)?\\s*(\\d+)\\s*年",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "戒烟年数",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "既往史",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "戒(烟|了)(?:史)?\\s*(\\d+)\\s*年",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "饮酒史",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "既往史",
+    "现病史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "饮酒",
+     "喝酒",
+     "酗酒",
+     "嗜酒",
+     "饮酒史",
+     "白酒",
+     "黄酒",
+     "啤酒"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "文化程度",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "个人史",
+    "入院记录",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "文盲",
+     "半文盲",
+     "小学",
+     "初中",
+     "高中",
+     "中专",
+     "技校",
+     "大专",
+     "本科",
+     "大学",
+     "硕士",
+     "研究生",
+     "博士"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "卒中家族史",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "家族史",
+    "既往史",
+    "个人史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "卒中家族史",
+     "脑卒中家族史",
+     "中风家族史",
+     "脑血管病家族史",
+     "家族史"
+    ],
+    "_note": "原来还含 父母/父亲/母亲/兄弟/姐妹/子女 —— 「父母健在」会把整列误报成阳性。",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "发病前-mRS（0-5整数）",
+   "sheet": "诊断-其他",
+   "layer": "small",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "small",
+    "field": "发病前-mRS（0-5整数）"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 15,
+   "col": "基线-mRS（0-5整数）",
+   "sheet": "诊断-其他",
+   "layer": "small",
+   "source_sections": [
+    "诊断",
+    "初步诊断",
+    "病程记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "入院时\\s*mRS\\s*[：:]\\s*([0-5])",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 16,
+   "col": "格拉斯哥（GCS）评分",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "查体",
+    "专科检查",
+    "病程记录",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:GCS|格拉斯哥(?:昏迷)?)\\s*(?:评分)?\\s*[：:＝= ]?\\s*(\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "ESSEN评分",
+   "sheet": "诊断-其他",
+   "layer": "small",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(ESSEN|Essen|essen)\\s*评分?\\s*[：:＝= ]?\\s*(\\d{1,2})",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "待确认"
+  },
+  {
+   "idx": 18,
+   "col": "患者住院期间是否发生脑梗死(仅TIA需要填写)",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "检查报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "新发脑梗死",
+     "新发梗死",
+     "再次梗死",
+     "梗死灶增大",
+     "新出现梗死"
+    ],
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "住院期间脑梗死具体发病时间(仅TIA需要填写)",
+   "sheet": "诊断-其他",
+   "layer": "rule+small",
+   "source_sections": [
+    "病程记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(新发脑梗死|新发梗死|再次梗死)[^。；\\n]{0,20}?(\\d{4}[-年]\\d{1,2}[-月]\\d{1,2}|\\d{1,2}月\\d{1,2}日|\\d{1,2}[:：]\\d{2})",
+    "group": 2,
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 20,
+   "col": "充血性心衰",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "心力衰竭",
+     "心衰",
+     "心功能不全",
+     "心功能Ⅲ级",
+     "心功能Ⅳ级",
+     "NYHA"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "外周动脉疾病",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "外周动脉",
+     "下肢动脉硬化",
+     "下肢动脉闭塞",
+     "动脉硬化性闭塞",
+     "PAD"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "心力衰竭",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "心力衰竭",
+     "心衰",
+     "心功能不全",
+     "NYHA"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "蛛网膜下腔出血",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "蛛网膜下腔出血",
+     "SAH"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "脑动脉瘤",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "动脉瘤"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "动静脉畸形AVM",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "动静脉畸形",
+     "AVM"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "硬脑膜动静脉瘘DAVF",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "硬脑膜动静脉瘘",
+     "DAVF",
+     "动静脉瘘"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 27,
+   "col": "脊髓血管疾病",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "脊髓血管",
+     "脊髓动静脉"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 28,
+   "col": "静脉窦血栓形成/皮层静脉血栓形成",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "静脉窦血栓",
+     "皮层静脉血栓",
+     "CVST",
+     "脑静脉血栓"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "机械人工瓣膜",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "机械瓣",
+     "人工瓣膜",
+     "瓣膜置换",
+     "瓣膜置换术后"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 30,
+   "col": "扩张型心肌病",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "扩张型心肌病",
+     "扩心病",
+     "扩张性心肌病"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 31,
+   "col": "病窦综合征",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "病态窦房结",
+     "病窦综合征",
+     "病窦"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 32,
+   "col": "心房黏液瘤",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "黏液瘤",
+     "粘液瘤",
+     "心房瘤"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 33,
+   "col": "感染性心内膜炎",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "感染性心内膜炎",
+     "心内膜炎",
+     "IE"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 34,
+   "col": "二尖瓣狭窄",
+   "sheet": "诊断-其他",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "出院记录",
+    "诊断",
+    "医嘱"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "二尖瓣狭窄",
+     "二尖瓣重度狭窄"
+    ],
+    "missing_means": "否若段在",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "溶栓": [
+  {
+   "idx": 1,
+   "col": "ONT",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "病程记录",
+    "溶栓记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "time_diff_min",
+    "a": "溶栓用药时间",
+    "b": "发病时间",
+    "fallback_b": "到院时间（就诊时间）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "DNT",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "病程记录",
+    "溶栓记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "time_diff_min",
+    "a": "溶栓用药时间",
+    "b": "到院时间（就诊时间）",
+    "fallback_b": "发病时间",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "是否本院行rt-PA静脉溶栓治疗",
+   "sheet": "溶栓",
+   "layer": "rule+small",
+   "source_sections": [
+    "医嘱",
+    "病程记录",
+    "溶栓记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "rt-PA",
+     "rtPA",
+     "阿替普酶",
+     "爱通立",
+     "静脉溶栓",
+     "静脉rt-PA",
+     "溶栓治疗"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 4,
+   "col": "溶栓用药时间",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "溶栓记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(溶栓|rt-PA|阿替普酶|爱通立)[^。；\\n]{0,20}?(\\d{1,2}[:：]\\d{2})",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "rt-PA首剂",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "溶栓记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(首剂|负荷量)[^。；\\n]{0,10}?(\\d+(?:\\.\\d+)?)\\s*(mg|毫克)",
+    "group": 0,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "rt-PA总量",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "溶栓记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(rt-PA|rtPA|阿替普酶|爱通立)[^。；\\n]{0,25}?(?:总量|总剂量|共)\\s*[：: ]?(\\d+(?:\\.\\d+)?)\\s*(mg|毫克)",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "是否尿激酶静脉溶栓",
+   "sheet": "溶栓",
+   "layer": "rule+small",
+   "source_sections": [
+    "医嘱",
+    "病程记录",
+    "溶栓记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "尿激酶"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 8,
+   "col": "尿激酶给药总量(单位:万UI)(20-300)",
+   "sheet": "溶栓",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "溶栓记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "尿激酶[^。；\\n]{0,25}?(\\d+(?:\\.\\d+)?)\\s*(万\\s*U|万UI|万单位)",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "不给溶栓的原因",
+   "sheet": "溶栓",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "不给溶栓的原因"
+   },
+   "missing_means": "否若段在"
+  }
+ ],
+ "NIHSS": [
+  {
+   "idx": 1,
+   "col": "基线-NIHSS",
+   "sheet": "NIHSS",
+   "layer": "done",
+   "source_sections": [
+    "诊断",
+    "初步诊断",
+    "病程记录",
+    "查体"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "入院时\\s*NIHSS\\s*[：:]\\s*(\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 2,
+   "col": "24h-NIHSS",
+   "sheet": "NIHSS",
+   "layer": "rule+small",
+   "source_sections": [
+    "病程记录",
+    "查体"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "24\\s*(?:h|H|小时|h后|小时后)?[^。；\\n]{0,12}?NIHSS[^0-9]{0,6}?(\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 3,
+   "col": "1w-NIHSS",
+   "sheet": "NIHSS",
+   "layer": "rule+small",
+   "source_sections": [
+    "病程记录",
+    "查体"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:1\\s*(?:w|W|周)|一周|7\\s*(?:d|天))[^。；\\n]{0,12}?NIHSS[^0-9]{0,6}?(\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 4,
+   "col": "出院NIHSS评分(0-42整数)",
+   "sheet": "NIHSS",
+   "layer": "rule+small",
+   "source_sections": [
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:出院|离院)[^。；\\n]{0,15}?NIHSS[^0-9]{0,6}?(\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  }
+ ],
+ "化验": [
+  {
+   "idx": 1,
+   "col": "空腹血糖（mg/dL）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "空腹血糖"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "空腹血糖（mmol/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "空腹血糖"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "空腹血糖检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "空腹血糖"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "糖化血红蛋白检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "糖化血红蛋白"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "糖化血红蛋白检查结果（%）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "糖化血红蛋白检查结果"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "血常规检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血常规"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "白细胞计数（10E9/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "白细胞计数"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "红细胞计数.（10E12/L，1-100）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "红细胞计数"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "血红蛋白（g/L，20-200）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血红蛋白"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "血小板计数.（10^9/L，10-600）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血小板计数"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "中性粒细胞比例（%，10-100）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "中性粒细胞比例"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "凝血谱检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "凝血谱"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "凝血酶原时间PT（s，>50）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "凝血酶原时间PT"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "部分凝血活酶时间APTT（s）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "部分凝血活酶时间APTT"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "国际标准化比值INR（>0,<5）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "国际标准化比值INR"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 16,
+   "col": "纤维蛋白原定量FBG（g/L，<91）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "纤维蛋白原定量FBG"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "D-D急诊（D-二聚体）（ug/L.FEU，>0）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "D-D急诊（D-二聚体）"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "氨基端B型利钠肽原（pro-BNP）检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "氨基端B型利钠肽原"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "氨基端B型利钠肽原（pro-BNP）检查结果(pg/mL)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "氨基端B型利钠肽原（pro-BNP）检查结果"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "糖脂肝肾生化检查时间",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "糖脂肝肾生化"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "白蛋白.(g/L)(5-500)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "白蛋白.(g/L)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "前白蛋白(mg/L)(10-500)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "前白蛋白(mg/L)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "同型半胱氨酸Hcy（umol/L，>0）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "同型半胱氨酸Hcy"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "血钠（mmol/L，120-180）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血钠"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "血钾（mmol/L，1.5-8）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血钾"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "葡萄糖（mmol/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "葡萄糖"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 27,
+   "col": "血尿素氮BUN（mmol/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血尿素氮BUN"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 28,
+   "col": "血尿素氮BUN(mg/dL)(0-56)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "血尿素氮BUN(mg/dL)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "肌酐Cr（μmol/L，10-500）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "肌酐Cr"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 30,
+   "col": "肌酐(mg/dL)(0-1000)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "肌酐(mg/dL)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 31,
+   "col": "尿酸（μmol/L，20-1000）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "尿酸"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 32,
+   "col": "尿酸(mg/dL)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "尿酸"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 33,
+   "col": "胆固醇TC（mmol/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "胆固醇TC"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 34,
+   "col": "甘油三酯TG(mmol/L，>0)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "甘油三酯TG"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 35,
+   "col": "高密度脂蛋白HDL(mmol/L，>0)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "高密度脂蛋白HDL"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 36,
+   "col": "高密度脂蛋白HDL(mg/dL，>0)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "高密度脂蛋白HDL"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 37,
+   "col": "低密度脂蛋白LDL(mmol/L，>0,<20)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "低密度脂蛋白LDL"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 38,
+   "col": "低密度脂蛋白LDL(mg/dL)(0-600)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "低密度脂蛋白LDL(mg/dL)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 39,
+   "col": "甘油三酯／HDL-C比例",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "甘油三酯／HDL-C比例"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 40,
+   "col": "游离脂肪酸（μmol/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "游离脂肪酸"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 41,
+   "col": "脂蛋白(a).(mg/L)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "脂蛋白(a)"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 42,
+   "col": "肾小球滤过率(ml/min1.73m2)",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "肾小球滤过率"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 43,
+   "col": "C反应蛋白CRP（mg/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "C反应蛋白CRP"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 44,
+   "col": "超敏C反应蛋白（mg/L）",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "超敏C反应蛋白"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 45,
+   "col": "氯吡格雷代谢基因多态性（CYP2C19）检查时间",
+   "sheet": "化验",
+   "layer": "rule+small",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "氯吡格雷代谢基因多态性"
+    },
+    "field": "报告时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 46,
+   "col": "氯吡格雷代谢基因多态性（CYP2C19）阳性指标",
+   "sheet": "化验",
+   "layer": "rule+small",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "氯吡格雷代谢基因多态性（CYP2C19）阳性指标"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 47,
+   "col": "是否存在抗血小板治疗禁忌症",
+   "sheet": "化验",
+   "layer": "rule+small",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "是否存在抗血小板治疗禁忌症"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 48,
+   "col": "凝血异常",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "凝血异常"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 49,
+   "col": "高同型半胱氨酸血症",
+   "sheet": "化验",
+   "layer": "rule",
+   "source_sections": [
+    "化验单",
+    "辅助检查"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "化验单",
+    "filter": {
+     "项目": "高同型半胱氨酸血症"
+    },
+    "field": "结果",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "检查": [
+  {
+   "idx": 1,
+   "col": "是否颅内出血",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "颅内出血"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "头颅弥散成像（DWI)检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅弥散成像（DWI)"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "头颅CT检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅CT"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "头颅磁共振检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅磁共振"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "头颅CT脑灌注检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅CT脑灌注"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "头颅磁共振增强(增强MRI)检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅磁共振增强(增强MRI)"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "经颅多谱勒（TCD）检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "经颅多谱勒（TCD）"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "头颅CTA检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅CTA"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "头颅MRA检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "头颅MRA"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "颈动脉CTA检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "颈动脉CTA"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "颈部CEMRA检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "颈部CEMRA"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "颈动脉B超检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "颈动脉B超"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "椎动脉B超检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "椎动脉B超"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "全脑血管造影术(DSA)检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "全脑血管造影术(DSA)"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "下肢静脉B超检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "下肢静脉B超"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 16,
+   "col": "下肢大动脉B超检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "下肢大动脉B超"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "冠状动脉造影",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "冠状动脉造影"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "冠状动脉CTA",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "冠状动脉CTA"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "心脏B超",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "心脏B超"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "心电图检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "心电图"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "动态心电图检查",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "动态心电图"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "心脏--卵圆孔未闭PFO",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--卵圆孔未闭PFO"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 23,
+   "col": "心脏--左心房壁血栓",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--左心房壁血栓"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 24,
+   "col": "心脏--房性期前收缩Premature.atrial.complexes",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--房性期前收缩Premature.atrial.complexes"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 25,
+   "col": "心脏--左心室肥大",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--左心室肥大"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 26,
+   "col": "心脏--先天性左心室憩室",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--先天性左心室憩室"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 27,
+   "col": "心脏--心房异位活动",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "心脏--心房异位活动"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 28,
+   "col": "心脏B超--左心室射血分数（LVEF，%）",
+   "sheet": "检查",
+   "layer": "rule",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "检查报告",
+    "terms": [
+     "心脏B超--左心室射血分数（LVEF，%）"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "左房CTA检查",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "左房CTA检查"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 30,
+   "col": "高分辨磁共振检查",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "高分辨磁共振检查"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 31,
+   "col": "磁敏感成像（序列）检查",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "磁敏感成像（序列）检查"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 32,
+   "col": "弥散张量成像(DTI)检查",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "弥散张量成像(DTI)检查"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 33,
+   "col": "发泡试验检查",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "发泡试验检查"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 34,
+   "col": "头MR的DWI表现(仅TIA需要填写)",
+   "sheet": "检查",
+   "layer": "llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "missing_means": "不适用",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 35,
+   "col": "腔隙",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "腔隙"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 36,
+   "col": "主动脉斑块",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "主动脉斑块"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 37,
+   "col": "住院房颤评估",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "住院房颤评估"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 38,
+   "col": "颅内大动脉狭窄（初筛）",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "颅内大动脉狭窄（初筛）"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 39,
+   "col": "颅内大动脉狭窄程度",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "颅内大动脉狭窄程度"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 40,
+   "col": "狭窄血管",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "狭窄血管"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 41,
+   "col": "白质高信号（初筛）",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "白质高信号（初筛）"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 42,
+   "col": "白质高信号",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "白质高信号"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 43,
+   "col": "白质高信号部位",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "白质高信号部位"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 44,
+   "col": "脑室旁白质高信号数值",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "脑室旁白质高信号数值"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 45,
+   "col": "深部白质高信号数值",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "深部白质高信号数值"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 46,
+   "col": "微出血（初筛）",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血（初筛）"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 47,
+   "col": "微出血",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 48,
+   "col": "微出血部位",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血部位"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 49,
+   "col": "微出血个数-脑叶",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血个数-脑叶"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 50,
+   "col": "微出血个数-深部",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血个数-深部"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 51,
+   "col": "微出血个数-幕下",
+   "sheet": "检查",
+   "layer": "small+llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "small_then_llm",
+    "field": "微出血个数-幕下"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 52,
+   "col": "一周内不能颈动脉检查的原因说明",
+   "sheet": "检查",
+   "layer": "llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "一周内不能颈动脉检查的原因说明"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 53,
+   "col": "其他类型心脏疾病",
+   "sheet": "检查",
+   "layer": "llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "其他类型心脏疾病"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 54,
+   "col": "先天性心脏病",
+   "sheet": "检查",
+   "layer": "llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "先天性心脏病"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 55,
+   "col": "其他心脏病",
+   "sheet": "检查",
+   "layer": "llm",
+   "source_sections": [
+    "检查报告",
+    "辅助检查",
+    "影像报告"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "其他心脏病"
+   },
+   "missing_means": "否若段在"
+  }
+ ],
+ "查体": [
+  {
+   "idx": 1,
+   "col": "脉搏(/min)",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "脉搏"
+    },
+    "field": "脉搏(/min)",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "脉搏\\s*(\\d+(?:\\.\\d+)?)",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "呼吸（/min）",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "呼吸"
+    },
+    "field": "呼吸（/min）",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "呼吸\\s*(\\d+(?:\\.\\d+)?)\\s*次",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "收缩压（mmHg）",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "收缩压"
+    },
+    "field": "收缩压（mmHg）",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "血压\\s*(\\d+)\\s*[∕/]\\s*\\d+",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "舒张压（mmHg）",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "舒张压"
+    },
+    "field": "舒张压（mmHg）",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "血压\\s*\\d+\\s*[∕/]\\s*(\\d+)",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "体温.(℃)",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "体温"
+    },
+    "field": "体温.(℃)",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "体温\\s*(\\d+(?:\\.\\d+)?)",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "体重（Kg）",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "体重"
+    },
+    "field": "体重（Kg）",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "体重\\s*(\\d+(?:\\.\\d+)?)\\s*(?:kg|KG|公斤)",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "身高（cm）",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "身高"
+    },
+    "field": "身高（cm）",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "身高\\s*[：:]?\\s*(\\d+(?:\\.\\d+)?)\\s*(?:m|米|cm|厘米)?",
+     "group": 1,
+     "mul_if_lt": [
+      3,
+      100
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "BMI",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "生命体征表",
+    "filter": {
+     "项目": "BMI"
+    },
+    "field": "BMI",
+    "want": "value",
+    "fallback": {
+     "kind": "regex",
+     "pattern": "BMI[指数]*\\s*[：:]?\\s*(\\d+(?:\\.\\d+)?)",
+     "group": 1
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "左右下肢肌力最低等级",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:下肢|四肢)肌力\\s*([0-5])\\s*级",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "入院48h内能否行走",
+   "sheet": "查体",
+   "layer": "small",
+   "source_sections": [
+    "病程记录",
+    "护理记录",
+    "查体"
+   ],
+   "extract": {
+    "kind": "small",
+    "field": "入院48h内能否行走"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 11,
+   "col": "洼田饮水试验",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "体格检查表",
+    "专科检查",
+    "生命体征",
+    "病案首页"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "洼田饮水试验",
+     "饮水试验",
+     "洼田"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "入院查体",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "查体",
+    "入院记录",
+    "病案首页",
+    "专科检查"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "入院(?:后)?查体\\s*[：:]\\s*([\\s\\S]{8,500})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "出院查体",
+   "sheet": "查体",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "查体\\s*[：:]\\s*([\\s\\S]{8,500})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "用药": [
+  {
+   "idx": 1,
+   "col": "目前用药",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "目前用药（出院/入院前用药清单，自由文本）",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "抗血小板药物史",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "阿司匹林",
+     "拜阿司匹灵",
+     "氯吡格雷",
+     "波立维",
+     "泰嘉",
+     "替格瑞洛",
+     "倍林达",
+     "双嘧达莫",
+     "西洛他唑",
+     "吲哚布芬"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "抗凝药物史",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "华法林",
+     "达比加群",
+     "泰毕全",
+     "利伐沙班",
+     "拜瑞妥",
+     "阿哌沙班",
+     "艾多沙班",
+     "依度沙班",
+     "低分子肝素",
+     "依诺肝素",
+     "那屈肝素",
+     "肝素"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "降压药物史",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "氨氯地平",
+     "硝苯地平",
+     "非洛地平",
+     "缬沙坦",
+     "厄贝沙坦",
+     "氯沙坦",
+     "替米沙坦",
+     "培哚普利",
+     "贝那普利",
+     "依那普利",
+     "美托洛尔",
+     "比索洛尔",
+     "氢氯噻嗪",
+     "吲达帕胺",
+     "特拉唑嗪"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "调节血脂药物史",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "阿托伐他汀",
+     "立普妥",
+     "瑞舒伐他汀",
+     "可定",
+     "辛伐他汀",
+     "舒降之",
+     "普伐他汀",
+     "氟伐他汀",
+     "依折麦布",
+     "依哲麦布",
+     "非诺贝特",
+     "苯扎贝特"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "降糖药物史",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "二甲双胍",
+     "格列美脲",
+     "格列齐特",
+     "格列吡嗪",
+     "阿卡波糖",
+     "拜糖平",
+     "西格列汀",
+     "达格列净",
+     "恩格列净",
+     "吡格列酮",
+     "胰岛素",
+     "诺和灵",
+     "优泌林"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "中成药物史（脑血管）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "入院前用药",
+    "既往史",
+    "入院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "银杏",
+     "银杏叶",
+     "丹参",
+     "血塞通",
+     "血栓通",
+     "三七",
+     "川芎嗪",
+     "灯盏花",
+     "脑心通",
+     "通心络",
+     "华佗再造"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "住院阿司匹林",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "阿司匹林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "住院阿司匹林用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿司匹林"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "住院阿司匹林使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿司匹林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "住院阿司匹林使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿司匹林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "住院氯吡格雷",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "氯吡格雷"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "住院氯吡格雷用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "氯吡格雷"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "住院氯吡格雷使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "氯吡格雷"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "住院氯吡格雷使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "氯吡格雷"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 16,
+   "col": "住院西洛他唑",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "西洛他唑"
+    ]
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "住院西洛他唑用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "西洛他唑"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "住院西洛他唑使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "西洛他唑"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "住院西洛他唑使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "西洛他唑"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "住院双嘧达莫(抗血小板)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "双嘧达莫"
+    ],
+    "form_any": [
+     "抗血小板"
+    ]
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "住院双嘧达莫用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "双嘧达莫"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "住院双嘧达莫使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "双嘧达莫"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "住院双嘧达莫使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "双嘧达莫"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "是否住院给予抗栓药物治疗",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "住院给予抗栓药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "住院华法林",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "华法林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "住院华法林用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "华法林"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 27,
+   "col": "住院华法林使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "华法林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 28,
+   "col": "住院华法林使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "华法林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "住院达比加群酯",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "达比加群酯"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 30,
+   "col": "住院达比加群酯用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "达比加群酯"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 31,
+   "col": "住院达比加群酯使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "达比加群酯"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 32,
+   "col": "住院达比加群酯使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "达比加群酯"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 33,
+   "col": "住院利伐沙班",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "利伐沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 34,
+   "col": "住院利伐沙班用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "利伐沙班"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 35,
+   "col": "住院利伐沙班使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "利伐沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 36,
+   "col": "住院利伐沙班使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "利伐沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 37,
+   "col": "住院阿加曲班",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "阿加曲班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 38,
+   "col": "住院阿加曲班用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿加曲班"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 39,
+   "col": "住院阿加曲班使用剂量(mg，20ml=10mg）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿加曲班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 40,
+   "col": "住院阿加曲班使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿加曲班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 41,
+   "col": "住院阿哌沙班",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "阿哌沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 42,
+   "col": "住院阿哌沙班用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿哌沙班"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 43,
+   "col": "住院阿哌沙班使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿哌沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 44,
+   "col": "住院阿哌沙班使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿哌沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 45,
+   "col": "住院依度沙班",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "依度沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 46,
+   "col": "住院依度沙班用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依度沙班"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 47,
+   "col": "住院依度沙班使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依度沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 48,
+   "col": "住院依度沙班使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依度沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 49,
+   "col": "住院低分子肝素",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "低分子肝素"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 50,
+   "col": "住院低分子肝素用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "低分子肝素"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 51,
+   "col": "住院低分子肝素使用剂量(unit或ml，4000unit=0.4ml)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "低分子肝素"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 52,
+   "col": "住院低分子肝素使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "低分子肝素"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 53,
+   "col": "住院普通肝素",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "普通肝素"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 54,
+   "col": "住院普通肝素用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普通肝素"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 55,
+   "col": "住院普通肝素使用剂量(unit或ml，4000unit=0.4ml)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普通肝素"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 56,
+   "col": "住院普通肝素使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普通肝素"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 57,
+   "col": "住院尤瑞克林",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "尤瑞克林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 58,
+   "col": "住院尤瑞克林用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "尤瑞克林"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 59,
+   "col": "住院尤瑞克林使用剂量(PNA)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "尤瑞克林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 60,
+   "col": "住院尤瑞克林使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "尤瑞克林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 61,
+   "col": "住院万汶（羟乙基淀粉)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "万汶"
+    ],
+    "form_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 62,
+   "col": "住院万汶（羟乙基淀粉)用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "万汶"
+    },
+    "field": "开始时间",
+    "want": "value",
+    "filter_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 63,
+   "col": "住院万汶（羟乙基淀粉)使用剂量(ml)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "万汶"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 64,
+   "col": "住院万汶（羟乙基淀粉)使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "万汶"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 65,
+   "col": "住院阿托伐他汀",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "阿托伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 66,
+   "col": "住院阿托伐他汀用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿托伐他汀"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 67,
+   "col": "住院阿托伐他汀使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿托伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 68,
+   "col": "住院阿托伐他汀使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "阿托伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 69,
+   "col": "住院瑞舒伐他汀",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "瑞舒伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 70,
+   "col": "住院瑞舒伐他汀用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "瑞舒伐他汀"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 71,
+   "col": "住院瑞舒伐他汀使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "瑞舒伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 72,
+   "col": "住院瑞舒伐他汀使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "瑞舒伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 73,
+   "col": "住院普伐他汀",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "普伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 74,
+   "col": "住院普伐他汀用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普伐他汀"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 75,
+   "col": "住院普伐他汀使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 76,
+   "col": "住院普伐他汀使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "普伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 77,
+   "col": "住院辛伐他汀",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "辛伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 78,
+   "col": "住院辛伐他汀用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "辛伐他汀"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 79,
+   "col": "住院辛伐他汀使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "辛伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 80,
+   "col": "住院辛伐他汀使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "辛伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 81,
+   "col": "住院依哲麦布",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "依哲麦布"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 82,
+   "col": "住院依哲麦布用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依哲麦布"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 83,
+   "col": "住院依哲麦布使用剂量(mg)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依哲麦布"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 84,
+   "col": "住院依哲麦布使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "依哲麦布"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 85,
+   "col": "住院丁苯酞（片剂\\胶囊）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "丁苯酞"
+    ],
+    "form_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 86,
+   "col": "住院丁苯酞（片剂\\胶囊）用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "开始时间",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 87,
+   "col": "住院丁苯酞（片剂\\胶囊）使用剂量(g)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 88,
+   "col": "住院丁苯酞（片剂\\胶囊）使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 89,
+   "col": "住院丁苯酞（注射液）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "丁苯酞"
+    ],
+    "form_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 90,
+   "col": "住院丁苯酞（注射液）用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "开始时间",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 91,
+   "col": "住院丁苯酞（注射液）使用剂量（ml)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 92,
+   "col": "住院丁苯酞（注射液）使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "丁苯酞"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 93,
+   "col": "住院胞磷胆碱（片剂\\胶囊）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "胞磷胆碱"
+    ],
+    "form_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 94,
+   "col": "住院胞磷胆碱（片剂\\胶囊）用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "开始时间",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 95,
+   "col": "住院胞磷胆碱（片剂\\胶囊）使用剂量(g)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 96,
+   "col": "住院胞磷胆碱（片剂\\胶囊）使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "片",
+     "胶囊"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 97,
+   "col": "住院胞磷胆碱（注射液）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "胞磷胆碱"
+    ],
+    "form_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 98,
+   "col": "住院胞磷胆碱（注射液）用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "开始时间",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 99,
+   "col": "住院胞磷胆碱（注射液）使用剂量(g,1ml=0.125g)",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 100,
+   "col": "住院胞磷胆碱（注射液）使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "胞磷胆碱"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 101,
+   "col": "住院替罗非班（注射液）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "医嘱表",
+    "terms": [
+     "替罗非班"
+    ],
+    "form_any": [
+     "注射液"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 102,
+   "col": "住院替罗非班用药时间",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "替罗非班"
+    },
+    "field": "开始时间",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 103,
+   "col": "住院替罗非班使用剂量(mg）",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "替罗非班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 104,
+   "col": "住院替罗非班使用频次",
+   "sheet": "用药",
+   "layer": "rule",
+   "source_sections": [
+    "医嘱",
+    "入院前用药",
+    "既往史"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "医嘱表",
+    "filter": {
+     "药名": "替罗非班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "既往史": [
+  {
+   "idx": 1,
+   "col": "既往史",
+   "sheet": "既往史",
+   "layer": "llm",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "既往史"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 2,
+   "col": "既往高血压",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "高血压"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "既往高血压确认时间(年/月)",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "高血压[^。；\\n]{0,30}?(\\d{4}\\s*[-年]\\s*\\d{1,2}|\\d{4}|\\d{1,2}\\s*[-月]\\s*\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "时间列（人工派生）：由词条附近的日期正则抽取"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "既往脂质代谢紊乱",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "脂质代谢紊乱"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "既往肺结核",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肺结核"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "既往糖尿病",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "糖尿病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "既往糖尿病确诊时间(年/月)",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "糖尿病[^。；\\n]{0,30}?(\\d{4}\\s*[-年]\\s*\\d{1,2}|\\d{4}|\\d{1,2}\\s*[-月]\\s*\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "时间列（人工派生）：由词条附近的日期正则抽取"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "既往缺血性脑卒中首次发作时间（年/月）",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "缺血性脑卒中[^。；\\n]{0,30}?(\\d{4}\\s*[-年]\\s*\\d{1,2}|\\d{4}|\\d{1,2}\\s*[-月]\\s*\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "时间列（人工派生）：由词条附近的日期正则抽取"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "既往充血性心衰",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "充血性心衰"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "既往高同型半胱氨酸血症",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "高同型半胱氨酸",
+     "同型半胱氨酸升高",
+     "Hcy升高",
+     "同型半胱氨酸血症"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "既往冠心病",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "冠心病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "既往心血管疾病家族史",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心血管疾病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "既往房颤",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "房颤"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "既往心肌梗死",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心肌梗死"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "既往其他心脏病",
+   "sheet": "既往史",
+   "layer": "llm",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "既往其他心脏病"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 16,
+   "col": "既往周围血管病",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "周围血管病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "既往甲状腺功能亢进",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "甲状腺功能亢进"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "既往心脏瓣膜病",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心脏瓣膜病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "既往偏头痛",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "偏头痛"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "既往痫性发作",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "痫性发作"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "既往脑出血",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "脑出血"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "既往肾功能不全",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肾功能不全"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "既往肿瘤",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肿瘤"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "既往贫血",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "贫血"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "既往血小板增多",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "血小板增多"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "既往消化道溃疡",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "消化道溃疡"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 27,
+   "col": "既往SLE",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "SLE"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 28,
+   "col": "既往休克",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "休克"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "既往房扑",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "房扑"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 30,
+   "col": "既往动脉夹层",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "动脉夹层"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 31,
+   "col": "既往类风湿性关节炎",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "类风湿性关节炎"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 32,
+   "col": "既往卵圆孔未闭PFO",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "卵圆孔未闭PFO"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 33,
+   "col": "既往其他病史",
+   "sheet": "既往史",
+   "layer": "llm",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "既往其他病史"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 34,
+   "col": "既往体健",
+   "sheet": "既往史",
+   "layer": "rule",
+   "source_sections": [
+    "既往史"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "体健"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "出院": [
+  {
+   "idx": 1,
+   "col": "出院科别",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(出院科别|出院科室|转往)[：:、\\s]*([\\u4e00-\\u9fa5]{2,10})",
+    "group": 2,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "出院日期",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "病案首页",
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "出院(?:日期|时间)[：:、\\s]*(\\d{4}[-年]\\d{1,2}[-月]\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "出院是否有高血压",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "有高血压"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "出院是否有脂质代谢紊乱",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "有脂质代谢紊乱"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "出院是否糖尿病",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "糖尿病"
+    ],
+    "tail_exclude": [
+     "饮食",
+     "教育",
+     "宣教",
+     "食谱",
+     "病史"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "出院是否房颤",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "房颤"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 7,
+   "col": "出院是否合并肺炎",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肺炎"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "出院是否合并深静脉血栓",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "深静脉血栓"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 9,
+   "col": "出院是否合并肺栓塞",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肺栓塞"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "出院是否短暂性脑缺血发作",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "短暂性脑缺血发作"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 11,
+   "col": "出院是否痫性发作",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "痫性发作"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "出院是否脑积水",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "脑积水"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 13,
+   "col": "出院是否泌尿系感染",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "泌尿系感染"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 14,
+   "col": "出院是否褥疮",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "褥疮"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 15,
+   "col": "出院是否抑郁",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "抑郁"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 16,
+   "col": "出院是否心肌梗死",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心肌梗死"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 17,
+   "col": "出院是否消化道出血",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "消化道出血"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 18,
+   "col": "出院是否心跳或呼吸停止",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心跳",
+     "呼吸停止"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 19,
+   "col": "出院是否有脑梗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "有脑梗"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 20,
+   "col": "出院是否心脏瓣膜病",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "心脏瓣膜病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 21,
+   "col": "出院是否冠心病",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "冠心病"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 22,
+   "col": "出院是否房扑",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "房扑"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 23,
+   "col": "出院是否休克",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "休克"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 24,
+   "col": "出院是否甲状腺功能亢进",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "甲状腺功能亢进"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 25,
+   "col": "出院是否偏头痛",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "偏头痛"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 26,
+   "col": "出院是否肾功能不全",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肾功能不全"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 27,
+   "col": "出院是否肿瘤",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "肿瘤"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 28,
+   "col": "出院是否贫血",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "贫血"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 29,
+   "col": "出院是否血小板增多",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "血小板增多"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 30,
+   "col": "出院是否消化道溃疡",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "消化道溃疡"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 31,
+   "col": "出院是否SLE",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "SLE"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 32,
+   "col": "出院是否动脉夹层",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "动脉夹层"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 33,
+   "col": "死亡日期",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "regex",
+    "pattern": "(?:死亡|临床死亡)(?:日期|时间)[：:、\\s]*(\\d{4}[-年]\\d{1,2}[-月]\\d{1,2})",
+    "group": 1,
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 34,
+   "col": "出院时mRS评分（0-5整数）",
+   "sheet": "出院",
+   "layer": "small",
+   "source_sections": [
+    "出院记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "small",
+    "field": "出院时mRS评分（0-5整数）"
+   },
+   "missing_means": "否若段在"
+  },
+  {
+   "idx": 35,
+   "col": "健康教育",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "健康教育",
+     "健康宣教",
+     "宣教",
+     "卒中教育"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 36,
+   "col": "戒烟教育",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "戒烟教育",
+     "戒烟宣教",
+     "戒烟指导",
+     "劝导戒烟"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 37,
+   "col": "控制体重",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "控制体重",
+     "减重",
+     "体重管理",
+     "减轻体重"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 38,
+   "col": "低盐低脂饮食",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "低盐低脂",
+     "低盐",
+     "低脂饮食",
+     "清淡饮食",
+     "饮食指导"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 39,
+   "col": "糖尿病健康教育",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "糖尿病教育",
+     "糖尿病宣教",
+     "血糖管理指导",
+     "糖尿病饮食"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 40,
+   "col": "是否给予患者卒中教育和/或以下材料",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "卒中教育",
+     "健康宣教",
+     "宣教材料",
+     "发放宣传",
+     "卒中宣传"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 41,
+   "col": "出院带药",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "丁苯酞",
+     "万汶",
+     "低分子肝素",
+     "依哲麦布",
+     "依度沙班",
+     "利伐沙班",
+     "华法林",
+     "双嘧达莫",
+     "尤瑞克林",
+     "普伐他汀",
+     "普通肝素",
+     "替格瑞洛",
+     "替罗非班",
+     "氯吡格雷",
+     "瑞舒伐他汀",
+     "胞磷胆碱",
+     "西洛他唑",
+     "辛伐他汀",
+     "达比加群酯",
+     "阿加曲班",
+     "阿司匹林",
+     "阿哌沙班",
+     "阿托伐他汀"
+    ],
+    "field": "全部药名",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）",
+    "want": "flag"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 42,
+   "col": "出院是否给予降压药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "降压药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 43,
+   "col": "出院给予的降压药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "氨氯地平",
+     "硝苯地平",
+     "非洛地平",
+     "缬沙坦",
+     "厄贝沙坦",
+     "氯沙坦",
+     "替米沙坦",
+     "培哚普利",
+     "贝那普利",
+     "依那普利",
+     "美托洛尔",
+     "比索洛尔",
+     "氢氯噻嗪",
+     "吲达帕胺"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 44,
+   "col": "给予降压药物种类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的降压药物名称",
+    "classes": {
+     "CCB": [
+      "氨氯地平",
+      "硝苯地平",
+      "非洛地平",
+      "左氨氯地平"
+     ],
+     "ARB": [
+      "缬沙坦",
+      "厄贝沙坦",
+      "氯沙坦",
+      "替米沙坦",
+      "奥美沙坦"
+     ],
+     "ACEI": [
+      "培哚普利",
+      "贝那普利",
+      "依那普利",
+      "雷米普利"
+     ],
+     "β阻滞剂": [
+      "美托洛尔",
+      "比索洛尔",
+      "阿替洛尔",
+      "卡维地洛"
+     ],
+     "利尿剂": [
+      "氢氯噻嗪",
+      "吲达帕胺",
+      "呋塞米",
+      "螺内酯"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 45,
+   "col": "是否给予高血脂药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "高血脂药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 46,
+   "col": "出院给予的调脂药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "阿托伐他汀",
+     "瑞舒伐他汀",
+     "辛伐他汀",
+     "普伐他汀",
+     "氟伐他汀",
+     "依折麦布",
+     "非诺贝特"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 47,
+   "col": "给予高血脂药物种类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的调脂药物名称",
+    "classes": {
+     "他汀": [
+      "阿托伐他汀",
+      "瑞舒伐他汀",
+      "辛伐他汀",
+      "普伐他汀",
+      "氟伐他汀",
+      "匹伐他汀"
+     ],
+     "依折麦布": [
+      "依折麦布",
+      "依哲麦布"
+     ],
+     "贝特类": [
+      "非诺贝特",
+      "苯扎贝特"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 48,
+   "col": "是否给予降糖药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "降糖药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 49,
+   "col": "出院给予的降糖药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "二甲双胍",
+     "格列美脲",
+     "格列齐特",
+     "阿卡波糖",
+     "西格列汀",
+     "达格列净",
+     "恩格列净",
+     "胰岛素"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 50,
+   "col": "给予降糖药物种类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的降糖药物名称",
+    "classes": {
+     "双胍": [
+      "二甲双胍"
+     ],
+     "磺脲": [
+      "格列美脲",
+      "格列齐特",
+      "格列吡嗪",
+      "格列喹酮"
+     ],
+     "α糖苷酶抑制剂": [
+      "阿卡波糖",
+      "伏格列波糖"
+     ],
+     "DPP4": [
+      "西格列汀",
+      "沙格列汀",
+      "维格列汀"
+     ],
+     "SGLT2": [
+      "达格列净",
+      "恩格列净",
+      "卡格列净"
+     ],
+     "胰岛素": [
+      "胰岛素",
+      "诺和灵",
+      "优泌林",
+      "甘精"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 51,
+   "col": "是否给予抗凝药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "抗凝药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 52,
+   "col": "出院给予的抗凝药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "华法林",
+     "达比加群",
+     "利伐沙班",
+     "阿哌沙班",
+     "依度沙班",
+     "低分子肝素",
+     "依诺肝素",
+     "那屈肝素"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 53,
+   "col": "出院给予的抗凝药物分类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的抗凝药物名称",
+    "classes": {
+     "维生素K拮抗剂": [
+      "华法林"
+     ],
+     "直接口服抗凝药": [
+      "达比加群",
+      "利伐沙班",
+      "阿哌沙班",
+      "依度沙班",
+      "艾多沙班"
+     ],
+     "肝素类": [
+      "低分子肝素",
+      "依诺肝素",
+      "那屈肝素",
+      "普通肝素",
+      "肝素"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 54,
+   "col": "是否出院给予抗栓药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "出院给予抗栓药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 55,
+   "col": "是否给予抗血小板药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "抗血小板药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 56,
+   "col": "出院给予的抗血小板药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "阿司匹林",
+     "氯吡格雷",
+     "替格瑞洛",
+     "双嘧达莫",
+     "西洛他唑",
+     "吲哚布芬"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 57,
+   "col": "出院给予的抗血小板药物分类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的抗血小板药物名称",
+    "classes": {
+     "COX抑制剂": [
+      "阿司匹林"
+     ],
+     "P2Y12抑制剂": [
+      "氯吡格雷",
+      "替格瑞洛"
+     ],
+     "其他": [
+      "双嘧达莫",
+      "西洛他唑",
+      "吲哚布芬"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 58,
+   "col": "是否给予消化系统药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "消化系统药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 59,
+   "col": "出院给予的消化系统药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "奥美拉唑",
+     "泮托拉唑",
+     "雷贝拉唑",
+     "埃索美拉唑",
+     "兰索拉唑",
+     "铝碳酸镁",
+     "枸橼酸铋钾",
+     "莫沙必利"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 60,
+   "col": "出院给予的消化系统药物种类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的消化系统药物名称",
+    "classes": {
+     "PPI": [
+      "奥美拉唑",
+      "泮托拉唑",
+      "雷贝拉唑",
+      "埃索美拉唑",
+      "兰索拉唑",
+      "艾司奥美拉唑"
+     ],
+     "H2受体拮抗剂": [
+      "法莫替丁",
+      "雷尼替丁",
+      "西咪替丁"
+     ],
+     "胃黏膜保护剂": [
+      "铝碳酸镁",
+      "枸橼酸铋钾",
+      "硫糖铝",
+      "瑞巴派特"
+     ],
+     "促动力药": [
+      "莫沙必利",
+      "多潘立酮",
+      "伊托必利"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 61,
+   "col": "是否给予神经系统药物治疗",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "神经系统药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 62,
+   "col": "出院给予的神经系统药物名称",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter_any": [
+     "丁苯酞",
+     "胞磷胆碱",
+     "依达拉奉",
+     "尤瑞克林",
+     "奥拉西坦",
+     "吡拉西坦",
+     "尼莫地平",
+     "银杏",
+     "血塞通",
+     "血栓通"
+    ],
+    "field": "药名",
+    "want": "match",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 63,
+   "col": "出院给予的神经系统药物种类",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "compute",
+    "op": "classify",
+    "col": "出院给予的神经系统药物名称",
+    "classes": {
+     "改善脑循环": [
+      "丁苯酞",
+      "银杏",
+      "血塞通",
+      "血栓通",
+      "川芎嗪",
+      "灯盏花"
+     ],
+     "神经保护": [
+      "依达拉奉",
+      "胞磷胆碱",
+      "尤瑞克林",
+      "脑蛋白水解物"
+     ],
+     "认知改善": [
+      "奥拉西坦",
+      "吡拉西坦",
+      "多奈哌齐",
+      "美金刚"
+     ]
+    },
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 64,
+   "col": "出院其他药物",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院记录",
+    "出院带药",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "出院带药中不属于上述类别的其他药物",
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 65,
+   "col": "出院时阿司匹林",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "阿司匹林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 66,
+   "col": "出院时阿司匹林剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿司匹林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 67,
+   "col": "出院时阿司匹林频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿司匹林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 68,
+   "col": "出院时氯吡格雷",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "氯吡格雷"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 69,
+   "col": "出院时氯吡格雷剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "氯吡格雷"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 70,
+   "col": "出院时氯吡格雷频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "氯吡格雷"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 71,
+   "col": "出院时西洛他唑",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "西洛他唑"
+    ]
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 72,
+   "col": "出院时西洛他唑剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "西洛他唑"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 73,
+   "col": "出院时西洛他唑频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "西洛他唑"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 74,
+   "col": "出院时双嘧达莫(抗血小板)",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "双嘧达莫"
+    ],
+    "form_any": [
+     "抗血小板"
+    ]
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 75,
+   "col": "出院时双嘧达莫剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "双嘧达莫"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 76,
+   "col": "出院时双嘧达莫频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "双嘧达莫"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若带药清单在",
+   "escalate_if": null
+  },
+  {
+   "idx": 77,
+   "col": "出院时华法林",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "华法林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 78,
+   "col": "出院时华法林剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "华法林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 79,
+   "col": "出院时华法林频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "华法林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 80,
+   "col": "出院时达比加群酯",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "达比加群酯"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 81,
+   "col": "出院时达比加群酯剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "达比加群酯"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 82,
+   "col": "出院时达比加群酯频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "达比加群酯"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 83,
+   "col": "出院时利伐沙班",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "利伐沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 84,
+   "col": "出院时利伐沙班剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "利伐沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 85,
+   "col": "出院时利伐沙班频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "利伐沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 86,
+   "col": "出院时阿加曲班",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "阿加曲班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 87,
+   "col": "出院时阿加曲班剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿加曲班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 88,
+   "col": "出院时阿加曲班频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿加曲班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 89,
+   "col": "出院时阿哌沙班",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "阿哌沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 90,
+   "col": "出院时阿哌沙班剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿哌沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 91,
+   "col": "出院时阿哌沙班频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿哌沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 92,
+   "col": "出院时依度沙班",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "依度沙班"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 93,
+   "col": "出院时依度沙班剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "依度沙班"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 94,
+   "col": "出院时依度沙班频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "依度沙班"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 95,
+   "col": "出院普通肝素(抗凝)",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "普通肝素"
+    ],
+    "form_any": [
+     "抗凝"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 96,
+   "col": "出院普通肝素剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "普通肝素"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 97,
+   "col": "出院普通肝素频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "普通肝素"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 98,
+   "col": "出院低分子肝素(抗凝)",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "低分子肝素"
+    ],
+    "form_any": [
+     "抗凝"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 99,
+   "col": "出院低分子肝素剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "低分子肝素"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 100,
+   "col": "出院低分子肝素频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "低分子肝素"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 101,
+   "col": "出院尤瑞克林",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "尤瑞克林"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 102,
+   "col": "出院尤瑞克林剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "尤瑞克林"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 103,
+   "col": "出院尤瑞克林频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "尤瑞克林"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 104,
+   "col": "出院万汶（羟乙基淀粉)",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "万汶"
+    ],
+    "form_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 105,
+   "col": "出院万汶（羟乙基淀粉)剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "万汶"
+    },
+    "field": "剂量",
+    "want": "value",
+    "filter_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 106,
+   "col": "出院万汶（羟乙基淀粉)频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "万汶"
+    },
+    "field": "频次",
+    "want": "value",
+    "filter_any": [
+     "羟乙基淀粉"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 107,
+   "col": "出院时阿托伐他汀",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "阿托伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 108,
+   "col": "出院时阿托伐他汀剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿托伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 109,
+   "col": "出院时阿托伐他汀频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "阿托伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 110,
+   "col": "出院时瑞舒伐他汀",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "瑞舒伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 111,
+   "col": "出院时瑞舒伐他汀剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "瑞舒伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 112,
+   "col": "出院时瑞舒伐他汀频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "瑞舒伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 113,
+   "col": "出院时普伐他汀",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "普伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 114,
+   "col": "出院时普伐他汀剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "普伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 115,
+   "col": "出院时普伐他汀频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "普伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 116,
+   "col": "出院辛伐他汀",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "辛伐他汀"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 117,
+   "col": "出院辛伐他汀剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "辛伐他汀"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 118,
+   "col": "出院辛伐他汀频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "辛伐他汀"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 119,
+   "col": "出院依哲麦布",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "table": "出院带药",
+    "terms": [
+     "依哲麦布"
+    ]
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 120,
+   "col": "出院依哲麦布剂量",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "依哲麦布"
+    },
+    "field": "剂量",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 121,
+   "col": "出院依哲麦布频次",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "出院带药"
+   ],
+   "extract": {
+    "kind": "table_lookup",
+    "table": "出院带药",
+    "filter": {
+     "药名": "依哲麦布"
+    },
+    "field": "频次",
+    "want": "value"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 122,
+   "col": "是否进行吞咽功能筛查",
+   "sheet": "出院",
+   "layer": "rule+small",
+   "source_sections": [
+    "病程记录",
+    "护理记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "吞咽功能筛查",
+     "吞咽筛查",
+     "饮水试验",
+     "洼田",
+     "吞咽评估",
+     "吞咽功能评定"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 123,
+   "col": "吞咽功能筛查结果",
+   "sheet": "出院",
+   "layer": "rule+small",
+   "source_sections": [
+    "病程记录",
+    "护理记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_enum",
+    "terms": [
+     "洼田饮水试验",
+     "饮水试验",
+     "吞咽功能筛查",
+     "吞咽评估",
+     "Ⅰ级",
+     "Ⅱ级",
+     "Ⅲ级",
+     "Ⅳ级",
+     "Ⅴ级",
+     "1级",
+     "2级",
+     "3级",
+     "4级",
+     "5级"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": "规则未命中"
+  },
+  {
+   "idx": 124,
+   "col": "是否行吞咽功能康复",
+   "sheet": "出院",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "护理记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "吞咽功能康复",
+     "吞咽训练",
+     "吞咽康复",
+     "吞咽治疗",
+     "进食训练"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "护理": [
+  {
+   "idx": 1,
+   "col": "康复评定",
+   "sheet": "护理",
+   "layer": "rule",
+   "source_sections": [
+    "护理记录",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "康复评定",
+     "康复评估",
+     "康复训练",
+     "康复治疗",
+     "肢体功能训练"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "康复科会诊",
+   "sheet": "护理",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "会诊记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "康复科会诊",
+     "康复会诊",
+     "请康复科"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 3,
+   "col": "戒烟咨询记录",
+   "sheet": "护理",
+   "layer": "rule",
+   "source_sections": [
+    "护理记录",
+    "病程记录",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "戒烟咨询",
+     "戒烟指导",
+     "戒烟宣教",
+     "劝导戒烟",
+     "戒烟建议"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "气压治疗",
+   "sheet": "护理",
+   "layer": "rule",
+   "source_sections": [
+    "护理记录",
+    "医嘱",
+    "病程记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "气压治疗",
+     "气压泵",
+     "间歇充气",
+     "IPC",
+     "梯度压力"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 5,
+   "col": "病史深静脉血栓评估",
+   "sheet": "护理",
+   "layer": "rule",
+   "source_sections": [
+    "入院记录",
+    "病程记录",
+    "护理记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "negation": true,
+    "terms": [
+     "DVT评估",
+     "深静脉血栓评估",
+     "血栓风险评估",
+     "Caprini",
+     "VTE评估",
+     "VTE风险"
+    ],
+    "term_quality": "ok",
+    "term_quality_why": "人工覆盖（term_overrides.json）"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  }
+ ],
+ "禁忌症": [
+  {
+   "idx": 1,
+   "col": "是否存在DVT预防的禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "DVT预防的"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 2,
+   "col": "存在的DVT预防禁忌症类型",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "存在的DVT预防禁忌症类型"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 3,
+   "col": "是否存在他汀类药物治疗禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "他汀类药物"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 4,
+   "col": "选择他汀类药物治疗禁忌症原因",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "选择他汀类药物治疗禁忌症原因"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 5,
+   "col": "是否存在抗栓治疗禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "抗栓"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 6,
+   "col": "选择抗栓治疗禁忌症原因",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "选择抗栓治疗禁忌症原因"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 7,
+   "col": "是否存在降糖治疗禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "降糖"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 8,
+   "col": "选择降糖治疗禁忌症原因",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "选择降糖治疗禁忌症原因"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 9,
+   "col": "是否存在抗凝治疗禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "抗凝"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 10,
+   "col": "选择抗凝治疗禁忌症原因",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "选择抗凝治疗禁忌症原因"
+   },
+   "missing_means": "不适用"
+  },
+  {
+   "idx": 11,
+   "col": "是否存在降压治疗禁忌症",
+   "sheet": "禁忌症",
+   "layer": "rule",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "gazetteer_boolean",
+    "terms": [
+     "降压"
+    ],
+    "negation": true,
+    "term_quality": "ok"
+   },
+   "missing_means": "否若段在",
+   "escalate_if": null
+  },
+  {
+   "idx": 12,
+   "col": "选择降压治疗禁忌症原因",
+   "sheet": "禁忌症",
+   "layer": "llm",
+   "source_sections": [
+    "病程记录",
+    "术前讨论",
+    "出院记录"
+   ],
+   "extract": {
+    "kind": "llm_text",
+    "field": "选择降压治疗禁忌症原因"
+   },
+   "missing_means": "不适用"
+  }
+ ],
+ "_gate": {
+  "_note": "门控参数。对齐 F6：阈值必须在配置里，不能写死在代码里，否则没法拿金标准扫（F6 那边叫 margin_min）。",
+  "escalate_at": "low",
+  "_escalate_at_note": "置信度 ≤ 这一档就升级。可选 low/medium；口径与 route_f3.confidence_of 的 high/medium/low 一致。",
+  "uncertain_window": 14,
+  "_uncertain_window_note": "「疑似/考虑」这类词离证据多近才算数（字符数）。",
+  "uncertain_words": [
+   "疑似",
+   "考虑",
+   "不除外",
+   "待排",
+   "可能",
+   "倾向",
+   "可疑",
+   "印象",
+   "拟诊"
+  ]
+ }
+}

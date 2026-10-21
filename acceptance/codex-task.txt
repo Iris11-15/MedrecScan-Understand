@@ -1,0 +1,23 @@
+你在 /home/ubuntu 上修 medrec 流水线。唯一目标是让标尺读数变好。
+
+标尺是只读的，禁止修改、禁止绕过、禁止放宽：
+  /home/ubuntu/medrec/acceptance/accept.py
+  /home/ubuntu/medrec/acceptance/slice.txt
+
+命令 1
+  /home/ubuntu/anaconda3/envs/vl-env/bin/python /home/ubuntu/medrec/acceptance/accept.py
+
+开始前先跑命令 1，把 M1 / M2 / M3 三个数抄进 /tmp/acc_before.log。
+
+每一轮
+  1. 看 accept.py 打印的「失败明细」，挑坏表最多的那一个 case。
+  2. 打开对应代码找根因，只改一个地方。
+  3. 只重跑那一个 case（不要跑全批），再跑命令 1。
+  4. M1 或 M3 没升高就把这一轮改动 git checkout 回退，换下一个假设。
+
+禁止
+  改 accept.py；改判据；直接改 tables.json 产物；
+  用改 n_cols、截断行、丢表的方式让 M1 变好。
+
+做完 3 轮停下，只报告三件事：
+  改了哪几个文件；M1/M2/M3 从多少变到多少；下一步你认为该动哪里。

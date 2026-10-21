@@ -1,0 +1,303 @@
+# config/pipeline.yaml —— 产线运行参数（代码里不硬编码）
+#   2026-10-09.2 variants 语义落实：写 false 的变体**真的不跑**（旧代码只在非首页过滤，
+#                首页照样跑 falsy 副变体 → 奉化 008 首页白跑 plain 85.4s，见 reports/speedup-20261009.md 改动③）。
+#                variants_frontpage_only 现在只在「开着的副变体」上生效：副变体全关时它是空操作。
+#   2026-10-09.5 定位（安吉首程 bug）：first_progress 词表加「病程记录」（安吉页底页眉的上位写法）；
+#                grace 退让加 rank 门槛 + 按几何计数；新增页眉几何预探针。见 reports/speedup-round2-20261009.md 步①。
+#   2026-10-09.6 副变体（plain）改「按需补跑」取代一刀切：主路径仍走 layout，只有首页页集的
+#                必填列标签缺失时才对最可能的 1 页补跑 plain。判据与实测代价见 ocr.on_demand 注释。
+#   2026-10-09.7 抽取关掉思维链（llm.enable_thinking: false → chat_template_kwargs）。实测同 prompt
+#                completion_tokens 207→54、reasoning_content 222→0 字符、content 逐字不变。见 reports 步③。
+version: "2026-10-09.7"
+
+paths:
+  data_root: /home/ubuntu/data/测试
+  run_root: /home/ubuntu/medrec/run/wide
+  tmp_root: /home/ubuntu/medrec/run/tmp
+  mapping: /home/ubuntu/medrec/config/field_mapping.yaml
+
+ocr:
+  base_url: http://127.0.0.1:8100
+  endpoint: /layout-parsing
+  pipeline_name: PaddleOCR-VL-1.6      # 注册名必须写全，写短会静默换旧组合
+  use_layout_detection: true           # ★ 首页是表格，必须开版面检测（风险①）
+  # ★ 风险①对照实验（2026-10-09，奉化__20230728_008 第 90 页，同一张 PNG）：
+  #   layout=true ：给表格 HTML，但首页整块被合并成 1 个 colspan 单元格；
+  #                勾选框渲染成 ☐ —— 「性别/入院途径/离院方式」的选中项**丢失**。
+  #   layout=false：整页一行文本，「性别 1 男 2. 女」「入院途径 ①1. 急诊」——
+  #                选中项以 ①/数字 形式**保留**；表格列对齐丢失。
+  #   结论：两者互补，首页两种都跑（首页只有 1-2 页/例，代价可接受）。
+  variants:
+    layout: true                       # 主变体：块 + block_bbox，供 cell/coord 配对
+    plain: false                       # 副变体：整页文本，勾选框选中项在这里。
+                                       # 2026-10-09.4 删掉 4 个勾选框列（性别/医保类型/入院途径/离院方式）
+                                       # → 24 列里没有勾选框字段，副变体没有存在理由 → 关。
+                                       # 要恢复勾选框列：改回 true，并先人工授权 checkbox 回填规则。
+  # ★ 2026-10-09.6 副变体按需补跑（取代一刀切）。variants.plain=false 时，下面开着就只对
+  #   **判据命中的页**补跑 plain；variants.plain=true 时副变体本来就跑，本段空操作。
+  #
+  # 为什么不是一刀切（同一张安吉首页 PNG 实测，run/wide/pilot10(plain=true) vs speed10b(false)）：
+  #   plain=false：安吉 09162565 首页塌成 2 块/6 块，人口学区整块读没
+  #                → 首页必填列标签只命中 2/10（身份证号/籍贯/现住址/联系人/病案号…全丢）
+  #   plain=true ：字段齐全（plain 文本 10/10 命中），但每例多跑 2 页：
+  #                安吉 09162565 14.7+12.1=26.8s；安吉 09220067 12.6+14.0=26.6s；
+  #                奉化 008 76.1+14.4=90.5s（p88 单页 plain 76.1s！）
+  #   一刀切 = 为 2/10 的例让 10/10 的例永久多付 26~90s。
+  #
+  # 判据（离线跑通，10 例 speed10b，脚本 workspace/speedup2/p2_offline_criterion.py）：
+  #   首页页集 layout 文本**并集**里 required_columns 的 candidate_labels 命中数：
+  #     奉化×2 桐乡×2 玉环×2 长兴×2 = 10/10 → 不补跑（零额外成本）
+  #     安吉 09220067 = 9/10（缺 case_no）→ 补跑；安吉 09162565 = 2/10 → 补跑
+  #   页级：plain 只在「人口学区那一页」有用（安吉 p55/p57 plain 命中 10/10，另一页 0/10 = 白跑）
+  #   → 用 demographic_markers 计数挑页，并列时再看该页 layout 已有的 required 命中数，
+  #     最后按页号降序；每补一页立刻重算缺失，补齐就停。
+  #
+  # required_columns 不含 adm_no / contact_phone：这两个标签（住院号 / 联系人电话）在**全部 5 个院区**
+  # 首页 layout 文本里都不存在（10/10 例都缺），写进来会让每个例都触发补跑。patient_name_dup 无标签，同理排除。
+  variants_on_demand: true
+  on_demand:
+    variant: plain                     # 补跑的副变体名（= variants 里被写 false 的那个键）
+    max_pages: 1                       # 每例最多补几页（安吉实测 1 页就补齐）
+    demographic_min_markers: 3         # 页内出现这么多个人口学标记才当候选页
+                                       # 实测：诊断表续页=1（只有「医疗付费方式」）；人口学区页=11~15；
+                                       # 安吉塌版面两页=3/3（并列 → 靠 required 命中数破平，选中含标签那页）
+    required_columns: [patient_name, case_no, admit_time_raw, age, native_place,
+                       id_card, patient_phone, address, contact_name, discharge_date]
+    demographic_markers: [组织机构代码, 身份证号, 身份证号码, 出生地, 籍贯, 民族, 现住址,
+                          户口地址, 工作单位, 联系人, 入院途径, 病案号, 医疗付款方式,
+                          医疗付费方式, 住院病案首页, 病案首页]
+  # 副变体只跑首页（勾选框在首页）。首程页只跑主变体 —— 实测整页 OCR 13.7–20.1s/页，
+  # 首程页省掉副变体 ≈ 每例省 2 页 × 14s。要全跑改 false。
+  variants_frontpage_only: true
+  prompt_label: ocr
+  return_markdown_images: false
+  max_pixels: 1003520
+  timeout_s: 600
+  retries: 2
+  retry_backoff_s: 5
+  # ── OCR 并发度（2026-10-10 round4 第 3 件）──────────────────────────────
+  # 只对 **vllm 通道** 生效；paddlex 通道一律串行（实测同卡两个 PaddleX 会退化成
+  # 单线程 CPU，AGENTS.md §一）。摊平粒度 = 页 × 变体 × **带**，所以分带的 4 条带也并行。
+  # 默认 8 的依据（两条饱和曲线，报告 §2.2.3 / §2.2.5）：
+  #   (a) 默认可批处理服务端、真实每例请求集 14 请求（workspace/conc/conc_case_bench.out）：
+  #       安吉 conc1=74.7s → conc2=38.6 → conc4=31.5 → conc8=29.4 → conc16=29.5（撞单请求地板）
+  #   (b) 交付服务端 --max-num-seqs 1（workspace/conc/single_sq_conc.out）：
+  #       5 整页 conc1=7.13s → conc2=6.23 → conc4=6.27 → conc8=6.26（0.80 页/s，conc=2 已饱和）
+  #   两条都在 8 之前饱和；取 8 是为了摊开每例的 14 条带请求，再高只增加排队
+  #   （(b) 里 conc8 的单页延迟 6.26s vs conc2 的 3.96s）。
+  #   ⚠ (b) 下并发只盖掉 HTTP/base64 间隙，服务端仍排一条队 → 端到端只赚 5–13%（§2.6.7）。
+  # ★ 生效条件见下面 require_batch_invariant / replica_single_seq_ok —— 服务端没被闸门
+  #   确认过时本值作废，自动退回 1 并告警（红线①：并发不得改变输出）。
+  concurrency: 8
+  # ★ 并发前置闸门（红线①）。true = 只有确认 vLLM 进程环境里有 VLLM_BATCH_INVARIANT=1
+  #   才允许并发；查不到按 False → **强制串行并告警**（fail-closed）。
+  #   依据（workspace/conc/determinism*.out，5 张真实整页 × 3 轮 × 4 种并发）：
+  #     · 默认配置：conc 输出与串行**不逐字节相同**，且并发自身也不稳定
+  #       （page_0009 三轮跑出 3 种正文：524daf4e / ef9a7d01 / 44a65507）；
+  #     · --no-enable-prefix-caching + FLASH_ATTN splits=1 + CUBLAS_WORKSPACE_CONFIG
+  #       仍然不一致（不是 prefix cache 一个原因，是批形状改变归约顺序）；
+  #     · 只有 VLLM_BATCH_INVARIANT=1 做到 9/9 逐字节一致（serial==conc4==conc8）。
+  #   代价也要如实记账：BI 单请求慢 ~3×（5 整页串行 7.2s → 22.2s），
+  #   并发收益只有 ~2.4× → 本机单卡上 BI+并发 比 round3 的非 BI 串行还慢。
+  #   结论与取舍见 reports/ocr-concurrency-20261010.md。
+  require_batch_invariant: false
+  # ★ 第二条放行路（round4）：不用 BI 内核，改用 **批形状钉死为 1 的端点**
+  #   （`--max-num-seqs 1` + `--no-enable-prefix-caching`）。**端点数 ≥1 即可**：
+  #   这个充分条件只看服务端批形状，不看端点数。**每个**端点的启动命令里都必须显式带
+  #   那两个参数，查不到 → 强制串行（fail-closed）。
+  #   依据一（workspace/conc/replica_test.out）：2 副本跨进程、跨并发度 15/15 逐字节相同。
+  #   依据二（workspace/conc/single_sq_conc.out，单端点 8110）：conc=2/4/8 的 5 页输出
+  #     与串行 5/5 逐字节相同、completion_tokens 完全相同（1270 967 105 883 221）。
+  #   代价记账：确定性不花钱；吞吐只涨 ~1.2×（0.61→0.80 页/s），因为服务端把请求排成一条队，
+  #     客户端并发只能盖掉编码/HTTP/调度间隙。收益在 conc=2 就饱和。
+  #   （2026-10-10 修正：原先要求 ≥2 个端点，把这条同样合规的路堵死了 —— 见
+  #     src/wide/s1_ocr.py 的 vllm_single_seq_replicas() 与报告 §2.2.5。）
+  replica_single_seq_ok: true
+  # 多副本端点列表。**默认注释掉** = 只用上面 vllm_url 单端点 → 闸门会把并发压回 1。
+  # 要启用副本并发，取消注释并确保两个服务都按 --max-num-seqs 1 起（起法见
+  # workspace/conc/phase_replica2.sh），或命令行 --vllm-urls 覆盖。
+  # vllm_urls:
+  #   - http://127.0.0.1:8110
+  #   - http://127.0.0.1:8112
+  # ── OCR 通道开关（2026-10-10 vLLM 换栈实验）────────────────────────────
+  # backend: paddlex | vllm
+  #   paddlex = 8100 /layout-parsing，返回版面块 + block_bbox（cell/coord 策略可用）
+  #   vllm    = 8110 /v1/chat/completions，只返回一段文本（cell/coord 必然 0）
+  # 默认保持 paddlex；切不切由 reports/ocr-vllm-switch-20261010.md 的字段级回归决定。
+  # 实测（2026-10-10）：vllm 只有**开 CUDA graph** 才快（整页 1.7–2.7 s / 页眉条 0.34–0.55 s）；
+  #   --enforce-eager 版整页 12.4–12.9 s、页眉条 1.65–2.53 s。启动参数见 workspace/vllm_ocr/start_vllm_cudagraph.sh。
+  # ★ 2026-10-10 round3（本轮任务第 4 件）：默认切 vllm。依据 = reports/ocr-vllm-round2-20261010.md
+  #   的字段级回归（24 列命中数 + 主诉/查体 非空 + 命中页对照）。**paddlex 通道保持可用**：
+  #   回滚 = 把本行改回 paddlex（8100 服务本身一直在跑，起法见 AGENTS.md §一）。
+  backend: vllm
+  # 按阶段覆盖（混合方案）：stage ∈ locate / frontpage / first_progress
+  # 全默认（不写）= 一律跟随 backend。
+  backends: {}
+  vllm_url: http://127.0.0.1:8110
+  # ★ 复读早停（整行判据 RepeatWatcher）—— round31 §5「参数默认值与臂对齐」落库。
+  # 为什么开：round24/25/26/27/28 的**全部**基线（2.672 / 3.839 / 3.774 / 2.667 / 2.735 s/例）
+  #   都是臂脚本 export MEDREC_ABORT_REPEAT=1 测的（workspace/round28/run_arm28.sh:96），
+  #   而 `medrec run` 此前既不读 env 也没有这个键 => 产线默认 OFF => 两条链不同速、不可比
+  #   （workspace/round31/chain_diff.md §4）。
+  # 依据：reports/round7-correctness-defenses-single-replica-20261010.md:672 —— 省
+  #   1201.5 token/例（-13.4%）、快 2.4-2.9 s/例；02_text 与 06_table 逐字节不变
+  #   （r7c vs r7e 240/240）。100 页误报 0。
+  # 消费方：src/wide/s1_ocr.py:401 abort_repeat_enabled()（env MEDREC_ABORT_REPEAT 仍可覆盖，A/B 用）。
+  # 回滚：删掉本行（或改 false）=> 回到「默认关」。
+  abort_repeat_loop: true
+  vllm_model: PaddleOCR-VL
+  vllm_max_tokens: 4096                # max_model_len=8192，整页图像 token≈1280 → 4096 够用
+  vllm_timeout_s: 600                  # 实测首条真实整页 12.9 s（JIT 在启动期已做完），600 为保守上限
+  vllm_prompt: "OCR:"                  # 默认 prompt（变体/阶段未命中时用）
+  vllm_prompts: {}                     # 可选：{"layout": "…", "plain": "…", "locate": "…"}
+  # ★ 分带裁剪（2026-10-10 round3 第 3 件）—— **只对 vllm 通道生效**。
+  # 依据（workspace/vllm_ocr/band_probe.out，桐乡二院__00335376 page_0009）：整页 PNG
+  #   3.90 Mpx 被 vLLM preprocessor_config.json 的 max_pixels: 1003520 降到线性 50.7%，
+  #   两处真实查体 OCR 错误（口唇不绀→口唇不结、跟膝胫试验→跟踪试验）；
+  #   切 4 条**原生分辨率**横带（4% 重叠）后两处都读回来。
+  # stages 白名单：默认**只对首程页分带**。首页的字段-值配对靠整页 block 策略
+  #   （vllm 通道本来就没有 bbox，切带只会更碎），且首页必填列标签在整页上下文里更稳。
+  # 去重：相邻带重叠 4% 页高（≈94 px）> 行高（≈30 px）→ 按整行相似度匹配去掉重复行。
+  bands:
+    enabled: true                        # A/B 实测：修回 2 处查体 OCR 错误，代价 +2.2 s/例（见 reports/ocr-vllm-round2-20261010.md §2.4）
+    stages: [first_progress]             # 首页保持整页（除非给出字段级对照证明有改善）
+    target_pixels: 1003520               # = vLLM preprocessor max_pixels，保证每带不被再降采样
+    overlap_frac: 0.04                   # 带间重叠（页高比例）
+    max_bands: 6
+    min_bands: 1
+    dedup_thresh: 0.6                    # 整行平均相似度阈值（宁可留重复行，不可丢正文行）
+
+render:
+  target_px: 3900000                   # A4 ≈200 DPI（沿用 pdf2png.py 的实测校正）
+  max_side_pt: 3000.0
+  max_upscale: 3.0
+  min_scale: 0.5
+  rotate_by_hospital: {}               # 需要摆正时写 {"安吉": 180}
+
+blank_guard:                           # ★ 风险②：空白页/低信息页会被模型幻觉
+  ink_min: 0.003                       # 暗像素占比 < 此值 → 判空白（沿用 pdf2png.py 实测值）
+  dark_threshold: 200                  # 灰度 < 200 记为暗像素
+  std_min: 12.0                        # 灰度标准差 < 此值 → 判低信息
+  low_info_ink_min: 0.010              # 墨迹低于此值但高于 ink_min → 标「低信息，未识别」
+  action: mark                         # mark=落盘并标记，不送 OCR；drop=直接不落盘
+  # 定位选中的页（首页 / 首程）另用宽松档：只有 ink < ink_min（真空白）才不送 OCR，
+  # low_info 仍送 OCR 但保留 page_kind=low_info 标记，由 hallucination_watchwords 兜底。
+  # 实测（2026-10-09，run/tmp/probe/lowinfo_check.py）：安吉__img20231201_11004386
+  # 0based 250 = 首次病程记录标题页，ink 0.00333 / std 12.68 → 严格档会跳过它，
+  # 而旧批次该页 OCR 正文 1302 字 → 主诉/查体直接丢失。
+  requested_page_policy: ocr_low_info  # ocr_low_info=宽松档；skip_low_info=旧行为
+  # 实测（2026-10-09，奉化__20230728_008 空白/低信息页）模型幻觉出的古籍名：
+  # 「識典古籍」(0based 82)、「晉書卷八」(0based 84)。命中只**标记**，不删内容。
+  hallucination_watchwords: [四庫全書, 欽定, 論語, 詩經, 尚書, 周易, 春秋, 道德經,
+                             晉書, 識典古籍, 史記, 漢書, 三國志, 資治通鑑]
+
+llm:
+  base_url: http://127.0.0.1:8080
+  endpoint: /v1/chat/completions
+  model: qwen3.8-flash-next-iq3_s
+  api_key: sk-local
+  temperature: 0                       # ★ 红线：温度 0
+  top_p: 1.0
+  # ★ 实测（2026-10-09）：该模型有思维链，reasoning_content 也计入 completion_tokens。
+  #   首页 prompt 在 max_tokens=4096 时思考 8178 字符后 finish_reason=length、content 为空。
+  #   16384 时 finish_reason=stop（completion 5522，其中 reasoning 10071 字符）。
+  max_tokens: 16384
+  # ★ 2026-10-10 步③：透传 vLLM `chat_template_kwargs: {"enable_thinking": false}`（旧产线一直在用：
+  #   src/f3_escalate.py:494、src/f3_batch.py:410、src/arbiter.py:69）。探针（workspace/speedup2/probe_thinking.py）
+  #   同 prompt 三态：不带参数 completion=207/reasoning=222 字符；false=54/0；true=207/222，
+  #   content 三者逐字相同。关掉后 max_tokens 16384 不再被思维链吃满（abort_on_length 保留当保险）。
+  #   删掉本键 = 不发该参数 = 旧行为。
+  enable_thinking: false
+  abort_on_length: true                # finish_reason=length → 记失败，绝不把半截输出当结果
+  timeout_s: 300
+  retries: 2
+  take_field: content                  # ★ 只取 content，忽略 reasoning_content
+  concurrency: 1
+
+# 来源目录顶层 → 标准化就诊医院（确定性注入，用于「标准化就诊医院」列）
+hospitals:
+  奉化:     {std_name: 宁波市奉化区人民医院医共体总院}
+  安吉:     {std_name: 安吉县人民医院}
+  桐乡二院: {std_name: 桐乡市第二人民医院}
+  玉环第一: {std_name: 玉环市人民医院}
+  长兴人民: {std_name: 长兴县人民医院（浙医二院长兴院区）}
+
+# 页面定位（首页 / 首程）。产线默认只 OCR 目标页，省掉 59 页/例的全扫成本
+locator:
+  frontpage_keywords: [住院病案首页, 病案首页]
+  first_progress_keywords: [首次病程记录, 病程记录, 入院记录]
+  # 优先级：同一个词表里靠前的写法更可信。「首次病程记录」才是首程，
+  # 「入院记录」只是兜底（实测奉化 008 第 88 页命中的是入院记录，不是首程）。
+  # 2026-10-09.5 加「病程记录」（rank 1）：安吉页底页眉只写上位文书名「病程记录」。
+  #   实测 bottom20% 窄条（workspace/speedup2/bottom_40_55.log，安吉 09162565）：
+  #     p043/p045 = 「病程记录」（普通病程记录页，rank 1）
+  #     p047      = 「病程记录 … 2023-11-27, 13:50 首次病程记录」（真首程，rank 0）
+  #     p049/p051/p053 = 「入院记录」（rank 2，兜底）
+  #   旧词表只有 rank0/rank2 → 安吉只能命中「入院记录」，取到的是入院记录的**体格检查表单**
+  #   （591-592 字）而不是首程叙述（107-212 字）→ 查体列内容错。
+  first_progress_priority: [首次病程记录, 病程记录, 入院记录]
+  # 位置先验表（AGENTS.md §四）：院区 → 首页位置组(head/tail) → 页眉条几何 → 首程页距。
+  # **只决定扫描顺序与页眉几何，不作为结论**；每个命中仍由本页页眉条 OCR 现场证实，
+  # 先验不中照旧走 probe_fallback + 兜底阶梯（全覆盖，只是慢）。表内容进定位缓存键。
+  locate_prior: /home/ubuntu/medrec/config/locate_prior.yaml
+  # grace 退让的 rank 门槛：只有「最佳命中的优先级 <= grace_rank」才允许靠扫够页数提前收手。
+  # 实测（speed10b 安吉 09162565）旧行为：bottom 兜底只扫 2 页就靠 grace 判停
+  #   （grace_used=true / first_progress_kind=入院记录），其余 27 页候选从未扫过。
+  grace_rank: 1                        # 0=只认「首次病程记录」；1=「病程记录」也算够格
+  grace_pages_hard: 50                 # rank > grace_rank 的命中（例如只有「入院记录」）要扫这么多页才退让
+  # 页眉几何预探针：阶段 A 用 top 窄条找不到首页时，先对同一批页补跑 bottom 窄条；
+  # 若 bottom 找到首页而 top 没找到 → 该院区页眉在页底，后续扫描改用 bottom 几何。
+  # 实测安吉 top 窄条是密集正文（单页 53.6s）且结构上看不见标题；bottom 窄条 1.3-3.5s。
+  geometry_preprobe: true
+  # 首程记录常常跨页（病例特点/主诉/查体可能在标题页的下一页）→ 标题页 + 后续 N 页
+  first_progress_follow_pages: 2
+  max_frontpage_pages: 2
+  max_first_progress_pages: 3
+  index_file: ""                       # 定位缓存（tools/build_page_index.py 产出）；空=现场扫
+  # ↑ 上面这行保持原位，续页判据写在下面 locator 段末尾
+  # 首页常占两页，**续页常常没有标题**（实测奉化__20230728_008：标题在 0based 89，
+  # 续页在 0based 88 = 标题页前一页）。只认关键词会漏续页 → 离院方式/手术/质控全丢。
+  # 判据：标题页的邻页（±1）、本身不是别的文书标题、且页眉条里出现下面任一标记。
+  frontpage_continuation_markers: [手术及操作, 手术操作, 伤口愈合, 麻醉医师, 离院方式,
+                                   死亡患者尸检, 质控医师, 质控护士, 疾病编码, 出院诊断]
+
+pii:
+  mask_id_card: {keep_head: 3, keep_tail: 2}
+  never_log_columns: [id_card, patient_phone, contact_phone, address]
+  output_file_mode: "600"
+
+normalize:
+  # round33 §1.4「删 就诊医院 列」现已由 columns.yaml 直接删列实现（2026-10-15.1，23 列）；
+  # 这里显式清空，避免配置里留一个指向不存在 id 的悬空键
+  # （s6_table.py:547 会打「drop_output_columns 里有 columns.yaml 不存在的列 id」；
+  #  缺键时 s6 的默认仍是 DEFAULT_DROP_IDS=('hospital',)，见 s6_table.py:36,72）。
+  drop_output_columns: []
+  # 标准化病案号：去掉非字母数字后左补零到 width（各院区宽度不同，按来源目录覆盖）
+  case_no_std: {strip_nonalnum: true, upper: true, width_by_hospital: {}}
+  # 合并优先级：同一字段多种策略都命中时取谁（都记 provenance）
+  merge_priority: [llm, cell, coord, block]
+  # 占位词 —— 命中即视为缺失（红线：缺失填 null，不许用占位词冒充有值）
+  null_tokens: ["", "-", "—", "/", "无", "未提及", "未知", "null", "None", "n/a", "N/A"]
+  # 勾选框列（columns.yaml: widget: checkbox）。实测奉化__20230728_008：
+  #   版面模式 → 「性别 ☐ 1. 男 2. 女」（选中项丢失，☐ 全一样）
+  #   纯文本   → 「离院方式 ① 1. 医嘱离院 2. …」（① 疑似选中记号，但含义未证实）
+  # 读到的是**整排选项**而不是取值 → 默认判缺失（红线①：不许拿选项串冒充有值），
+  # 原文留在 fields.json 的 raw_option_text 里。fill: number = 按编号回填，属推断，
+  # **必须人工授权后才改**（当前代码未实现 number，改也只会报错，不会静默回填）。
+  checkbox:
+    fill: null                       # null = 判缺失；number = 待授权，未实现
+    option_pattern: "(?:[①-⑩]|\\d+\\s*[.、])"
+    min_options: 2                   # 命中这么多次选项编号就算「整排选项」
+    box_chars: "☐☑□▢"
+  los:
+    path_a_label: 实际住院          # 首页直接写的天数
+    path_b: discharge_minus_admit   # 出院日期 − 入院时间
+    tolerance_days: 1
+
+qc:
+  age_min: 0
+  age_max: 120
+  los_min: 0
+  los_max: 365
+  id_card_len: 18
+  phone_len: [7, 20]

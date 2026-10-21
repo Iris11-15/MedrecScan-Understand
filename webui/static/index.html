@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>病历取数 · 产线跑批页面</title>
+<style>
+body{font:15px/1.55 system-ui,"Noto Sans CJK SC",sans-serif;margin:0 auto;padding:14px;max-width:1080px;color:#15202b}
+h1{font-size:20px;margin:0 0 6px}h2{font-size:16px;margin:0 0 8px}
+section{border:1px solid #c8d2da;border-radius:6px;padding:12px;margin:12px 0}
+.bound{font-size:13px;color:#33475b;background:#eef3f7;padding:5px 8px;border-radius:4px}
+.kv{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+.ok{color:#0a6b2d}.bad{color:#a8071a}.mut{color:#5c6b7a;font-size:13px}
+.bar{border-radius:4px;padding:7px 9px;margin:8px 0;font-size:14px}
+.yellow{background:#fff6d9;border:1px solid #d9a406}.red{background:#ffeaea;border:1px solid #a8071a}
+.green{background:#eaf7ee;border:1px solid #0a6b2d}.grey{background:#f2f5f7;border:1px solid #c8d2da}
+.drop{border:2px dashed #9db1c1;border-radius:6px;padding:16px;text-align:center;background:#fafcfd}
+.drop.on{background:#e6f2ff;border-color:#1c6fd0}
+button{font:inherit;padding:5px 11px;border:1px solid #7d8b98;border-radius:4px;background:#fff;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.big{font-size:17px;padding:9px 20px;background:#1c6fd0;color:#fff;border:0}
+input[type=text],select{font:inherit;padding:5px;border:1px solid #9db1c1;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border:1px solid #c8d2da;padding:4px 7px;text-align:left;vertical-align:top}
+th{background:#f2f5f7}pre{background:#f6f8fa;border:1px solid #c8d2da;border-radius:4px;padding:7px;
+overflow:auto;white-space:pre-wrap;word-break:break-all;font-size:13px;margin:6px 0}
+details{margin:6px 0}summary{cursor:pointer;font-size:14px}
+label{margin-right:12px}progress{width:220px;height:12px;vertical-align:middle}
+.hidden{display:none}
+tr.on>td{background:#eaf2fa}
+.detailrow>td{background:#f7fbff;border-left:3px solid #1c6fd0}
+.detailrow .dhead{margin:0 0 6px;font-size:14px}
+.detailrow .dhead b{font-size:15px}
+iframe.viz{width:100%;height:560px;border:1px solid #c8d2da;border-radius:4px;background:#fff}
+.plainbox{background:#fff6d9;border:1px solid #d9a406;border-radius:4px;padding:5px 8px;margin:6px 0;font-size:13px}
+</style>
+</head>
+<body>
+<h1>病历取数 · 产线跑批页面</h1>
+<div class="bound">本页面仅本机可访问（<span id="bound">127.0.0.1:8090</span>）。
+页面只拼命令 + 读产物 + 显示文本，不直接调 OCR / Strata。</div>
+
+<!-- 块 1 状态条 -->
+<section id="b1"><h2>① 状态</h2>
+<div class="kv">
+  <span>OCR 8110：<b id="s-ocr" class="mut">…</b></span>
+  <span>Strata 8080：<b id="s-llm" class="mut">…</b></span>
+  <span>负载：<b id="s-load" class="mut">…</b></span>
+  <span>列版本：<b id="s-colver" class="mut">…</b></span>
+  <span>去重键：<b id="s-dedup" class="mut">…</b></span>
+  <span>入口：<b id="s-entry" class="mut">…</b></span>
+  <span>产物写根：<b id="s-runroot" class="mut">…</b></span>
+  <span>进度看板：<b id="s-viz" class="mut">…</b></span>
+</div>
+<div id="s-msg" class="mut"></div>
+<div id="draftbar" class="bar yellow hidden"></div>
+</section>
+
+<!-- 块 2 新建任务 -->
+<section id="b2"><h2>② 新建任务</h2>
+<div>输入方式：
+  <label><input type="radio" name="mode" value="upload" checked> 上传（文件夹 / PDF / .zip）</label>
+  <label><input type="radio" name="mode" value="src"> 本机路径（raid5 等：目录 / .zip，只读引用不改名）</label>
+</div>
+<div id="up-area">
+  <div id="drop" class="drop">把 文件夹 / PDF / .zip 拖到这里，或
+    <div style="margin-top:8px">
+      <button id="pick-files">选择 PDF / zip</button>
+      <button id="pick-dir">选择文件夹</button>
+      <input type="file" id="f-files" multiple class="hidden">
+      <input type="file" id="f-dir" webkitdirectory directory class="hidden">
+    </div>
+  </div>
+  <div id="sel" class="mut" style="margin-top:6px">已选：0 个文件</div>
+  <button id="upload-check">上传并校验</button> <button id="clear">清空</button>
+  <span id="upmsg" class="mut"></span>
+</div>
+<div id="src-area" class="hidden" style="margin-top:8px">
+  源根目录 / 压缩包（绝对路径；目录的形状必须是
+  <code>&lt;源根&gt;/&lt;院区&gt;/&lt;病例目录&gt;/&lt;文件&gt;.pdf</code>）：
+  <input type="text" id="src" size="60" placeholder="/home/ubuntu/data/测试">
+  <button id="recheck">校验</button><span class="mut"> 填完停 0.8 s 自动校验，也可点这里</span>
+  <div style="margin-top:6px">
+    <button id="browse-go">浏览本机目录</button>
+    <input type="text" id="bpath" size="42" placeholder="/raid5">
+    <span class="mut" id="binfo"></span>
+  </div>
+  <div id="blist" class="hidden" style="margin-top:4px;max-height:230px;overflow:auto"></div>
+  <div id="lpre" class="mut" style="margin-top:6px"></div>
+  <div style="margin-top:6px">
+    <button id="stagebtn">暂存归一（.zip / 散页图片 → PDF）</button>
+    <label><input type="checkbox" id="autorange" checked> 归一完自动提取（自动跑六阶段）</label>
+    <span class="mut"> 只有图片的语料必须先归一：解压到同盘暂存区，按「一个图片目录 = 一份病例」拼成 PDF。
+      默认不跑守卫 OCR、8 进程并行（实测 2449 目录 / 14.2 万页 ≈ 6 分钟）；
+      要恢复「每目录 3 页 OCR 查多患者」：export MEDREC_MERGE_GUARD=on 后重启 8090。
+      勾上左边后，下面「开始」一个按钮就够：先归一、归一完自动跑六阶段（关掉网页也不断）</span>
+  </div>
+  <div id="stageprog" class="bar grey hidden"></div>
+  <div id="ackrow" class="hidden" style="margin-top:6px">
+    <label><input type="checkbox" id="ackalerts"> 我已知晓被拦目录（守卫拦下的散页目录没合并、不会进本批，需人工确认）</label>
+  </div>
+</div>
+<div style="margin-top:10px">出表类型：
+  <select id="format"></select>
+  <span id="fmt-info" class="mut"></span>
+</div>
+<div style="margin-top:8px">批次名：<input type="text" id="batch" size="26">
+  <button id="regen">重新生成</button><span class="mut"> 留空自动生成，可改</span></div>
+<div id="plan" class="bar grey hidden"></div>
+<div style="margin-top:10px">
+  <button id="start" class="big" disabled>开始跑批</button>
+  <span id="why" class="bad"></span>
+</div>
+<div style="margin-top:8px">等效命令：<button id="copy">复制</button>
+  <pre id="cmd">（选好输入后显示）</pre></div>
+<details><summary>▶ 高级：只跑指定阶段</summary>
+  <div id="steps"></div>
+  <div class="mut">只勾后段（如 s4）时，网页会先检查上游产物是否齐全，缺就直接拒绝
+    —— 否则 run_steps 会对每例白等 900 s（round34 实测卡死）。</div>
+</details>
+</section>
+
+<!-- 块 3 当前任务 -->
+<section id="b3"><h2>③ 当前任务</h2>
+<div id="cur" class="mut">没有正在跑的任务。</div>
+<div id="curbar" class="bar grey hidden"></div>
+<div id="warnbox" class="bar red hidden"></div>
+<details id="logbox"><summary>尾部日志（姓名段已打码）</summary>
+  <pre id="loglines" class="mut"></pre></details>
+<div id="curviz" class="hidden">
+  <div class="dhead" style="margin-top:8px"><b>跑批进度看板</b>
+    <span class="mut">同源嵌入 8091 只读看板（2 s 自刷新）· <a id="curviz-open" href="#" target="_blank">新窗口打开</a></span></div>
+  <div id="curviz-msg" class="mut"></div>
+  <iframe id="curviz-frame" class="viz" title="跑批进度看板"></iframe>
+</div>
+</section>
+
+<!-- 块 4 历史批次 -->
+<section id="b4"><h2>④ 历史批次</h2>
+<table><thead><tr><th>批次</th><th>行×列</th><th>命中</th><th>warnings</th>
+<th>稳态 s/例</th><th>时间</th><th>操作</th></tr></thead><tbody id="hist"></tbody></table>
+<p class="mut">点行内按钮 → 结果<b>直接开在这一行下面</b>（不是整张表的最底下）。再点同一个按钮 = 收起。</p>
+<div><button id="hist-refresh">刷新批次列表</button>
+  <span class="mut">开着详情行的时候 15 s 自动刷新会暂停（否则把手上的面板冲掉），点这里手动刷</span></div>
+</section>
+<p class="mut">页面里没有：配置编辑 / 列选择器 / 服务启停 / 批次删除 / 任意参数输入框。
+原始 PII 明文默认不出现：只有显式勾选「不打码」才显示，且每次明文访问都写审计；
+服务端启动加 <code>--disable-plain</code> 可把明文出口整条关掉（届时勾选也拿不到）。</p>
+
+<script>
+var $=function(id){return document.getElementById(id)}, STEPS=["locate","s1","s2","s3","s4","s5","s6"];
+var sel=[], uploadId="", planData=null, curBatch="", fmtMap={}, lastStatus=null;
+var uploading=false, planning=false, planTimer=null, planSeq=0;
+var histRows=[], openBatch="", openKind="", detailHtml="", detailSeq=0, plainOn=false, curVizSrc="";
+var KINDS={check:"check 报告",stages:"stages 报告",preview:"宽表预览",
+  progress:"跑批进度看板",qc:"检验流程看板",replay:"跑批回放看板"};
+// 看板页名 ≠ 按钮名：progress → 8091 的 /viz/live（代理白名单里只有 live/qc/replay）
+var VIZPAGE={progress:"live",qc:"qc",replay:"replay"};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function mb(n){return (n/1048576).toFixed(1)+" MB"}
+function api(path,opts){return fetch(path,opts).then(function(r){return r.json().then(function(j){
+  return {code:r.status,body:j}})})}
+function postJSON(path,obj){return api(path,{method:"POST",headers:{"Content-Type":"application/json"},
+  body:JSON.stringify(obj)})}
+
+/* ---------- 块 1 ---------- */
+function refreshStatus(){
+  api("/api/status").then(function(r){var d=r.body; lastStatus=d;
+    $("bound").textContent=d.bound; $("s-entry").textContent=d.entry;
+    $("s-runroot").textContent=d.run_root||"?";
+    $("s-runroot").title="旧批次只读根："+((d.legacy_run_roots||[]).join(" · ")||"无");
+    var o=d.services.ocr_8110, l=d.services.llm_8080;
+    $("s-ocr").textContent=o.ok?"活":"不活"; $("s-ocr").className=o.ok?"ok":"bad";
+    $("s-llm").textContent=l.ok?"活":"不活"; $("s-llm").className=l.ok?"ok":"bad";
+    $("s-load").textContent="load1 "+d.load.load1+" / "+d.load.cpu_count+" 核 · 内存 "+d.load.mem_used_pct+"%";
+    $("s-colver").textContent=d.doctor.columns_version+"（yaml "+d.doctor.yaml_cols+
+      " → 宽表 "+d.doctor.expect_wide_cols+"）";
+    $("s-dedup").textContent=d.doctor.dedup_key;
+    var vz=d.viz||{};
+    $("s-viz").textContent=vz.ok?"活（"+(vz.url||"")+"）":"没在跑";
+    $("s-viz").className=vz.ok?"ok":"bad";
+    var m=[]; if(d.doctor.fail!==null&&d.doctor.fail!=="0") m.push("doctor FAIL="+d.doctor.fail);
+    if(d.doctor.warn&&d.doctor.warn!=="0") m.push("doctor WARN="+d.doctor.warn+"（详见 doctor）");
+    if(d.doctor.error) m.push(d.doctor.error);
+    $("s-msg").textContent=m.join(" · ");
+    var dr=d.drafts;
+    if(dr.count>0){$("draftbar").className="bar yellow";$("draftbar").innerHTML=
+      "⚠ 有 <b>"+dr.count+"</b> 份草案未落地 → 结果口径可能不一致。<details><summary>看清单</summary><pre>"+
+      dr.items.map(esc).join("\n")+"</pre></details>";$("draftbar").classList.remove("hidden")}
+    else $("draftbar").classList.add("hidden");
+    gateStart();
+    // 页面刷新后 ③ 会空掉：锁里若有**还活着**的批次，接回来（进度看板跟着活）
+    if(!curBatch&&d.lock&&d.lock.alive&&d.lock.batch){curBatch=d.lock.batch;refreshJob()}
+  })}
+
+/* ---------- 块 2：输入 ---------- */
+function setSel(list){sel=list; renderSel()}
+function renderSel(){
+  var bytes=0,pdf=0; sel.forEach(function(s){bytes+=s.file.size; if(/\.pdf$/i.test(s.rel))pdf++});
+  $("sel").textContent="已选："+sel.length+" 个文件（"+pdf+" 个 PDF，共 "+mb(bytes)+"）";
+  $("upmsg").textContent=uploadId?("已上传到暂存区 "+uploadId+""):"（尚未上传）";
+  gateStart()}
+function addFile(f,rel){
+  if(!/\.(pdf|zip)$/i.test(f.name)){return}
+  sel.push({file:f,rel:rel||f.name})}
+function walkEntry(entry,base,out){
+  if(entry.isFile){entry.file(function(f){addFile(f,base+entry.name);out.push(1)},function(){})}
+  else if(entry.isDirectory){entry.createReader().readEntries(function(es){
+    var n=0; es.forEach(function(e){walkEntry(e,base+entry.name+"/",out)})})}}
+function fromTransfer(dt){
+  var out=[],items=dt.items;
+  if(items&&items.length&&items[0].webkitGetAsEntry){
+    for(var i=0;i<items.length;i++){var e=items[i].webkitGetAsEntry(); if(e)walkEntry(e,"",out)}
+    setTimeout(function(){renderSel()},250)}
+  else{for(var j=0;j<dt.files.length;j++)addFile(dt.files[j]); renderSel()}}
+function uploadAll(){
+  if(!sel.length)return Promise.resolve(null);
+  if(uploading)return Promise.resolve(null);
+  uploading=true; uploadId="u"+Date.now(); invalidate();
+  var fd=new FormData();
+  sel.forEach(function(s){fd.append("rel",s.file,s.rel)});
+  $("upmsg").textContent="上传中…";
+  return fetch("/api/upload",{method:"POST",headers:{"X-Upload-Id":uploadId},body:fd})
+    .then(function(r){return r.json()}).then(function(d){
+      if(!d.ok){$("upmsg").textContent="上传被拒："+(d.errors||[]).join("；");uploadId="";return null}
+      $("upmsg").textContent="已上传 "+d.files.length+" 个文件 / "+mb(d.total_bytes)+
+        (d.zips&&d.zips.length?"（解压 "+d.zips.length+" 个 zip："+d.zips.map(function(z){
+          return z.rule}).join("、")+"）":"");
+      return planNow()}).then(function(x){uploading=false;return x},
+        function(e){uploading=false;$("upmsg").textContent="上传失败："+e;return null})}
+function payload(){
+  checkStageBinding();
+  var steps=STEPS.filter(function(s){var e=$("st-"+s);return e&&e.checked});
+  var p={batch:$("batch").value.trim(),format:$("format").value,
+         steps:steps.join(",")};
+  if(mode()==="upload")p.upload_id=uploadId;
+  else{p.src=$("src").value.trim();if(stageId)p.stage_id=stageId}
+  if(stageId&&$("ackalerts").checked)p.ack_alerts=true;
+  return p}
+function mode(){return document.querySelector("input[name=mode]:checked").value}
+
+/* 本机路径：浏览 → 预检 →（只有图片时）暂存归一 → 校验 */
+var stageId="",stageTimer=null,needStage=false,stageSt=null;
+function chainMode(){return mode()==="src"&&needStage&&!stageId&&$("autorange").checked}
+var STAGE_BTN=$("stagebtn").textContent;
+/* 预检是异步的（2449 个散页目录实测 1.4 s）⇒ 校验必须等它：否则 needStage 还是旧值
+   就发了 /api/plan，后端按 PDF 口径回一句「没有找到任何 .pdf」，页面只剩一条红灯。
+   round42h 审计日志里 18:31 / 18:54 那批 plan_reject 全是这个竞态。 */
+var inspectSeq=0,inspecting=false,lastInspected="";
+function gb(n){return (Number(n||0)/1e9).toFixed(2)+" GB"}
+function clearStage(){$("stageprog").classList.add("hidden");
+  $("ackrow").classList.add("hidden");$("ackalerts").checked=false;stageSt=null}
+/* ★ round42s：换源根时必须把旧的 stage_id 绑定整个作废（含 localStorage）。
+   旧代码只在 payload() 里 stage_id 优先于 src ⇒ 换了输入框点的还是上一批的暂存树。 */
+function unbindStage(){stageId="";if(stageTimer){clearTimeout(stageTimer);stageTimer=null}
+  try{localStorage.removeItem("medrec_stage_id")}catch(e){}
+  lastInspected="";clearStage();gateStart()}
+/* 输入框里的源根 != 暂存状态里记的源根 ⇒ 旧绑定作废。oninput 只重算 plan 不跑预检，
+   所以这里必须自己比一次；payload() 里再兜一次，提交前一定过。 */
+function checkStageBinding(){if(!stageId||!stageSt)return;
+  var v=$("src").value.trim();
+  if(stageSt.src&&v&&stageSt.src!==v)unbindStage()}
+function browseTo(p){
+  $("binfo").textContent="列出中…";
+  return api("/api/browse?path="+encodeURIComponent(p)).then(function(r){var d=r.body;
+    $("bpath").value=d.path||p;
+    if(!d.ok){$("binfo").textContent="";$("blist").innerHTML=
+      "<span class='bad'>"+(d.errors||[d.error||"读不了这个目录"]).map(esc).join("<br>")+"</span>";
+      $("blist").classList.remove("hidden");return}
+    $("binfo").textContent=d.path+" · "+d.items.length+" 项"+(d.truncated?"（已截断，选深一层）":"");
+    if(d.truncated)$("binfo").textContent=d.path+" · 只列前 "+d.items.length+
+      " 项（目录太多）⇒ 直接在上面输入框填完整路径更快";
+    var h="<table><tr><th></th><th>名称</th><th>大小</th><th></th></tr>";
+    if(d.parent)h+="<tr><td>↩</td><td colspan=3><a href='#' data-nav='"+esc(d.parent)+
+      "'>.. 上一级</a></td></tr>";
+    d.items.forEach(function(it){
+      var full=(d.path==="/"?"/":d.path+"/")+it.name;
+      h+="<tr><td>"+(it.kind==="dir"?"📁":"🗄")+"</td><td><a href='#' data-nav='"+esc(full)+
+        "'>"+esc(it.name)+"</a></td><td>"+(it.bytes?gb(it.bytes):"")+"</td><td>"+
+        "<a href='#' data-pick='"+esc(full)+"'>选它</a></td></tr>"});
+    $("blist").innerHTML=h+"</table>";$("blist").classList.remove("hidden")},
+    function(e){$("binfo").textContent="";
+      $("blist").innerHTML="<span class='bad'>浏览失败："+esc(e)+"</span>";
+      $("blist").classList.remove("hidden")})}
+function inspectSrc(force){
+  var v=$("src").value.trim();
+  if(stageId&&stageSt&&stageSt.src===v)return;   // 同一个源根：别把状态清掉
+  if(stageId)unbindStage();   // ★ 换源根 ⇒ 旧暂存绑定作废，否则提交的是上一批的语料
+  stageSt=null;clearStage();
+  if(!v||mode()!=="src"){$("lpre").textContent="";lastInspected="";inspecting=false;return}
+  if(!force&&v===lastInspected)return;
+  var seq=++inspectSeq;inspecting=true;
+  $("lpre").textContent="预检中…";
+  api("/api/inspectlocal?path="+encodeURIComponent(v)).then(function(r){var d=r.body;
+    if(seq!==inspectSeq)return;      // 打字快时旧响应会后到 ⇒ 只认最后一次
+    inspecting=false;lastInspected=v;
+    if(!d.ok&&d.errors&&d.errors.length){$("lpre").innerHTML="<span class='bad'>"+
+      d.errors.map(esc).join("<br>")+"</span>";return}
+    if(d.kind==="zip"){
+      $("lpre").innerHTML="zip："+d.entries+" 条目 / 解压后 "+gb(d.uncompressed_bytes)+
+        " · PDF <b>"+d.pdfs+"</b> · 图片 <b>"+d.images+"</b> · 含图片的目录 <b>"+d.image_dirs+
+        "</b> · 顶层 "+esc((d.top_levels||[]).join("、"))+
+        ((d.warnings||[]).length?"<br><span class='mut'>⚠ "+d.warnings.map(esc).join("<br>⚠ ")+"</span>":"")+
+        (d.needs_merge?"<br><span class='bad'>★ 压缩包里一个 PDF 都没有 ⇒ 必须先点「暂存归一」"+
+          "（"+d.image_dirs+" 个散页目录"+(d.merge_guard?" × 3 页守卫 OCR":" · 不跑守卫 OCR")+
+          " ≈ "+Math.round(d.est_minutes||0)+" 分钟 · "+(d.merge_workers||1)+" 进程并行）</span>":"");
+      needStage=!!d.needs_merge}
+    else if(d.kind==="dir"){
+      var h="目录：PDF <b>"+d.pdfs+"</b> / 病例 "+d.cases+" / PDF 深度 "+
+        esc(JSON.stringify(d.depth_hist||{}))+" / "+gb(d.total_bytes)+
+        (d.image_dirs?"<br>散页图片：<b>"+d.images+"</b> 张 / 含图片的目录 <b>"+d.image_dirs+
+          "</b> / 图片目录深度 "+esc(JSON.stringify(d.image_depth_hist||{})):"")+
+        ((d.hospitals_from_images||[]).length?
+          "<br>归一后的院区层（<b>层深不限</b>：病例目录自己套两层时自动往上跳一层）："+
+          esc(d.hospitals_from_images.map(function(x){return x.hospital+"（"+x.cases+" 例）"}).join("、")):"")+
+        ((d.tree_preview||[]).length?
+          "<br><span class='mut'>例：→ "+esc(d.tree_preview.join(" · "))+"</span>":"")+
+        (d.truncated?"<br><span class='bad'>★ PDF 扫描太大没扫完：把源根选深一层（选到装着院区目录的那一层）</span>":"")+
+        (d.img_truncated?"<br><span class='bad'>★ 图片目录太多没扫完：上面计数只是下限（跑批会扫全）</span>":"")+
+        ((d.warnings||[]).length?"<br><span class='mut'>⚠ "+d.warnings.map(esc).join("<br>⚠ ")+"</span>":"")+
+        (d.needs_merge?"<br><span class='bad'>★ 没有 PDF、只有散页图片 ⇒ 先点「暂存归一」"+
+          "（"+d.image_dirs+" 个散页目录"+(d.merge_guard?" × 3 页守卫 OCR":" · 不跑守卫 OCR")+
+          " ≈ "+Math.round(d.est_minutes||0)+" 分钟 · "+(d.merge_workers||1)+" 进程并行）</span>":"");
+      $("lpre").innerHTML=h;
+      needStage=!!d.needs_merge}
+    else $("lpre").textContent="";
+    gateStart();planNow()},
+    function(e){if(seq!==inspectSeq)return;inspecting=false;
+      $("lpre").innerHTML="<span class='bad'>预检没发出去："+esc(e)+"</span>";gateStart()})}
+function showStage(st){
+  stageSt=st;var box=$("stageprog");box.classList.remove("hidden");
+  var pct=st.total_dirs?Math.round(100*(st.done_dirs||0)/st.total_dirs):0;
+  var head=st.state==="running"?"归一中":(st.state==="done"?"归一完成":
+    (st.state==="done_with_alerts"?"归一完成（有守卫报警）":"归一失败"));
+  var html="<b>"+head+"</b> "+(st.done_dirs||0)+"/"+(st.total_dirs||0)+
+    " 目录（"+pct+"%）· 合并 "+(st.merged||0)+" · 已存在跳过 "+(st.skipped||0)+
+    " · 被拦 "+(st.blocked||0)+" · 页 "+(st.pages||0)+" · PDF "+gb(st.pdf_bytes||0)+
+    "<br>阶段："+esc(st.phase||"")+(st.current?" · 当前 "+esc(st.current):"")+
+    "<br>暂存树："+esc(st.tree||"");
+  html+="<br>暂存源根：<b>"+esc(st.src||"（状态里没记源根）")+"</b>"+
+    (st.src&&$("src").value.trim()&&st.src!==$("src").value.trim()?
+      "<br><span class='bad'>★ 这个暂存树来自的源根和输入框里现在填的不一样 ⇒ 换语料必须重新点「暂存归一」</span>":"");
+  if(st.alerts)html+="<br><span class='bad'>守卫报警 "+st.alerts+
+    " 条 → 人工确认清单 "+esc(st.alert_path||"")+"</span>";
+  /* 链式状态（round42k）：归一完由 8090 进程里的轮询线程自动发起跑批，浏览器关了也不断 */
+  var c=st.chain||{};
+  if(c.status){
+    var cs={pending:"已排队：归一完自动提取",starting:"归一完成，正在发起跑批…",
+      started:"已自动发起跑批 pid="+c.run_pid,
+      awaiting_ack:"★ 守卫拦下目录未人工确认 ⇒ 已暂停，没有自动跑批",
+      waiting_lock:"单飞锁被占 ⇒ 稍后自动重试",rejected:"自动提取被拒："+(c.note||""),
+      aborted:"自动提取已中止："+(c.note||"")}[c.status]||c.status;
+    html+="<br>自动提取：<b>"+esc(cs)+"</b>（批次 "+esc(c.batch||"")+
+      " · 阶段 "+esc((c.steps||[]).join(",")||"all")+"）";
+    if(c.status==="awaiting_ack")html+="<br><button id='chainack'>看过清单了，继续提取</button>";
+    if(c.status==="started"&&c.batch&&!curBatch)curBatch=c.batch}
+  if((st.errors||[]).length)html+="<br><span class='bad'>"+
+    st.errors.slice(0,6).map(esc).join("<br>")+"</span>";
+  box.innerHTML=html;
+  $("ackrow").classList.toggle("hidden",!(st.alerts>0));
+  /* 归一是小时级 ⇒ 按钮自己变进度，跑完才恢复。否则用户看不见状态只会反复点
+     （实测连点 3 次 = 3 个 worker 打同一个语料：3× OCR + 3× 磁盘，一点没快） */
+  var running=st.state==="running";
+  $("stagebtn").disabled=running;
+  $("stagebtn").textContent=running?("归一中 "+(st.done_dirs||0)+"/"+(st.total_dirs||0)+
+    "（"+pct+"%，别重复点）"):STAGE_BTN}
+function pollStage(){
+  if(stageTimer)clearTimeout(stageTimer);
+  stageTimer=setTimeout(function(){stageTimer=null;
+    api("/api/stagestatus?stage_id="+encodeURIComponent(stageId)).then(function(r){var st=r.body;
+      showStage(st);
+      if(st.state==="running"){pollStage();return}
+      gateStart();planNow()},function(e){pollStage()})},3000)}
+function startStage(){
+  var v=$("src").value.trim();if(!v)return;
+  var auto=(arguments[0]===undefined)?$("autorange").checked:!!arguments[0];
+  /* ★ round42i 根因：api() 返回的是 {code, body} 包装，旧代码把包装当 body 用
+     ⇒ d.ok 永远 undefined ⇒ 后端明明起成功了，页面照样报「暂存归一被拒：未知」
+     （errors / error 都在 body 里，包装上根本没有）。同一个 bug 也废了浏览与预检。 */
+  if(stageSt&&stageSt.state==="running"){
+    $("stageprog").classList.remove("hidden");
+    $("stageprog").innerHTML="<span class='bad'>这个源根已经在归一中（"+(stageSt.done_dirs||0)+
+      "/"+(stageSt.total_dirs||0)+" 目录）⇒ 不要再点按钮，进度自己刷</span>";
+    pollStage();return}
+  invalidate();clearStage();
+  $("stagebtn").disabled=true;$("stagebtn").textContent="归一启动中…";
+  var body={src:v};
+  if(auto){body.auto_run=true;body.batch=$("batch").value.trim();
+    body.steps=payload().steps;body.format=$("format").value;
+    body.ack_alerts=$("ackalerts").checked}
+  postJSON("/api/stagelocal",body).then(function(r){var d=r.body;
+      $("stagebtn").disabled=false;$("stagebtn").textContent=STAGE_BTN;
+      if(!d.ok){$("stageprog").classList.remove("hidden");$("stageprog").innerHTML=
+        "<span class='bad'>暂存归一被拒（HTTP "+r.code+"）："+
+        (d.errors||[d.error||"后端没给原因"]).map(esc).join("<br>")+"</span>";
+        return}
+      stageId=d.stage_id;$("stageprog").classList.remove("hidden");
+      $("stageprog").innerHTML=(d.already_running?("这个源根已有 worker 在归一中（"+
+          (d.done_dirs||0)+"/"+(d.total_dirs||0)+"）⇒ 接上它，没有再起第二个"):
+        (d.reused?"复用已归一好的暂存树（没有重跑合并）":"已起 worker pid="+d.pid))+
+        "<br>暂存树："+esc(d.tree)+
+        (d.merged!=null?"<br>PDF "+d.merged+" 个 / 守卫拦下 "+(d.alerts||0)+" 个":"");
+      try{localStorage.setItem("medrec_stage_id",d.stage_id)}catch(e){}
+      if(d.chain&&d.chain.batch)$("why").textContent="已挂自动提取：批次 "+d.chain.batch;
+      pollStage()},
+    function(e){$("stagebtn").disabled=false;$("stagebtn").textContent=STAGE_BTN;
+      $("stageprog").classList.remove("hidden");
+      $("stageprog").innerHTML="<span class='bad'>请求没发出去："+esc(e)+"</span>"})}
+
+function restoreStage(){
+  var sid="";try{sid=localStorage.getItem("medrec_stage_id")||""}catch(e){}
+  if(!sid)return;
+  api("/api/stagestatus?stage_id="+encodeURIComponent(sid)).then(function(r){var st=r.body;
+    if(st.state==="none")return;
+    /* ★ round42s：刷新后 stage_id 还在但 src 输入框是空的 ⇒ 点启动会静默跑上一批的语料。
+       把暂存状态里记的源根回填进输入框：页面上看到的源根 == 实际要跑的源根（F7）。 */
+    stageId=sid;
+    if(!$("src").value.trim()&&st.src)$("src").value=st.src;
+    showStage(st);gateStart();
+    if(st.state==="running")pollStage();else planNow()},function(e){})}
+
+function planNow(){
+  var p=payload(); if(!p.batch)return Promise.resolve(null);
+  if(mode()==="upload"&&!uploadId)return Promise.resolve(null);
+  if(mode()==="src"&&!p.src&&!stageId)return Promise.resolve(null);
+  /* 预检还在飞 ⇒ 不要用旧的 needStage 发校验；预检回来后它的回调会再 planNow 一次 */
+  if(mode()==="src"&&inspecting&&!stageId){schedulePlan(600);return Promise.resolve(null)}
+  /* 只有散页图片时不再在前端编一条假错误挡掉请求：让后端 plan 回真数据
+     （目录数 / 张数 / GB / 归一后的院区层 / 已归一好的暂存树），红灯才有信息量 */
+  var seq=++planSeq; planning=true; gateStart();
+  return postJSON("/api/plan",p).then(function(r){var d=r.body;
+    if(seq!==planSeq)return null;
+    planning=false; planData=d; showPlan(d); gateStart(); return d},
+    function(e){if(seq!==planSeq)return null;
+      planning=false; planData={ok:false,plan:{},errors:["校验请求没发出去："+e]};
+      showPlan(planData); gateStart(); return planData})}
+function schedulePlan(ms){if(planTimer)clearTimeout(planTimer);
+  planTimer=setTimeout(function(){planTimer=null;planNow()},ms||800)}
+function invalidate(){planData=null;gateStart()}
+function showPlan(d){
+  var p=d.plan||{}, box=$("plan"); box.classList.remove("hidden");
+  var head=d.ok?"<span class='ok'>校验通过</span>":"<span class='bad'>校验不通过（不给跑）</span>";
+  var html=head+"<br>将创建 <b>"+(p.cases||0)+"</b> 个病例目录 / 共 <b>"+(p.pdfs||0)+
+    "</b> 个 PDF"+(p.image_dirs?"（另有 <b>"+p.image_dirs+"</b> 个散页图片目录 / "+
+      (p.images||0)+" 张，需先暂存归一）":"")+
+    " / 院区："+esc((p.hospitals||[]).join("、")||"—")+
+    "<br>源根："+esc(p.root||"")+" · 深度分布 "+esc(JSON.stringify(p.depth_hist||{}))+
+    " · 输入 "+mb(p.total_bytes||0);
+  if((d.warnings||[]).length)html+="<br><span class='mut'>⚠ "+d.warnings.map(esc).join("<br>⚠ ")+"</span>";
+  if((d.errors||[]).length)html+="<br><span class='bad'>"+d.errors.map(esc).join("<br>")+"</span>";
+  box.innerHTML=html; $("cmd").textContent=d.command||""}
+function gateStart(){
+  var why=[];
+  if(mode()==="upload"){if(!sel.length)why.push("还没选文件");else if(!uploadId)why.push("还没上传")}
+  else{if(!stageId&&!$("src").value.trim())why.push("还没填源根目录 / 压缩包");
+       else if(needStage&&!stageId&&!$("autorange").checked)why.push("只有散页图片：还没暂存归一")}
+  if(!$("batch").value.trim())why.push("批次名为空");
+  /* 链式模式不要求先出 plan：源根里一个 PDF 都没有，plan 必然红（「没有找到任何 .pdf」）。
+     真正的闸门在归一完成后由后端用**同一份** Handler.gate 跑（webui/server.py）；
+     前端这里只挡明显没填全的输入。 */
+  var cm=chainMode();
+  if(!cm){
+    if(planning)why.push("正在校验…");
+    else if(!planData)why.push("还没校验：填完源根目录会自动校验，或点「校验」");
+    else if(!planData.ok)why.push("校验不通过：按上面红条修输入，改完自动重新校验");
+  }
+  $("start").disabled=why.length>0;
+  $("start").textContent=cm?"开始（自动归一 → 自动提取）":"开始跑批";
+  $("why").textContent=why.join(" · ")+
+    (cm&&!why.length?" · 已勾自动提取：点一下先归一（量大几小时），归一完自动跑六阶段":"")}
+
+/* ---------- 块 3 ---------- */
+function refreshJob(){
+  if(!curBatch)return;
+  api("/api/job?batch="+encodeURIComponent(curBatch)).then(function(r){
+    var d=r.body; if(!d.ok)return;
+    var st=d.state==="done"?"已完成":(d.state==="running"?"运行中":d.state);
+    var cls=d.state==="done"?(d.warnings.length||d.rc?"yellow":"green"):"grey";
+    $("cur").innerHTML="批次 <b>"+esc(d.batch)+"</b> · "+st+
+      (d.elapsed_min!=null?"，已跑 "+d.elapsed_min+" min":"")+
+      " · 进度 <b>"+d.done+"/"+d.total+"</b> 例 · 稳态 "+
+      (d.steady_s_per_case||d.steady_s_per_case_live||"—")+" s/例";
+    var sc=d.stage_counts||{}, cells=STEPS.map(function(s){
+      return "<td>"+(sc[s]!=null?sc[s]:"—")+"</td>"}).join("");
+    $("curbar").className="bar "+cls;
+    $("curbar").innerHTML="<table><thead><tr><th>阶段</th>"+
+      STEPS.map(function(s){return "<th>"+s+"</th>"}).join("")+
+      "<th>稳态 s/例</th></tr></thead><tbody><tr><td>完成例数</td>"+cells+
+      "<td>"+(d.steady_s_per_case||d.steady_s_per_case_live||"—")+"</td></tr></tbody></table>";
+    var w=d.warnings||[];
+    if(w.length){$("warnbox").classList.remove("hidden");$("warnbox").innerHTML=
+      "warnings：<b>"+w.length+"</b> 条（有 warnings 就不算干净成功）<details><summary>看全文</summary><pre>"+
+      w.map(esc).join("\n")+"</pre></details>"}
+    else $("warnbox").classList.add("hidden");
+    var lg=d.log_tail||{};
+    $("loglines").textContent=(lg.error?lg.error+"\n":"")+(lg.lines||[]).join("\n");
+    $("logbox").querySelector("summary").textContent="尾部日志（"+
+      (lg.lines||[]).length+" 行，姓名段已打码）"+(lg.path?" — "+lg.path:"");
+    showCurViz(d.batch);
+  })}
+function vizOk(){return !!(lastStatus&&lastStatus.viz&&lastStatus.viz.ok)}
+function vizDownMsg(v){
+  return "<span class='bad'>进度看板（"+esc((v&&v.url)||"127.0.0.1:8091")+"）没在跑</span>"+
+    " —— 只读看板，起它不碰产线：<pre>"+esc((v&&v.start_command)||"见 /api/viz/status")+"</pre>"}
+function showCurViz(b){
+  var box=$("curviz"), f=$("curviz-frame"), msg=$("curviz-msg"), a=$("curviz-open");
+  if(!b||!box||!f)return;
+  var src="/viz/live?batch="+encodeURIComponent(b);
+  if(a)a.href=src;
+  if(!vizOk()){curVizSrc="";box.classList.remove("hidden");
+    msg.innerHTML=vizDownMsg(lastStatus&&lastStatus.viz);return}
+  if(curVizSrc===src){box.classList.remove("hidden");msg.innerHTML="";return}
+  curVizSrc=src;box.classList.remove("hidden");msg.innerHTML="";f.src=src}
+
+/* ---------- 块 4 ---------- */
+// 只有服务端**明确**说它支持明文出口才给勾：旧版 server.py 没重启 / 加了 --disable-plain ⇒ 不给勾
+function plainAllowed(){return !!(lastStatus&&lastStatus.plain_allowed===true)}
+function rowHtml(b,title,note,body){
+  return "<tr class='detailrow' id='detail-row'><td colspan=7 id='detail-cell'>"+
+    "<div class='dhead'><b>"+esc(title)+"</b> · "+esc(b)+
+    " <button data-a='reload' data-b='"+esc(b)+"'>重载</button>"+
+    " <button data-a='close' data-b='"+esc(b)+"'>收起</button>"+
+    " <span class='mut'>"+esc(note)+"</span></div>"+body+"</td></tr>"}
+function renderHist(){
+  var h="";
+  histRows.forEach(function(x){
+    var w=x.warnings||0, on=(x.batch===openBatch);
+    h+="<tr"+(on?" class='on'":"")+"><td>"+esc(x.batch)+"</td><td>"+
+      (x.rows==null?"—":x.rows+"×"+(x.cols==null?"?":x.cols))+"</td><td>"+esc(x.hits||"—")+
+      "</td><td class='"+(w?"bad":"")+"'>"+w+"</td><td>"+
+      (x.steady_s_per_case==null?"—":x.steady_s_per_case)+"</td><td>"+esc(x.time||"")+"</td><td>"+
+      "<button data-a='check' data-b='"+esc(x.batch)+"'>看 check</button> "+
+      "<button data-a='stages' data-b='"+esc(x.batch)+"'>看 stages</button> "+
+      "<button data-a='preview' data-b='"+esc(x.batch)+"'>看表</button> "+
+      "<button data-a='progress' data-b='"+esc(x.batch)+"'>看进度</button> "+
+      "<a href='/api/wide.csv?batch="+encodeURIComponent(x.batch)+"'>下载打码后 wide.csv</a>"+
+      "<a href='/api/wide.xlsx?batch="+encodeURIComponent(x.batch)+"'>下载打码后 wide.xlsx</a>"+
+      "</td></tr>";
+    if(on&&detailHtml)h+=detailHtml});
+  $("hist").innerHTML=h||"<tr><td colspan=7>还没有批次</td></tr>";
+  var el=$("detail-row");
+  if(el&&el.scrollIntoView)el.scrollIntoView({block:"nearest"})}
+function refreshBatches(force){
+  if(!force&&openBatch)return;   // 详情行开着 ⇒ 别重画表格（15 s 自动刷新会冲掉手上的面板）
+  api("/api/batches?limit=25").then(function(r){histRows=r.body.batches||[];renderHist()})}
+function openDetail(b,kind,force){
+  if(!b||!KINDS[kind])return;
+  if(!force&&openBatch===b&&openKind===kind)return closeDetail();   // 再点同一个 = 收起
+  openBatch=b;openKind=kind;detailSeq++;
+  var t=KINDS[kind],seq=detailSeq;
+  if(kind==="progress"||kind==="qc"||kind==="replay"){
+    detailHtml=rowHtml(b,t,"只读看板 · 经 8090 同源代理",vizBody(b,kind));renderHist();return}
+  detailHtml=rowHtml(b,t,"载入中…（check / stages 要跑一次只读命令，约 0.3~3 s）",
+    "<div class='mut'>载入中…</div>");renderHist();
+  if(kind==="preview")fillPreview(b,seq);else fillReadonly(b,kind,seq)}
+function closeDetail(){openBatch="";openKind="";detailHtml="";detailSeq++;renderHist()}
+function vizBody(b,kind){
+  if(!vizOk())return vizDownMsg(lastStatus&&lastStatus.viz)+
+    "<div class='mut'>起完之后点上面的「重载」。</div>"
+  return "<iframe class='viz' src='/viz/"+VIZPAGE[kind]+"?batch="+encodeURIComponent(b)+
+    "' title='"+esc(KINDS[kind])+"'></iframe>"+
+    "<div class='mut'>看板 = 8091 的只读页，经 8090 同源代理嵌进来（不另开端口、不改 8091 一行代码）。换视图："+
+    otherKinds(b,kind)+"</div>"}
+function otherKinds(b,kind){
+  var out=[];["progress","qc","replay"].forEach(function(k){if(k!==kind)
+    out.push("<button data-a='"+k+"' data-b='"+esc(b)+"'>"+KINDS[k]+"</button>")});
+  return out.join(" ")}
+function fillReadonly(b,kind,seq){
+  api("/api/"+kind+"?batch="+encodeURIComponent(b)).then(function(r){
+    if(seq!==detailSeq||openBatch!==b)return;var d=r.body;
+    if(!d.ok){detailHtml=rowHtml(b,KINDS[kind],"读不到",
+      "<div class='bar red'>"+esc(d.error||("读不到 "+kind))+"</div>");renderHist();return}
+    var head=kind+" "+b+"  →  rc="+d.rc+"  FAIL="+d.fail+"  WARN="+d.warn+"\n$ "+d.command+"\n\n";
+    detailHtml=rowHtml(b,KINDS[kind],"rc="+d.rc+" · FAIL="+d.fail+" · WARN="+d.warn,
+      "<pre>"+esc(head+(d.text||""))+"</pre>");renderHist()})}
+function fillPreview(b,seq){
+  api("/api/preview?batch="+encodeURIComponent(b)+"&rows=10"+(plainOn?"&plain=1":""))
+    .then(function(r){
+      if(seq!==detailSeq||openBatch!==b)return;var d=r.body;
+      if(!d.ok){detailHtml=rowHtml(b,"宽表预览","读不到",
+        "<div class='bar red'>"+esc(d.error||"读不到 wide.csv")+"</div>");renderHist();return}
+      var cols=d.preview.length?Object.keys(d.preview[0]).filter(function(k){return k!=="row"}):[];
+      var h="<table><thead><tr><th>行</th>"+cols.map(function(c){return "<th>"+esc(c)+"</th>"})
+        .join("")+"</tr></thead><tbody>";
+      d.preview.forEach(function(prow){
+        h+="<tr><td>"+prow.row+"</td>"+cols.map(function(c){
+          return "<td>"+esc(prow[c])+" <button data-a='raw' data-b='"+esc(b)+"' data-r='"+prow.row+
+            "' data-c='"+esc(c)+"'>本地查看</button></td>"}).join("")+"</tr>"});
+      h+="</tbody></table>";
+      detailHtml=rowHtml(b,"宽表预览",d.rows_total+" 行 × "+d.cols+" 列 · "+
+        (d.pii==="plain"?"不打码":"已打码"),plainBar(b,d)+h);renderHist()})}
+function plainBar(b,d){
+  var q="batch="+encodeURIComponent(b);
+  var s="<div class='"+(d.pii==="plain"?"plainbox":"mut")+"'>预览 "+d.preview.length+
+    " 行（宽表共 "+d.rows_total+" 行 × "+d.cols+" 列）· 当前："+
+    (d.pii==="plain"?"<b>不打码 —— 屏上是 PII 原文，服务端已记审计，不落盘</b>":"PII 已打码")+
+    "</div><div style='margin:6px 0'>"+
+    "<a href='/api/wide.csv?"+q+"'>下载打码后 wide.csv</a> ";
+  s+="<a href='/api/wide.xlsx?"+q+"'>下载打码后 wide.xlsx</a> ";
+  if(!plainAllowed())return s+"<span class='mut'>明文出口不可用：服务端没开（改了 server.py 没重启，或启动时加了 --disable-plain）</span></div>";
+  return s+"<label style='margin-left:12px'><input type=checkbox data-a='plain' data-b='"+esc(b)+
+    "'"+(plainOn?" checked":"")+"> 不打码（预览与下载都取原文）</label>"+
+    (plainOn?" <a href='/api/wide.csv?"+q+"&plain=1'><b>下载不打码 wide.csv（含 PII）</b></a>":"")+
+    (plainOn?" <a href='/api/wide.xlsx?"+q+"&plain=1'><b>下载不打码 wide.xlsx（含 PII）</b></a>":"")+
+    "</div>"}
+function viewRaw(b,row,col,btn){
+  api("/api/raw?batch="+encodeURIComponent(b)+"&row="+row+"&col="+encodeURIComponent(col))
+    .then(function(r){var d=r.body;
+      btn.parentNode.textContent=d.ok?String(d.value):("拒绝："+d.error)})}
+
+/* ---------- 装配 ---------- */
+$("pick-files").onclick=function(){$("f-files").click()};
+$("pick-dir").onclick=function(){$("f-dir").click()};
+$("f-files").onchange=function(){sel=[];for(var i=0;i<this.files.length;i++)addFile(this.files[i]);
+  renderSel()};
+$("f-dir").onchange=function(){sel=[];for(var i=0;i<this.files.length;i++){
+  var f=this.files[i]; addFile(f,(f.webkitRelativePath||f.name))}renderSel()};
+$("clear").onclick=function(){sel=[];uploadId="";planData=null;planning=false;
+  if(planTimer){clearTimeout(planTimer);planTimer=null}
+  $("f-files").value="";$("f-dir").value="";$("plan").classList.add("hidden");renderSel()};
+var dz=$("drop");
+dz.ondragover=function(e){e.preventDefault();dz.classList.add("on")};
+dz.ondragleave=function(){dz.classList.remove("on")};
+dz.ondrop=function(e){e.preventDefault();dz.classList.remove("on");sel=[];fromTransfer(e.dataTransfer)};
+document.querySelectorAll("input[name=mode]").forEach(function(r){r.onchange=function(){
+  $("up-area").classList.toggle("hidden",mode()!=="upload");
+  $("src-area").classList.toggle("hidden",mode()!=="src");invalidate();
+  if(mode()==="src"&&$("src").value.trim()){inspectSrc(true)}}});
+$("regen").onclick=function(){api("/api/newbatch").then(function(r){$("batch").value=r.body.batch;
+  invalidate();planNow()})};
+$("src").oninput=function(){checkStageBinding();invalidate();schedulePlan()};
+$("src").onchange=function(){checkStageBinding();planNow()};
+$("src").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();inspectSrc()}};
+$("browse-go").onclick=function(){browseTo($("bpath").value.trim()||"/raid5")};
+$("bpath").onkeydown=function(e){if(e.key==="Enter")browseTo($("bpath").value.trim())};
+$("blist").addEventListener("click",function(e){
+  var a=e.target&&e.target.closest?e.target.closest("a"):null;if(!a)return;e.preventDefault();
+  if(a.dataset.nav)browseTo(a.dataset.nav);
+  else if(a.dataset.pick){$("src").value=a.dataset.pick;unbindStage();
+    invalidate();inspectSrc()}});
+$("stagebtn").onclick=function(){startStage()};
+$("stageprog").addEventListener("click",function(e){
+  var b=e.target&&e.target.closest?e.target.closest("button"):null;
+  if(!b||b.id!=="chainack"||!stageId)return;
+  b.disabled=true;b.textContent="提交中…";
+  postJSON("/api/chainack",{stage_id:stageId}).then(function(r){var d=r.body;
+    if(!d.ok){b.disabled=false;b.textContent="继续提取被拒："+esc(d.error||"未知");return}
+    pollStage()},function(e2){b.disabled=false;b.textContent="重试"})});
+$("autorange").onchange=function(){invalidate();gateStart()};
+$("ackalerts").onchange=function(){invalidate();planNow()};
+$("batch").oninput=function(){invalidate();schedulePlan(1200)};
+$("recheck").onclick=function(){if(mode()==="upload"&&!uploadId)return uploadAll();
+  return planNow()};
+$("upload-check").onclick=function(){return uploadAll()};
+$("format").onchange=function(){invalidate();schedulePlan(300);showFmt()};
+function showFmt(){var f=fmtMap[$("format").value];if(!f)return;
+  var n=(lastStatus&&lastStatus.doctor)?lastStatus.doctor.expect_wide_cols:null;
+  $("fmt-info").textContent=f.display_name+" · 输出列数 "+(n||"—")+
+    "（来自 doctor，列版本 "+((lastStatus&&lastStatus.doctor)||{}).columns_version+"）· 更多表类型待接入"}
+$("start").onclick=function(){
+  if(chainMode())return startStage(true);
+  var go=function(){return postJSON("/api/start",payload()).then(function(r){var d=r.body;
+    if(!d.ok){$("why").textContent=(d.error||"启动被拒")+" "+JSON.stringify(d.lock||{});
+      refreshStatus();return}
+    curBatch=d.batch;$("cur").textContent="已发起："+d.command;
+    refreshJob();refreshBatches()})};
+  if(mode()==="upload"&&!uploadId)return uploadAll().then(function(){
+    if(uploadId&&planData&&planData.ok)return go()});
+  if(!planData||!planData.ok)return planNow().then(function(d){if(d&&d.ok)return go()});
+  return go()};
+$("copy").onclick=function(){var t=$("cmd").textContent,navigator2=navigator;
+  if(navigator2.clipboard)navigator2.clipboard.writeText(t).then(function(){
+    $("copy").textContent="已复制"});};
+$("hist").addEventListener("click",function(e){var b=e.target;
+  if(!b.dataset)return;var a=b.dataset.a;if(!a)return;
+  if(a==="close")return closeDetail();
+  if(a==="reload")return openDetail(b.dataset.b,openKind,true);
+  if(a==="raw")return viewRaw(b.dataset.b,b.dataset.r,b.dataset.c,b);
+  if(a==="plain"){plainOn=!plainOn;detailSeq++;return fillPreview(b.dataset.b,detailSeq)}
+  openDetail(b.dataset.b,a)});
+$("hist-refresh").onclick=function(){detailSeq++;refreshBatches(true)};
+function initSteps(){$("steps").innerHTML=STEPS.map(function(s){return "<label><input type=checkbox id=st-"+
+  s+" checked>"+s+"</label>"}).join("")}
+api("/api/table_formats").then(function(d){var f=d.body.formats;
+  Object.keys(f).forEach(function(k){fmtMap[k]=f[k];var o=document.createElement("option");
+    o.value=k;o.textContent=f[k].display_name;$("format").appendChild(o)});
+  showFmt()});
+api("/api/newbatch").then(function(r){$("batch").value=r.body.batch});
+initSteps();refreshStatus();refreshBatches();
+restoreStage();
+setInterval(refreshJob,1000);setInterval(refreshStatus,4000);
+setInterval(function(){refreshBatches()},15000);
+document.addEventListener("change",function(e){
+  if(e.target.id&&e.target.id.indexOf("st-")===0){invalidate();schedulePlan(300)}});
+</script>
+</body></html>

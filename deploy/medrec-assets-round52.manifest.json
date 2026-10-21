@@ -1,0 +1,1437 @@
+{
+ "package": "medrec-assets-round52.tar.gz",
+ "built": "2026-10-20T11:52:06+0800",
+ "compressor": "pigz -3",
+ "archive_sha256": "5f3ed519fad1144bfc2512a5287effc21e1812b45ff16178dafbcc3249f2e204",
+ "archive_bytes": 3637990435,
+ "file_count": 134,
+ "entry_count": 178,
+ "total_bytes": 4529681952,
+ "build_seconds": 20.7,
+ "files": [
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.eval_results",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.eval_results",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.gitattributes",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.gitattributes",
+   "kind": "file",
+   "size": 1586,
+   "mode": "0o664",
+   "sha256": "0ab87e437d3b0f02d882198091b325db26085d934efc7299486f085122b05ed8"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/LICENSE",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/LICENSE",
+   "kind": "file",
+   "size": 11376,
+   "mode": "0o664",
+   "sha256": "b8c4d7deccd236af023af1c88c4d4e8f0fc2f41914e0fb23a3ec9678fb5a8456"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/README.md",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/README.md",
+   "kind": "file",
+   "size": 21424,
+   "mode": "0o664",
+   "sha256": "d6c5b77a660577f6e18021defccd835bdc93a8c6538f5a479d597f3e94288abf"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/added_tokens.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/added_tokens.json",
+   "kind": "file",
+   "size": 25381,
+   "mode": "0o664",
+   "sha256": "f59f889088e0fe21c523e7cf121bb6dca3b0bb148cb7159fbb4572c74dfc5644"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/chat_template.jinja",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/chat_template.jinja",
+   "kind": "file",
+   "size": 1474,
+   "mode": "0o664",
+   "sha256": "2f27812dab7f333e471884e0c803d807f11953d5453140dfb1aaba234f872bc8"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/config.json",
+   "kind": "file",
+   "size": 2059,
+   "mode": "0o664",
+   "sha256": "ce7f4565f8b1db78532ad5d1b9ebe55c2139d49bd4cb04778b580a08a598f171"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/configuration_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/configuration_paddleocr_vl.py",
+   "kind": "file",
+   "size": 8104,
+   "mode": "0o664",
+   "sha256": "753dd93654c3a9c8c85a3eaee1e3092dd12591b0f2dce0305e1abfb7a41ff160"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/generation_config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/generation_config.json",
+   "kind": "file",
+   "size": 133,
+   "mode": "0o664",
+   "sha256": "a6701d78ab3b4d972307cdec3b69d4c13f46e0d5140514f50ab7d84259324b94"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/image_processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/image_processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 25032,
+   "mode": "0o664",
+   "sha256": "a4fa521b9cb16e207f94b7f2d16427771776dfc634420d319fc4916ee58049ec"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/inference.yml",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/inference.yml",
+   "kind": "file",
+   "size": 43,
+   "mode": "0o664",
+   "sha256": "1587aece2d6442366efce34161d5f7d5f67f09ebfbf043168e5fade892c2780e"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/model.safetensors",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/model.safetensors",
+   "kind": "file",
+   "size": 1917255968,
+   "mode": "0o664",
+   "sha256": "85a479d506a11e724e7285d395c551be69f41dbc16b6342d3cacfb189aed71db"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/modeling_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/modeling_paddleocr_vl.py",
+   "kind": "file",
+   "size": 103889,
+   "mode": "0o664",
+   "sha256": "c5013dff57ca8b87dc1de64d0fd839a44313de09d230a4fb2d08289d2cad5111"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/preprocessor_config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/preprocessor_config.json",
+   "kind": "file",
+   "size": 641,
+   "mode": "0o664",
+   "sha256": "111872ab1e8bb7fd040ac5087bfced7ab8f011f02139b088cba294964c3b1d0e"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 12253,
+   "mode": "0o664",
+   "sha256": "e29cb1e5f275f2bd3ce051bd5c9983a33894e693b2823a0e13d4c07c8c4f9e13"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/processor_config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/processor_config.json",
+   "kind": "file",
+   "size": 137,
+   "mode": "0o664",
+   "sha256": "1568858960a9760c54431dae693a6152e601ff55cdf6d2eab97a4a99958faea0"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/special_tokens_map.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/special_tokens_map.json",
+   "kind": "file",
+   "size": 1151,
+   "mode": "0o664",
+   "sha256": "d3a125c03103deb2acaf7730791bdbbf196f620e5a2213b664511ff9b4b25bab"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer.json",
+   "kind": "file",
+   "size": 11189060,
+   "mode": "0o664",
+   "sha256": "c8a215a59183d0d0781adc33bacd3ce6162716f7fd568fb30234a74d69803a7d"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer.model",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer.model",
+   "kind": "file",
+   "size": 1614363,
+   "mode": "0o664",
+   "sha256": "34ef7db83df785924fb83d7b887b6e822a031c56e15cff40aaf9b982988180df"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer_config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/tokenizer_config.json",
+   "kind": "file",
+   "size": 186947,
+   "mode": "0o664",
+   "sha256": "1f979337347cc0cb72a6282d8a23ed183539aa81a87a906f022aee2bab83c7c5"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.eval_results/real5_omnidocbench.yaml",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master/.eval_results/real5_omnidocbench.yaml",
+   "kind": "file",
+   "size": 1418,
+   "mode": "0o664",
+   "sha256": "99219214a2793f849b55dc875a356917b8fc6d178455467e5a98e71a00689cf5"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/.gitattributes",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/.gitattributes",
+   "kind": "file",
+   "size": 2183,
+   "mode": "0o664",
+   "sha256": "16cc3b7c374589506cc042d8a220630ecccb9136ee649a71c56f717026952291"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/README.md",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/README.md",
+   "kind": "file",
+   "size": 12077,
+   "mode": "0o664",
+   "sha256": "8483bc2af32658aae3d38ddec2b7186f94f925481b70ae9e9034daaf80e6b9e1"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.json",
+   "kind": "file",
+   "size": 1196890,
+   "mode": "0o664",
+   "sha256": "2b68367c5b312a03de5a6e1642c597c8f95165a7e40cd59c6700cf4a5042f4fd"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.pdiparams",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.pdiparams",
+   "kind": "file",
+   "size": 130806572,
+   "mode": "0o664",
+   "sha256": "70bd316b0582769ec968829fd1feb1a6a58b7c941b938327e551b6b12b45c137"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.yml",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-DocLayoutV3/snapshots/master/inference.yml",
+   "kind": "file",
+   "size": 1482,
+   "mode": "0o664",
+   "sha256": "506fcfac13b3b546ae40d7886b44126420f392adb694e3f8bb6a6286a1f90fdc"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/.gitattributes",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/.gitattributes",
+   "kind": "file",
+   "size": 2132,
+   "mode": "0o664",
+   "sha256": "16a369b9b94903ada962eff2255c71a84238e4d8e475b6ce64768b0c1bd4d811"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/README.md",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/README.md",
+   "kind": "file",
+   "size": 16075,
+   "mode": "0o664",
+   "sha256": "b02727443cef4904a9ee12accdfaf66fcbada7b93a1a05c40dde7582291ba28c"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/config.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/config.json",
+   "kind": "file",
+   "size": 352253,
+   "mode": "0o664",
+   "sha256": "6df1587ae056f0b987125fc894b17f62ae3a12644fa2488d108f19377da9c1a8"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.json",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.json",
+   "kind": "file",
+   "size": 217724,
+   "mode": "0o664",
+   "sha256": "24587345250c7332d0fc6f9a44e794d078cdaeb64c302fef906f325619de2569"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.pdiparams",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.pdiparams",
+   "kind": "file",
+   "size": 16458665,
+   "mode": "0o664",
+   "sha256": "2460da90875937c94db97eba74ae3d9e5d4c4c57c42f1f41531c09a26bcc771a"
+  },
+  {
+   "archive": "medrec-assets/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.yml",
+   "source": "/home/ubuntu/medrec/models/models/PaddlePaddle--PP-OCRv5_mobile_rec/snapshots/master/inference.yml",
+   "kind": "file",
+   "size": 148345,
+   "mode": "0o664",
+   "sha256": "5dfeb2777f6d0db8177d8128a8acfcf6e6276dc4ac73ea3bf0dc06d6a5e85d8e"
+  },
+  {
+   "archive": "medrec-assets/modules",
+   "source": "/home/ubuntu/medrec/models/modules",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 25032,
+   "mode": "0o664",
+   "sha256": "a4fa521b9cb16e207f94b7f2d16427771776dfc634420d319fc4916ee58049ec"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34/processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/ccd480361a393e34/processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 12253,
+   "mode": "0o664",
+   "sha256": "e29cb1e5f275f2bd3ce051bd5c9983a33894e693b2823a0e13d4c07c8c4f9e13"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "kind": "file",
+   "size": 8104,
+   "mode": "0o664",
+   "sha256": "753dd93654c3a9c8c85a3eaee1e3092dd12591b0f2dce0305e1abfb7a41ff160"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 25032,
+   "mode": "0o664",
+   "sha256": "a4fa521b9cb16e207f94b7f2d16427771776dfc634420d319fc4916ee58049ec"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/PaddleOCR_hyphen_VL_hyphen_1_dot_6_hyphen_AWQ_hyphen_W4A16/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "kind": "file",
+   "size": 8104,
+   "mode": "0o664",
+   "sha256": "753dd93654c3a9c8c85a3eaee1e3092dd12591b0f2dce0305e1abfb7a41ff160"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/a3625802c2aaa03c",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/a3625802c2aaa03c",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/ccd480361a393e34",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/ccd480361a393e34",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/f489c3ae95a72c19",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/f489c3ae95a72c19",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/a3625802c2aaa03c/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/a3625802c2aaa03c/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/a3625802c2aaa03c/image_processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 25032,
+   "mode": "0o664",
+   "sha256": "a4fa521b9cb16e207f94b7f2d16427771776dfc634420d319fc4916ee58049ec"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/ccd480361a393e34/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/ccd480361a393e34/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/ccd480361a393e34/processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/ccd480361a393e34/processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 12253,
+   "mode": "0o664",
+   "sha256": "e29cb1e5f275f2bd3ce051bd5c9983a33894e693b2823a0e13d4c07c8c4f9e13"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/f489c3ae95a72c19/__init__.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/f489c3ae95a72c19/__init__.py",
+   "kind": "file",
+   "size": 0,
+   "mode": "0o664",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "archive": "medrec-assets/modules/transformers_modules/master/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "source": "/home/ubuntu/medrec/models/modules/transformers_modules/master/f489c3ae95a72c19/configuration_paddleocr_vl.py",
+   "kind": "file",
+   "size": 8104,
+   "mode": "0o664",
+   "sha256": "753dd93654c3a9c8c85a3eaee1e3092dd12591b0f2dce0305e1abfb7a41ff160"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models",
+   "source": "/home/ubuntu/.paddlex/official_models",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_det",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_rec",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_det",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_det",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_rec",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_det",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_det",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_rec",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_det",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_det",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_rec",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_rec",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o755",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3/.gitattributes",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3/.gitattributes",
+   "kind": "file",
+   "size": 2183,
+   "mode": "0o664",
+   "sha256": "16cc3b7c374589506cc042d8a220630ecccb9136ee649a71c56f717026952291"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3/README.md",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3/README.md",
+   "kind": "file",
+   "size": 12077,
+   "mode": "0o664",
+   "sha256": "8483bc2af32658aae3d38ddec2b7186f94f925481b70ae9e9034daaf80e6b9e1"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3/inference.json",
+   "kind": "file",
+   "size": 1196890,
+   "mode": "0o664",
+   "sha256": "2b68367c5b312a03de5a6e1642c597c8f95165a7e40cd59c6700cf4a5042f4fd"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3/inference.pdiparams",
+   "kind": "file",
+   "size": 130806572,
+   "mode": "0o664",
+   "sha256": "70bd316b0582769ec968829fd1feb1a6a58b7c941b938327e551b6b12b45c137"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-DocLayoutV3/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-DocLayoutV3/inference.yml",
+   "kind": "file",
+   "size": 1482,
+   "mode": "0o664",
+   "sha256": "506fcfac13b3b546ae40d7886b44126420f392adb694e3f8bb6a6286a1f90fdc"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/.msc",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/.msc",
+   "kind": "file",
+   "size": 366,
+   "mode": "0o644",
+   "sha256": "97b5d9da39f10237c3301604c38259e68ef2a8ba895fb3a28b518acb8d56a9fe"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/.mv",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/.mv",
+   "kind": "file",
+   "size": 67,
+   "mode": "0o644",
+   "sha256": "8a35518fb5db926ff6d4a2df6f3fc833a5c528c750805e448e98d431aba1798d"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/README.md",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/README.md",
+   "kind": "file",
+   "size": 6831,
+   "mode": "0o644",
+   "sha256": "1575198e849fd659e26a670b877bd2b3f3e89ba98d0cfb60360f4dd40ff9c864"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/config.json",
+   "kind": "file",
+   "size": 2561,
+   "mode": "0o644",
+   "sha256": "e49f6be2fe4034232b05fb80d983a7b9bde4592d4a52812129c9a348057d3147"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.json",
+   "kind": "file",
+   "size": 104441,
+   "mode": "0o644",
+   "sha256": "3580978602f309c3554508dd85d4fe09b73a7e0d80d7f9e63258f5b72c390c69"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.pdiparams",
+   "kind": "file",
+   "size": 6754166,
+   "mode": "0o644",
+   "sha256": "e8d6e7c5d264507e40e58a655779059d616b20d7441ea22047d829eb3931989c"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_doc_ori/inference.yml",
+   "kind": "file",
+   "size": 766,
+   "mode": "0o644",
+   "sha256": "9e195eb729a8173588cd0e8a852c8b373aa606e79e77b4ac7d8346f5426caf26"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori/img_textline180_demo_res.jpg",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori/img_textline180_demo_res.jpg",
+   "kind": "file",
+   "size": 6897,
+   "mode": "0o644",
+   "sha256": "69aa9e920a574c44b625e3929155e7193c488447612be04dd95feed74d4e231b"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori/img_textline180_demo_res.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori/img_textline180_demo_res.json",
+   "kind": "file",
+   "size": 236,
+   "mode": "0o644",
+   "sha256": "b5da01345cee9639e44572607d0afa5292afc3d93fd7b0a2b27f60cfb8d32650"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.json",
+   "kind": "file",
+   "size": 104399,
+   "mode": "0o644",
+   "sha256": "b81929eeaff8e52db0fafb49c9fbfc5bc0572f81641fe0179cc52096323fb4d4"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.pdiparams",
+   "kind": "file",
+   "size": 6743918,
+   "mode": "0o644",
+   "sha256": "0de2bcf996cf553e2b848dd7b1769dafffc6917b1ccdf55c1d8efe7909fbf743"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-LCNet_x1_0_textline_ori/inference.yml",
+   "kind": "file",
+   "size": 735,
+   "mode": "0o644",
+   "sha256": "8d5120d0e1a30a9df7ed46aa9119da3796ed066777089d1c1d705f132d5e90f9"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/.gitattributes",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/.gitattributes",
+   "kind": "file",
+   "size": 2132,
+   "mode": "0o664",
+   "sha256": "16a369b9b94903ada962eff2255c71a84238e4d8e475b6ce64768b0c1bd4d811"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/README.md",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/README.md",
+   "kind": "file",
+   "size": 16243,
+   "mode": "0o664",
+   "sha256": "4cc20ad6d41af86b3ce9885ffb0956e152574a2eb14179aeb07fd2d3956161ca"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/config.json",
+   "kind": "file",
+   "size": 2871,
+   "mode": "0o664",
+   "sha256": "7ac1c33f377ba58561f4b89d3180b6add2b7c5c60a4edac90fa4e0ceccdc6665"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/inference.json",
+   "kind": "file",
+   "size": 229777,
+   "mode": "0o664",
+   "sha256": "05feef1acb00aa4cd7362b15f7f501fc4f99d7b1fa73c1c871e0c7b1504b0f5c"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/inference.pdiparams",
+   "kind": "file",
+   "size": 4692937,
+   "mode": "0o664",
+   "sha256": "afa1820cb16c1fd0dad589d0f8b389139061c1ef6d68019685fd07be997dda5b"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_det/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_det/inference.yml",
+   "kind": "file",
+   "size": 903,
+   "mode": "0o664",
+   "sha256": "98069072e1b6b37d727fd9d9f11725faa46d6ea0de012f2ed26caea011c37699"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/.gitattributes",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/.gitattributes",
+   "kind": "file",
+   "size": 2132,
+   "mode": "0o664",
+   "sha256": "16a369b9b94903ada962eff2255c71a84238e4d8e475b6ce64768b0c1bd4d811"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/README.md",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/README.md",
+   "kind": "file",
+   "size": 16075,
+   "mode": "0o664",
+   "sha256": "b02727443cef4904a9ee12accdfaf66fcbada7b93a1a05c40dde7582291ba28c"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/config.json",
+   "kind": "file",
+   "size": 352253,
+   "mode": "0o664",
+   "sha256": "6df1587ae056f0b987125fc894b17f62ae3a12644fa2488d108f19377da9c1a8"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/inference.json",
+   "kind": "file",
+   "size": 217724,
+   "mode": "0o664",
+   "sha256": "24587345250c7332d0fc6f9a44e794d078cdaeb64c302fef906f325619de2569"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/inference.pdiparams",
+   "kind": "file",
+   "size": 16458665,
+   "mode": "0o664",
+   "sha256": "2460da90875937c94db97eba74ae3d9e5d4c4c57c42f1f41531c09a26bcc771a"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_mobile_rec/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_mobile_rec/inference.yml",
+   "kind": "file",
+   "size": 148345,
+   "mode": "0o664",
+   "sha256": "5dfeb2777f6d0db8177d8128a8acfcf6e6276dc4ac73ea3bf0dc06d6a5e85d8e"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_det/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det/config.json",
+   "kind": "file",
+   "size": 2871,
+   "mode": "0o664",
+   "sha256": "436bf19010fe3879477e8599a870a0ec8ccd14ca39056805ec4ed20ab318ec04"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_det/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det/inference.json",
+   "kind": "file",
+   "size": 402480,
+   "mode": "0o664",
+   "sha256": "af5876933d8806a1b50d895867e0781e135cd92ff37381992828fc8d1b842d28"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_det/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det/inference.pdiparams",
+   "kind": "file",
+   "size": 87932887,
+   "mode": "0o664",
+   "sha256": "183146fe9d9910352f68482f623bcbbb9fa7b9e8fa1463b9ad288cef00524d2d"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_det/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_det/inference.yml",
+   "kind": "file",
+   "size": 903,
+   "mode": "0o664",
+   "sha256": "28fb721efc3634fc8aa677e474b9602cb815a91cf569ef357a7a553d7b3ce685"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_rec/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec/config.json",
+   "kind": "file",
+   "size": 352253,
+   "mode": "0o664",
+   "sha256": "6a780e213d7a830058ae1b6899c62cc13ca9c1f0f04ae39a27ebb2610fae7c51"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_rec/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec/inference.json",
+   "kind": "file",
+   "size": 325204,
+   "mode": "0o664",
+   "sha256": "8e6e12e5d42531840310977fffb58165bf889fc5061408c5a8afdb6985f47fcb"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_rec/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec/inference.pdiparams",
+   "kind": "file",
+   "size": 84390117,
+   "mode": "0o664",
+   "sha256": "63853f062a5f4089befc16f565a68277618e0da5cb45468b49d11079de0ada77"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv5_server_rec/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv5_server_rec/inference.yml",
+   "kind": "file",
+   "size": 148345,
+   "mode": "0o664",
+   "sha256": "2c719dba044c4e2228aef8ff92f5f575394d75d24c16de096a33b7cfd902f66d"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_det/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_det/inference.json",
+   "kind": "file",
+   "size": 312150,
+   "mode": "0o644",
+   "sha256": "0f1a7ec35da36173529c7a60238b7f7919e3831929c3f700ad90ad4896adecd5"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_det/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_det/inference.pdiparams",
+   "kind": "file",
+   "size": 61960476,
+   "mode": "0o644",
+   "sha256": "85218d2e3d98f5a21c58b4220627be923a97aee5db3cc71f39536ab31ac53960"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_det/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_det/inference.yml",
+   "kind": "file",
+   "size": 886,
+   "mode": "0o644",
+   "sha256": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_rec/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_rec/inference.json",
+   "kind": "file",
+   "size": 221814,
+   "mode": "0o644",
+   "sha256": "0b2e25e990bd072f1bf77d59d67d508bce6c4bd44af6624e0fb27d6da2cd00e8"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_rec/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_rec/inference.pdiparams",
+   "kind": "file",
+   "size": 76465087,
+   "mode": "0o644",
+   "sha256": "1b01c79a914587933f615569e75de54f2e638ebb5d3f3b3c1b38c24ede8c7319"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_medium_rec/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_medium_rec/inference.yml",
+   "kind": "file",
+   "size": 150580,
+   "mode": "0o644",
+   "sha256": "991b700facf5b50a7de193468207d5f4255b538dde0d312ae3b7c7a9b6873129"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_det/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_det/inference.json",
+   "kind": "file",
+   "size": 229307,
+   "mode": "0o644",
+   "sha256": "89240f689a4a77aad75ef55a8df0a15c8e1d4980a327d17e58f24bbadde5aeab"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_det/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_det/inference.pdiparams",
+   "kind": "file",
+   "size": 9817888,
+   "mode": "0o644",
+   "sha256": "5043d4ccc8d63402ccea8feefcee4db57077431a873e78d2191836a178a492da"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_det/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_det/inference.yml",
+   "kind": "file",
+   "size": 885,
+   "mode": "0o644",
+   "sha256": "193f435274bf9f0b5f71a929bbfbcf148282df7e633b34e7c373e8f44741b516"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_rec/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_rec/inference.json",
+   "kind": "file",
+   "size": 208004,
+   "mode": "0o644",
+   "sha256": "f0bf53c853937a917affdd74467472167727f8ab0f0f7bded01c4a16c27e46e6"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_rec/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_rec/inference.pdiparams",
+   "kind": "file",
+   "size": 21074618,
+   "mode": "0o644",
+   "sha256": "406e1e689c9a7fbb04178007a3fe10cf852afe7bf8bb3bc6dbb9d532b13bd907"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_small_rec/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_small_rec/inference.yml",
+   "kind": "file",
+   "size": 150579,
+   "mode": "0o644",
+   "sha256": "ab078671bb49f06228eadccd34f1bb501e157f7a047095ffb943ba81512c77d1"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_det/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_det/inference.json",
+   "kind": "file",
+   "size": 229184,
+   "mode": "0o644",
+   "sha256": "935c18972799dd8f2a2ff424b9f8b2c6adee4b89f3a76f0746210ec33ba9b3d8"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_det/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_det/inference.pdiparams",
+   "kind": "file",
+   "size": 1718055,
+   "mode": "0o644",
+   "sha256": "853f7ed317d4f2f80de646842e5bbc32f9d39c601562cbe466cda42e4bafb1b1"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_det/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_det/inference.yml",
+   "kind": "file",
+   "size": 883,
+   "mode": "0o644",
+   "sha256": "3ac018be6f97499a08faa3bbdeb33640968d9307f6736d152902747a9f259593"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_rec/inference.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_rec/inference.json",
+   "kind": "file",
+   "size": 108959,
+   "mode": "0o644",
+   "sha256": "b5b14770c7dcf092781e92f4278a2ae5f95048f08b4b8a04140e88cb2745f147"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_rec/inference.pdiparams",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_rec/inference.pdiparams",
+   "kind": "file",
+   "size": 4420410,
+   "mode": "0o644",
+   "sha256": "bb2f8f54d1e25f28c71b6fa4fe23f5940e159cae27fbee96155c99f822156e57"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PP-OCRv6_tiny_rec/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PP-OCRv6_tiny_rec/inference.yml",
+   "kind": "file",
+   "size": 55571,
+   "mode": "0o644",
+   "sha256": "66170210bad538e83fff3c4a3867e547d6bf20b50d64b20347c4b913f3034ea1"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/._tmp",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/._tmp",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/.msc",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/.msc",
+   "kind": "file",
+   "size": 1346,
+   "mode": "0o600",
+   "sha256": "59c9cb052c56b1b5401a2320215b60b737e70c3e19613296f5f599a6c31bd58f"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/.mv",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/.mv",
+   "kind": "file",
+   "size": 67,
+   "mode": "0o664",
+   "sha256": "2832d1295339050c0f2dbb14e5db73728957793762b06cee673a892b02d495e3"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/LICENSE",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/LICENSE",
+   "kind": "file",
+   "size": 11376,
+   "mode": "0o664",
+   "sha256": "b8c4d7deccd236af023af1c88c4d4e8f0fc2f41914e0fb23a3ec9678fb5a8456"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/README.md",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/README.md",
+   "kind": "file",
+   "size": 21477,
+   "mode": "0o664",
+   "sha256": "4846e008c85a15974486ecd3b49ca8f28adbf47009033b36bdb11f4dad5a8c4b"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/added_tokens.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/added_tokens.json",
+   "kind": "file",
+   "size": 25381,
+   "mode": "0o664",
+   "sha256": "f59f889088e0fe21c523e7cf121bb6dca3b0bb148cb7159fbb4572c74dfc5644"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/chat_template.jinja",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/chat_template.jinja",
+   "kind": "file",
+   "size": 1474,
+   "mode": "0o664",
+   "sha256": "2f27812dab7f333e471884e0c803d807f11953d5453140dfb1aaba234f872bc8"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/config.json",
+   "kind": "file",
+   "size": 2059,
+   "mode": "0o664",
+   "sha256": "ce7f4565f8b1db78532ad5d1b9ebe55c2139d49bd4cb04778b580a08a598f171"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/configuration_paddleocr_vl.py",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/configuration_paddleocr_vl.py",
+   "kind": "file",
+   "size": 8104,
+   "mode": "0o664",
+   "sha256": "753dd93654c3a9c8c85a3eaee1e3092dd12591b0f2dce0305e1abfb7a41ff160"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/generation_config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/generation_config.json",
+   "kind": "file",
+   "size": 133,
+   "mode": "0o664",
+   "sha256": "a6701d78ab3b4d972307cdec3b69d4c13f46e0d5140514f50ab7d84259324b94"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/image_processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/image_processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 25032,
+   "mode": "0o664",
+   "sha256": "a4fa521b9cb16e207f94b7f2d16427771776dfc634420d319fc4916ee58049ec"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/inference.yml",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/inference.yml",
+   "kind": "file",
+   "size": 43,
+   "mode": "0o664",
+   "sha256": "1587aece2d6442366efce34161d5f7d5f67f09ebfbf043168e5fade892c2780e"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/model.safetensors",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/model.safetensors",
+   "kind": "file",
+   "size": 1917255968,
+   "mode": "0o664",
+   "sha256": "85a479d506a11e724e7285d395c551be69f41dbc16b6342d3cacfb189aed71db"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/modeling_paddleocr_vl.py",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/modeling_paddleocr_vl.py",
+   "kind": "file",
+   "size": 103889,
+   "mode": "0o664",
+   "sha256": "c5013dff57ca8b87dc1de64d0fd839a44313de09d230a4fb2d08289d2cad5111"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/preprocessor_config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/preprocessor_config.json",
+   "kind": "file",
+   "size": 641,
+   "mode": "0o664",
+   "sha256": "111872ab1e8bb7fd040ac5087bfced7ab8f011f02139b088cba294964c3b1d0e"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/processing_paddleocr_vl.py",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/processing_paddleocr_vl.py",
+   "kind": "file",
+   "size": 12253,
+   "mode": "0o664",
+   "sha256": "e29cb1e5f275f2bd3ce051bd5c9983a33894e693b2823a0e13d4c07c8c4f9e13"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/processor_config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/processor_config.json",
+   "kind": "file",
+   "size": 137,
+   "mode": "0o664",
+   "sha256": "1568858960a9760c54431dae693a6152e601ff55cdf6d2eab97a4a99958faea0"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/special_tokens_map.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/special_tokens_map.json",
+   "kind": "file",
+   "size": 1151,
+   "mode": "0o664",
+   "sha256": "d3a125c03103deb2acaf7730791bdbbf196f620e5a2213b664511ff9b4b25bab"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/tokenizer.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/tokenizer.json",
+   "kind": "file",
+   "size": 11189060,
+   "mode": "0o664",
+   "sha256": "c8a215a59183d0d0781adc33bacd3ce6162716f7fd568fb30234a74d69803a7d"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/tokenizer.model",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/tokenizer.model",
+   "kind": "file",
+   "size": 1614363,
+   "mode": "0o664",
+   "sha256": "34ef7db83df785924fb83d7b887b6e822a031c56e15cff40aaf9b982988180df"
+  },
+  {
+   "archive": "medrec-assets/paddlex/official_models/PaddleOCR-VL-1.6/tokenizer_config.json",
+   "source": "/home/ubuntu/.paddlex/official_models/PaddleOCR-VL-1.6/tokenizer_config.json",
+   "kind": "file",
+   "size": 186947,
+   "mode": "0o664",
+   "sha256": "1f979337347cc0cb72a6282d8a23ed183539aa81a87a906f022aee2bab83c7c5"
+  },
+  {
+   "archive": "medrec-assets/smoke",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o700",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/smoke/测试医院",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/测试医院",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o700",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/smoke/probe_page.png",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/probe_page.png",
+   "kind": "file",
+   "size": 134849,
+   "mode": "0o664",
+   "sha256": "c3cade75ba7e2a6461e24d14ab317800473c779c00305d3b3efc4a3667956ddd"
+  },
+  {
+   "archive": "medrec-assets/smoke/测试医院/SMOKE0001",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/测试医院/SMOKE0001",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o700",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/smoke/测试医院/SMOKE0002",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/测试医院/SMOKE0002",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o700",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/smoke/测试医院/SMOKE0001/SMOKE0001.pdf",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/测试医院/SMOKE0001/SMOKE0001.pdf",
+   "kind": "file",
+   "size": 353364,
+   "mode": "0o664",
+   "sha256": "539983587bccb2ed0dc6245c0b7423a8894e34cc2a865c03e48a32936845abc7"
+  },
+  {
+   "archive": "medrec-assets/smoke/测试医院/SMOKE0002/SMOKE0002.pdf",
+   "source": "/home/ubuntu/medrec-deploy-round52/smoke_src/测试医院/SMOKE0002/SMOKE0002.pdf",
+   "kind": "file",
+   "size": 349816,
+   "mode": "0o664",
+   "sha256": "386bfae29ddc58034a8da59c1ed0e6ec501c335e918b949bcbda60f6bba11da0"
+  },
+  {
+   "archive": "medrec-assets/wheels",
+   "source": "/home/ubuntu/medrec-deploy-round52/work/wheels",
+   "kind": "dir",
+   "size": 4096,
+   "mode": "0o775",
+   "sha256": ""
+  },
+  {
+   "archive": "medrec-assets/wheels/README.md",
+   "source": "/home/ubuntu/medrec-deploy-round52/work/wheels/README.md",
+   "kind": "file",
+   "size": 2261,
+   "mode": "0o664",
+   "sha256": "1d475404f7928e7d08ba4b4579197da4eb303c0629b3f1d6638114bc2f112771"
+  },
+  {
+   "archive": "medrec-assets/wheels/freeze-ocr-env.txt",
+   "source": "/home/ubuntu/medrec-deploy-round52/work/wheels/freeze-ocr-env.txt",
+   "kind": "file",
+   "size": 2236,
+   "mode": "0o664",
+   "sha256": "d199700b7f9e79684302de130fe75e8f242cf44dc8f1466f549c47e0cc9b20b3"
+  },
+  {
+   "archive": "medrec-assets/wheels/freeze-qwen-env.txt",
+   "source": "/home/ubuntu/medrec-deploy-round52/work/wheels/freeze-qwen-env.txt",
+   "kind": "file",
+   "size": 4314,
+   "mode": "0o664",
+   "sha256": "5f0ccc676833b349aac48bd34c9b9a58abf1ce0fccc7f1392571a514e3763fc8"
+  },
+  {
+   "archive": "medrec-assets/wheels/freeze-vl-env.txt",
+   "source": "/home/ubuntu/medrec-deploy-round52/work/wheels/freeze-vl-env.txt",
+   "kind": "file",
+   "size": 8420,
+   "mode": "0o664",
+   "sha256": "9725c5eadc3a3b23a0e33222e88204c15c495f0f3315cc77f3bfbba1094d84ed"
+  }
+ ]
+}

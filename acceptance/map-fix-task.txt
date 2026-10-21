@@ -1,0 +1,88 @@
+立刻执行，不要复述、不要写标题、不要写计划。每条命令都要真跑，贴原始输出；跑完一条再跑下一条。
+
+固定路径（下文用 B 和 E 指代）
+  B=/home/ubuntu/medrec/jobs/batch_1002_1936
+  E=/home/ubuntu/anaconda3/envs/vl-env/bin/python
+
+命令 0（不通过就停手）
+  test -f /home/ubuntu/medrec/acceptance/variables_f3.baseline.json && echo "基线在位" || echo "缺基线文件"
+  看到「缺」立刻停下只报告这一行。不要自己造替代品。
+
+目标
+  给 /home/ubuntu/medrec/src/variables_f3.json 里「检查」sheet 那些零命中的列，补上对的同义词。
+
+先说清三件事
+
+  1. 改 JSON 本身不会让任何一格填上。「零命中列少了几个」不是成绩，别去优化那个数。
+     上一轮有人给 22 个「检查」列同时加 凝血/糖化血红蛋白/血糖/瓣膜 —— 那是伪造数据，已回滚。
+
+  2. 全局「有效填充率」也不能当成绩：实测它的重跑噪声有 0.54 个百分点，
+     比你改一列能影响的格子（5 格约 0.2 点）还大 2.7 倍。所以只看**目标列自己变成了什么值**。
+
+  3. 一个词只能加到语义上属于它的那一列。判断方法：把词单独拿出来 grep 上下文，
+     那一句讲的必须是**这一列管的那个检查**。
+
+通用词禁令（违反即任务失败）
+  这些词永远不许加进「检查」sheet 的任何列，它们同时属于好几种检查：
+    超声  CT  MRI  B超  血糖  凝血  糖化血红蛋白  瓣膜  血压  心电图
+  反例：给「心脏彩超检查」加「超声」是错的 ——
+        做过颈动脉B超 / 下肢静脉B超 / 腹部超声 的病人会被判成做过心脏彩超。
+
+每轮只处理一列，五步
+
+  1. 看这一列现在的规则（把「列名」换成实际列名）：
+     $E -c "import json,io; d=json.load(io.open('/home/ubuntu/medrec/src/variables_f3.json',encoding='utf-8')); [print(e) for l in d.values() if isinstance(l,list) for e in l if isinstance(e,dict) and e.get('col')=='列名']"
+     注意 extract.layer：是 "rule" 的这一列不走模型，判定是确定的。
+
+  2. 看这一列的检查在原文里实际被写成什么样：
+     grep -rho ".\{0,25\}核心词.\{0,25\}" $B/compiled/*/compiled.md | sort | uniq -c | sort -rn | head -15
+
+  3. 出处核对（加词前必做）：把候选词 grep 出来逐条读，讲的必须是这一列的检查。
+     grep -rho ".\{0,30\}候选词.\{0,30\}" $B/compiled/*/compiled.md | sort | uniq -c | sort -rn | head -8
+
+  4. 快检（秒级，看词进没进表格矩阵）：
+     grep -rl "候选词" $B/compiled/*/tables.json | wc -l
+     改前记一次、改后记一次。从 0 变成 N 才说明生效。
+
+  5. 改 JSON。规矩（违反即任务失败）：
+     - 备份只许写 /tmp：cp /home/ubuntu/medrec/src/variables_f3.json /tmp/vf3.$(date +%H%M%S).bak
+     - 不许碰 /home/ubuntu/medrec/src/ 下任何 .bak 文件
+     - 不许在 /home/ubuntu/medrec/src/ 下新建任何文件（含临时脚本）
+     - 改 JSON 只用 python 的一行 -c，不要落盘成 .py
+     - 改完用 json.load 读一遍确认没坏
+     - **不许改格式**：写回时必须用 indent=1（原文件就是这个缩进）。
+       改前记一次字节数，改完再记一次 —— 差值必须小于 200 字节。
+       如果涨了上万字节，说明整份文件被重排了格式，必须立刻从 /tmp 备份还原重来。
+       （原文件是 217807 字节。变成 25 万字节就是重排了，那是错的。）
+
+每 3 列做一次慢验（约 10 分钟，严格按这个流程）
+  第一步，先清空再跑（不清空会混进上一次的残留）：
+    rm -rf /tmp/slice5 && mkdir -p /tmp/slice5
+    nohup env LLM_MODEL=agent-strong /home/ubuntu/medrec/src/medrec route $B/compiled --limit 5 --outdir /tmp/slice5 --model agent-strong > /tmp/route5.log 2>&1 &
+  第二步，等它跑完，然后**必须验这三条**：
+    tail -2 /tmp/route5.log             看到「完成 5 例」
+    ls /tmp/slice5/*.json | wc -l       **必须正好是 5**。只有 4 就重跑这一轮 ——
+                                        绝对不许拿不足的例数当数，那会让比率凭空变化。
+    grep -c "请求失败" /tmp/route5.log   最好 0
+  第三步，出表并按列看：
+    /home/ubuntu/medrec/src/medrec wide /tmp/slice5 --out /tmp/slice5.xlsx --no-gate --no-abnormal
+    $E -c "import openpyxl,sys,collections; wb=openpyxl.load_workbook('/tmp/slice5.xlsx',read_only=True,data_only=True); ws=wb['Sheet1']; it=ws.iter_rows(values_only=True); hdr=list(next(it)); i=hdr.index(sys.argv[1]); print(sys.argv[1],'->',dict(collections.Counter(str(r[i]) for r in it)))" "列名"
+  改对的标志：那一列从「未提及×5」变成有 未做 / 是 / 具体值 出现。
+
+  注意：wide 那一步会报「零命中列 286 > 80」的门禁告警 —— 那是**误报**，
+  那个阈值是按全批 104 例调的，5 例切片上零命中列自然多。忽略它，不影响读数。
+
+一条硬规矩
+  同一条命令失败两次，立刻停下报告，不要改参数重试。（上一轮有人用同一条错的 sed 重试了 13 次。）
+
+范围
+  只动 variables_f3.json 一个文件，别的文件一律不碰，一轮只改一列。
+
+报告格式（每列一段）
+  列名：
+  加的（想不出就写「想不出」，不要凑数）：
+  出处核对的前 3 条原文：
+  快检：改前 N 例 / 改后 M 例
+  一句话理由：
+
+做完 5 列停下。

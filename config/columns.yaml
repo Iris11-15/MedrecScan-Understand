@@ -1,0 +1,225 @@
+# config/columns.yaml —— 输出宽表的**唯一**列定义
+#
+# 规则：
+#   * header 是宽表里的列名，**原样照搬**用户给的模板，不增删改、不去重。
+#   * id 是代码内部用的稳定键（ASCII，唯一）。重名列靠 id 区分，表头仍按 header 输出。
+#   * source 说明这一列的值从哪来：
+#       frontpage      = 病历首页（病案首页）上有的字段
+#       first_progress = 首次病程记录里的字段
+#       derived        = 由产线自己生成（来源目录 / 输入文件 / 序号）
+#       normalized     = 由 frontpage 的值做**确定性**标准化（规则见 pipeline.yaml:normalize）
+#       computed       = 由其它列算出来（住院天数）
+#       none           = 首页上没有、也没有既定来源 —— 只能填 null，等人工决定
+#   * candidate_labels = 这一列在首页上**可能**出现的标签写法（种子表；
+#     实际生效的映射由 tools/pass1_mapping.py 统计后写进 config/field_mapping.yaml）。
+#   * pii: true 的列不许进 stdout / 日志，日志里打码；输出文件权限 600。
+#
+# 版本改动必须同时改 version，并在 docs/column_mapping.md 里留痕。
+#   2026-10-09.2 首版 34 列
+#   2026-10-09.3 只改 adm_no 的 definition：原写法与实跑行为不一致（实跑把「病案号」同时认领给
+#                adm_no 与 case_no，见 docs/column_mapping.md 歧义表 / 报告 §2.6），改成如实描述。
+#                列的 id / header / source / pii 一律未动。
+#   2026-10-09.4 模板 34 列 → 24 列（用户给的新模板原样照搬）。删掉 10 列：
+#                性别 sex / 医保类型 insurance_type / 质控打分 qc_score / 民族 ethnicity /
+#                入院途径 admit_route / 入院科别 admit_dept / 出院科别 discharge_dept /
+#                是否死亡 is_death / 离院方式 discharge_mode / 非医嘱出院原因 non_medical_discharge_reason。
+#                被删的 10 列里 4 列是勾选框列（sex / insurance_type / admit_route / discharge_mode）
+#                → 剩余 24 列没有任何勾选框字段，plain 副变体失去存在理由（pipeline.yaml:ocr.variants）。
+#                重名列未合并：姓名 [2,8]、标准化入院时间 [18,19]（原 [19,20]）。
+#                用户给的原始列表在「标准化就诊医院」与「出院日期」之间有两个**连续空位**
+#                （制表符），按「空名列丢弃」处理 → 见 suspicions.empty_slots_dropped。
+#   2026-10-12.1 日期类列统一显示格式（round16 §7e 草案 · round19 落地）：
+#                admit_time_raw / admit_time_std / admit_time_std_dup / discharge_date 的
+#                definition 从「原文 / ISO datetime」改为统一「YYYY年MM月DD日」（月/日补零、丢弃时刻）；
+#                admit_time_std / admit_time_std_dup 的 dtype 由 datetime 改 text（语义变更；
+#                dtype/allowed 只用于校验与报告、产线不回填，见本文件 :189）。
+#                adm_no 追加「跨栏尾随串按格式归一化去除」。原文/原值留在 fields.json 的
+#                pre_norm_value / pre_trim_value；归一化实现在 src/wide/s4_normalize.py，
+#                QC flag 在 src/wide/s5_qc.py（date_format_unmatched / id_tail_trimmed）。
+#                ⚠ docs/column_mapping.md 的留痕需由人补（本轮未授权写 docs/）。
+#   2026-10-15.1 round35 B 删列已落地 + round36 收尾对齐（P1/P3/P4）：
+#                **删除 就诊医院（id: hospital）整列**（round35 查明：首页无此字段、106/106 全空，
+#                改由 hospital_std（来源目录 -> pipeline.yaml:hospitals）承担；24 列 -> 23 列）。
+#                本轮同时：admit_time_raw / admit_time_std / admit_time_std_dup 的 definition
+#                按**实跑行为**回写（原文照抄、只丢秒、无时分则 null、只到「时」记 QC admit_time_hour_only，
+#                不再写「丢弃时刻」；依据 src/wide/s4_normalize.py:78-88,554-567 与 s5_qc.py:191-205）。
+#                suspicions.no_known_source 清空为 []（唯一条目「质控打分」随 2026-10-09.4 删列移除）。
+#                ⚠ docs/column_mapping.md 的留痕仍需由人补（本轮未授权写 docs/）。
+version: "2026-10-15.1"
+row_grain: 一行一例（one row per case）
+
+columns:
+  - id: adm_no
+    header: 住院号
+    source: frontpage
+    pii: false
+    candidate_labels: [住院号, 住院病历号, 住院流水号]
+  - id: patient_name
+    header: 姓名
+    source: frontpage
+    pii: true
+    candidate_labels: [姓名, 患者姓名, 病人姓名]
+  - id: source_dir
+    header: 来源目录
+    source: derived
+    pii: false
+  - id: input_file
+    header: 输入文件
+    source: derived
+    pii: false
+  - id: case_no
+    header: 病案号
+    source: frontpage
+    pii: false
+    candidate_labels: [病案号, 病历号, 病案编号, 病人ID]
+  - id: admit_time_raw
+    header: 入院时间（住院时间）
+    source: frontpage
+    pii: false
+    candidate_labels: [入院时间, 入院日期, 住院时间, 入院日期及时间]
+# 2026-10-15 删除 就诊医院 列：首页无此字段，改由 hospital_std（来源目录映射）承担
+  - id: patient_name_dup
+    header: 姓名
+    source: frontpage
+    pii: true
+    mirror_of: patient_name
+    note: "与第 2 列同名（模板原样保留，不合并）。"
+  - id: age
+    header: 年龄
+    source: frontpage
+    pii: false
+    candidate_labels: [年龄, 年龄(岁)]
+  - id: native_place
+    header: 籍贯
+    source: frontpage
+    pii: false
+    candidate_labels: [籍贯, 出生地]
+  - id: id_card
+    header: 身份证号
+    source: frontpage
+    pii: true
+    candidate_labels: [身份证号, 身份证号码]
+  - id: patient_phone
+    header: 本人电话号码
+    source: frontpage
+    pii: true
+    candidate_labels: [电话, 联系电话, 本人电话]
+  - id: address
+    header: 地址
+    source: frontpage
+    pii: true
+    candidate_labels: [现住址, 现地址, 住址, 户口地址]
+  - id: contact_name
+    header: 联系人姓名
+    source: frontpage
+    pii: true
+    candidate_labels: [联系人姓名, 联系人, 紧急联系人]
+  - id: contact_phone
+    header: 联系人电话
+    source: frontpage
+    pii: true
+    candidate_labels: [联系人电话]
+  - id: seq_no
+    header: 序号
+    source: derived
+    pii: false
+  - id: case_no_std
+    header: 标准化病案号
+    source: normalized
+    pii: false
+  - id: admit_time_std
+    header: 标准化入院时间
+    source: normalized
+    pii: false
+  - id: admit_time_std_dup
+    header: 标准化入院时间（住院时间）
+    source: normalized
+    pii: false
+    mirror_of: admit_time_std
+    note: "与第 18 列「标准化入院时间」实质同一个量（模板原样保留，不合并）。两列由同一次标准化写入同一值。"
+  - id: hospital_std
+    header: 标准化就诊医院
+    source: normalized
+    pii: false
+    note: "由来源目录 → config/pipeline.yaml:hospitals 注入（确定性映射）。"
+  - id: discharge_date
+    header: 出院日期
+    source: frontpage
+    pii: false
+    candidate_labels: [出院时间, 出院日期, 出院日期及时间]
+  - id: los_days
+    header: 住院天数（天）
+    source: computed
+    pii: false
+    candidate_labels: [实际住院, 住院天数, 实际住院天数]
+    note: "两条路都试：A 首页「实际住院 N 天」直接取；B 出院日期 − 入院时间。谁命中记 provenance，冲突标 flag。"
+
+  # ---- 首程记录（原文照抄）----
+  - id: chief_complaint
+    header: 主诉
+    source: first_progress
+    pii: false
+    note: "原文照抄，不改写、不规范化、不补标点。"
+  - id: physical_exam
+    header: 查体
+    source: first_progress
+    pii: false
+    note: "原文照抄，不改写、不规范化、不补标点。"
+
+# 重名列 / 疑点（报告里要顶格列出；这里同时给机器可读的登记）
+suspicions:
+  duplicate_headers:
+    - {header: 姓名, ids: [patient_name, patient_name_dup], positions: [2, 8]}
+  same_quantity_pairs:
+    # 2026-10-09.4 起仍在（位置从 [19,20] 前移到 [18,19]）：表头一个带「（住院时间）」后缀、
+    # 一个不带，但是同一个量 —— 模板原样保留，不合并，两列写同一值。
+    - {ids: [admit_time_std, admit_time_std_dup], positions: [18, 19]}
+  no_known_source: []
+    # 本类已清空：唯一条目「质控打分」(qc_score) 随 2026-10-09.4 删列一并移除（见下方 dropped_in_2026_10_09_4）。保留键 + 显式空列表 = 机器可读的「本类为空」，比裸键解析成 None 更不易被误判（tools/pass1_mapping.py:355 读 `or []`）。
+  computed_from_two_paths:
+    - {header: 住院天数（天）, id: los_days, position: 22}
+  # 用户给的原始列表在「标准化就诊医院」与「出院日期」之间有两个**连续空位**（制表符）。
+  # 本次按「空名列丢弃」处理 —— 若那里本应有列名，需用户补充后再加列（加列=升 version）。
+  empty_slots_dropped:
+    - {between: [标准化就诊医院, 出院日期], n_empty_slots: 2,
+       action: dropped_as_empty_column_names, needs: 用户补充列名}
+  # 2026-10-09.4 删掉的 10 列（登记在此，便于回溯；不是当前模板的一部分）
+  dropped_in_2026_10_09_4:
+    - {header: 性别, id: sex, was_position: 12, widget: checkbox}
+    - {header: 医保类型, id: insurance_type, was_position: 21, widget: checkbox}
+    - {header: 质控打分, id: qc_score, was_position: 23}
+    - {header: 民族, id: ethnicity, was_position: 24}
+    - {header: 入院途径, id: admit_route, was_position: 25, widget: checkbox}
+    - {header: 入院科别, id: admit_dept, was_position: 26}
+    - {header: 出院科别, id: discharge_dept, was_position: 27}
+    - {header: 是否死亡, id: is_death, was_position: 28}
+    - {header: 离院方式, id: discharge_mode, was_position: 30, widget: checkbox}
+    - {header: 非医嘱出院原因, id: non_medical_discharge_reason, was_position: 31}
+
+# 变量字典（阶段⑤ variable_dictionary.csv 的来源）。
+# definition = 这一列装什么；dtype = 目标类型；allowed = 取值域（空=自由文本）。
+# 注意：dtype/allowed 只用于**校验与报告**，产线不回填、不改值（红线②）。
+definitions:
+  adm_no:            {definition: 首页「住院号」原样字符串；首页只有「病案号」时当前由写法认领填入（与 case_no 同值，是否撤回待裁决，见 docs/column_mapping.md）；跨栏尾随串（如「住院次数N」）按格式归一化去除，原值留 pre_trim_value, dtype: text, allowed: ""}
+  patient_name:      {definition: 患者姓名原文（PII）, dtype: text, allowed: ""}
+  source_dir:        {definition: 相对 data_root 的来源目录，如 奉化/20230728_008, dtype: text, allowed: ""}
+  input_file:        {definition: 输入 PDF 文件名, dtype: text, allowed: ""}
+  case_no:           {definition: 首页「病案号/病历号」原样字符串, dtype: text, allowed: ""}
+  admit_time_raw:    {definition: 首页「入院时间」**原文照抄**（不重排、不补零、不补值）；只丢秒 —— 印到秒的抄到分（s4 trim_seconds，date_norm=verbatim_trim_seconds），没印秒原样（date_norm=verbatim）；页面只印到「时」就只到「时」并记 QC admit_time_hour_only（按红线⑥不补 00:00）；首页没有该字段则 null, dtype: text, allowed: "首页原文（含时刻，秒丢弃）或 null"}
+  patient_name_dup:  {definition: 模板第 8 列「姓名」，与第 2 列同名，同源同值不合并, dtype: text, allowed: ""}
+  age:               {definition: 首页年龄原文（常带「岁」）, dtype: text, allowed: ""}
+  native_place:      {definition: 籍贯/出生地原文, dtype: text, allowed: ""}
+  id_card:           {definition: 身份证号原文（PII，日志只留前3后2）, dtype: text, allowed: "17 位数字 + 校验位（GB 11643）"}
+  patient_phone:     {definition: 本人电话原文（PII）, dtype: text, allowed: "7–20 位数字"}
+  address:           {definition: 地址原文（PII）；首页有「现住址」「户口地址」两处，取哪个待裁决, dtype: text, allowed: ""}
+  contact_name:      {definition: 联系人姓名原文（PII）, dtype: text, allowed: ""}
+  contact_phone:     {definition: 联系人电话原文（PII）, dtype: text, allowed: "7–20 位数字"}
+  seq_no:            {definition: 产线生成的行序号（1 起，按 manifest 顺序）, dtype: integer, allowed: ">=1"}
+  case_no_std:       {definition: 病案号去非字母数字 + 大写 + 按院区补零, dtype: text, allowed: ""}
+  admit_time_std:    {definition: 入院时间标准化 = admit_time_raw 的 ISO 形态：原文印到分 -> 「YYYY-MM-DD HH:MM」（date_norm=iso_datetime）；只印到时或只印到日 -> 「YYYY-MM-DD」（date_norm=iso_date，**不补 00:00**）；秒丢弃；原文留 raw / pre_norm_value；admit_time_raw 为 null 则本列 null, dtype: text, allowed: "YYYY-MM-DD[ HH:MM] 或 null"}
+  admit_time_std_dup: {definition: 模板第 19 列，与第 18 列同一个量，同源同值不合并；取值与格式同 admit_time_std（ISO「YYYY-MM-DD」，原文印到分时带 HH:MM；时刻保留、秒丢弃、不补 00:00）, dtype: text, allowed: "YYYY-MM-DD[ HH:MM] 或 null"}
+  hospital_std:      {definition: 来源目录 → config/pipeline.yaml:hospitals 的标准化医院名, dtype: text, allowed: "hospitals 表里的 std_name"}
+  discharge_date:    {definition: 出院时间，统一显示为「YYYY年MM月DD日」（本次由「原文」改为统一格式，丢弃时刻；原文留在 pre_norm_value）, dtype: text, allowed: "YYYY年MM月DD日 或 原文"}
+  los_days:          {definition: 住院天数：A 首页「实际住院」/ B 出院−入院，两条路都算并记 provenance, dtype: integer, allowed: "0–365（超出标 outlier）"}
+  chief_complaint:   {definition: 首程「主诉」原文照抄，不改写不补标点, dtype: text, allowed: ""}
+  physical_exam:     {definition: 首程「查体」原文照抄（实际小标题常写「体检」）, dtype: text, allowed: ""}

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>文档识别 · 本地版</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --panel:#fff; --line:#e5e7eb; --line-strong:#d4d7dd;
+    --ink:#1f2328; --ink-2:#5b6472; --ink-3:#8b93a1;
+    --brand:#2563eb; --brand-soft:#eff4ff;
+    --ok:#0f9d58; --warn:#d97706; --err:#dc2626;
+    --radius:10px; color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:14px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",
+         "PingFang SC","Hiragino Sans GB",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;}
+
+  header{
+    background:var(--panel); border-bottom:1px solid var(--line);
+    padding:14px 24px; display:flex; align-items:center; gap:16px;
+    position:sticky; top:0; z-index:20;
+  }
+  header h1{margin:0; font-size:16px; font-weight:650; letter-spacing:-.01em;}
+  header .sub{color:var(--ink-3); font-size:12.5px;}
+  .status{margin-left:auto; display:flex; align-items:center; gap:7px;
+          font-size:12.5px; color:var(--ink-2);}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);}
+  .dot.ok{background:var(--ok);} .dot.bad{background:var(--err);}
+
+  main{max-width:1460px; margin:0 auto; padding:20px 24px 60px;
+       display:grid; grid-template-columns:380px minmax(0,1fr); gap:20px;}
+  @media (max-width:1080px){ main{grid-template-columns:1fr;} }
+
+  .card{background:var(--panel); border:1px solid var(--line);
+        border-radius:var(--radius); padding:18px;}
+  .card h2{margin:0 0 12px; font-size:14px; font-weight:650;}
+
+  #drop{border:1.5px dashed var(--line-strong); border-radius:var(--radius);
+        padding:28px 16px; text-align:center; cursor:pointer;
+        transition:.15s; background:#fbfcfd;}
+  #drop:hover,#drop.over{border-color:var(--brand); background:var(--brand-soft);}
+  #drop .big{font-size:15px; font-weight:600; margin-bottom:6px;}
+  #drop .hint{color:var(--ink-3); font-size:12.5px;}
+  #drop .ico{font-size:26px; margin-bottom:10px;}
+
+  .picked{margin-top:12px; padding:10px 12px; background:var(--brand-soft);
+          border-radius:8px; font-size:12.5px; display:none;}
+  .picked.show{display:block;}
+  .picked .meta{color:var(--ink-2);}
+
+  .opt{margin-top:16px; padding-top:16px; border-top:1px solid var(--line);}
+  label.row{display:flex; align-items:center; gap:9px; padding:6px 0;
+            font-size:13px; cursor:pointer;}
+  label.row input[type=checkbox]{width:16px;height:16px;accent-color:var(--brand);}
+  .field{margin-top:12px;}
+  .field > span{display:block; font-size:12.5px; color:var(--ink-2); margin-bottom:5px;}
+  input[type=number]{width:100%; padding:7px 10px; border:1px solid var(--line-strong);
+    border-radius:7px; font-size:13px; font-family:inherit; background:#fff; color:var(--ink);}
+  .tip{font-size:12px; color:var(--ink-3); margin-top:5px; line-height:1.6;}
+
+  .btn{width:100%; margin-top:18px; padding:11px; border:0; border-radius:8px;
+       background:var(--brand); color:#fff; font-size:14px; font-weight:600;
+       cursor:pointer; transition:.15s;}
+  .btn:hover:not(:disabled){background:#1d4ed8;}
+  .btn:disabled{background:#c7cdd6; cursor:not-allowed;}
+  .btn.ghost{background:#fff; color:var(--ink-2); border:1px solid var(--line-strong);
+             font-weight:500; margin-top:8px;}
+  .btn.ghost:hover:not(:disabled){background:#f3f4f6; color:var(--ink);}
+  .btn.danger{background:#fff; color:var(--err); border:1px solid #fecaca;
+              font-weight:600; margin-top:8px;}
+  .btn.danger:hover{background:#fef2f2;}
+
+  #prog{display:none; margin-top:14px; padding:14px; background:var(--brand-soft);
+        border-radius:8px;}
+  #prog.show{display:block;}
+  .bar{height:5px; background:#dbe4f7; border-radius:99px; overflow:hidden; position:relative;}
+  .bar i{display:block; height:100%; width:0; background:var(--brand);
+         border-radius:99px; transition:width .35s ease;}
+  .bar.indet i{width:30%; animation:sweep 1.4s ease-in-out infinite;}
+  @keyframes sweep{0%{margin-left:-30%}100%{margin-left:100%}}
+  #prog .t{font-size:13px; font-weight:600; margin-bottom:8px;
+           display:flex; align-items:baseline; gap:8px;}
+  #prog .pct{margin-left:auto; font-variant-numeric:tabular-nums;
+             font-size:12.5px; color:var(--brand); font-weight:650;}
+  #prog .s{font-size:12px; color:var(--ink-2); margin-top:8px; line-height:1.7;}
+  .pagelist{margin-top:8px; display:flex; flex-wrap:wrap; gap:4px;}
+  .pg{font-size:11.5px; padding:1px 7px; border-radius:99px; border:1px solid var(--line-strong);
+      color:var(--ink-3); font-variant-numeric:tabular-nums;}
+  .pg.done{background:#e7f6ee; border-color:#b7e3cc; color:var(--ok);}
+  .pg.now{background:var(--brand); border-color:var(--brand); color:#fff;}
+  .pg.bad{background:#fef2f2; border-color:#fecaca; color:var(--err);}
+
+  #result{display:none;} #result.show{display:block;}
+  .tabs{display:flex; gap:4px; border-bottom:1px solid var(--line); margin-bottom:16px;}
+  .tabs button{border:0; background:none; padding:9px 14px; font-size:13.5px;
+    color:var(--ink-2); cursor:pointer; border-bottom:2px solid transparent;
+    margin-bottom:-1px; font-weight:500;}
+  .tabs button.on{color:var(--brand); border-bottom-color:var(--brand); font-weight:600;}
+  .pane{display:none;} .pane.on{display:block;}
+
+  .ptabs{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;}
+  .ptabs button{border:1px solid var(--line-strong); background:#fff; color:var(--ink-2);
+    padding:3px 11px; border-radius:7px; font-size:12.5px; cursor:pointer;
+    font-variant-numeric:tabular-nums;}
+  .ptabs button.on{background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600;}
+
+  .stage{position:relative; border:1px solid var(--line); border-radius:8px;
+         overflow:hidden; background:#fafafa; line-height:0;}
+  .stage img{display:block; width:100%; height:auto;}
+  .ov{position:absolute; inset:0;}
+  .box{position:absolute; border:1.5px solid var(--c);
+       background:color-mix(in srgb,var(--c) 10%,transparent);
+       transition:background .12s; cursor:pointer;}
+  .box:hover,.box.on{background:color-mix(in srgb,var(--c) 30%,transparent); z-index:3;}
+  .box .n{position:absolute; top:-1px; left:-1px; padding:0 4px; font-size:10px;
+    font-weight:700; background:var(--c); color:#fff; line-height:1.5; border-radius:0 0 3px 0;}
+  svg.poly{position:absolute; inset:0; width:100%; height:100%; pointer-events:none;}
+
+  .legend{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
+  .lg{display:inline-flex; align-items:center; gap:5px; font-size:12px;
+    padding:2px 9px; border-radius:99px; border:1px solid var(--c);
+    color:var(--ink-2); background:color-mix(in srgb,var(--c) 8%,transparent);}
+  .lg i{width:8px;height:8px;border-radius:2px;background:var(--c);display:block;}
+  .lg b{font-weight:600; color:var(--ink);}
+
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:9px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+  th{font-size:12px; color:var(--ink-3); font-weight:600; background:#fafbfc;}
+  td.ord{font-variant-numeric:tabular-nums; color:var(--ink-3); width:44px;}
+  td.lbl{white-space:nowrap; width:200px;}
+  .tag{display:inline-block; padding:1px 8px; border-radius:99px; font-size:11.5px;
+    border:1px solid var(--c); color:var(--c);
+    background:color-mix(in srgb,var(--c) 10%,transparent);}
+  td.cnt{white-space:pre-wrap; word-break:break-word; color:var(--ink-2);}
+  tr:hover td{background:#fafbfc;}
+  tr.pagehead td{background:#f3f6fd; color:var(--brand); font-weight:600;}
+
+  /* 路由徽章：这一块走的是快路径还是大模型 */
+  .rb{display:inline-block; padding:0 7px; border-radius:99px; font-size:10.5px;
+      margin-left:6px; border:1px solid; vertical-align:middle; white-space:nowrap;}
+  .rb.fast{color:#0f9d58; border-color:#b7e3cc; background:#e7f6ee;}
+  .rb.vl{color:#7c3aed; border-color:#ddd0f7; background:#f3eeff;}
+  .rb.ph{color:#8b93a1; border-color:#dfe3e8; background:#f6f7f9;}
+  .rb.skip{color:#dc2626; border-color:#fecaca; background:#fef2f2;}
+
+  .lstats{margin-bottom:12px; padding:11px 14px; background:#f8fafc;
+          border:1px solid var(--line); border-radius:8px; font-size:12.5px;
+          color:var(--ink-2); display:none; line-height:1.8;}
+  .lstats.show{display:block;}
+  .lstats b{color:var(--ink); font-variant-numeric:tabular-nums;}
+  .lstats .row2{display:flex; flex-wrap:wrap; gap:6px 16px; margin-top:4px;}
+
+  pre.md{background:#fafbfc; border:1px solid var(--line); border-radius:8px;
+    padding:14px; font-size:12.5px; line-height:1.75; overflow:auto; max-height:70vh;
+    white-space:pre-wrap; word-break:break-word; margin:0;
+    font-family:ui-monospace,Consolas,"Microsoft YaHei",monospace;}
+
+  .dl{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+  .dl button{padding:6px 14px; font-size:12.5px; border:1px solid var(--line-strong);
+    background:#fff; border-radius:7px; cursor:pointer; color:var(--ink-2);}
+  .dl button:hover{background:#f3f4f6; color:var(--ink);}
+  .empty{padding:60px 20px; text-align:center; color:var(--ink-3); font-size:13.5px;}
+  .err{margin-top:14px; padding:12px 14px; background:#fef2f2; color:var(--err);
+    border:1px solid #fecaca; border-radius:8px; font-size:13px; display:none;}
+  .err.show{display:block;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>文档识别</h1>
+  <span class="sub">PaddleOCR-VL 1.6 · 本地运行 · 逐页流式输出</span>
+  <div class="status"><span class="dot" id="dot"></span><span id="stext">检查服务…</span></div>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+      <h2>1. 选择文件</h2>
+      <div id="drop">
+        <div class="ico">📄</div>
+        <div class="big">点击选择，或把文件拖到这里</div>
+        <div class="hint">支持 图片（png / jpg / bmp / webp）与 PDF</div>
+      </div>
+      <input type="file" id="file" hidden accept="image/*,.pdf">
+      <div class="picked" id="picked"></div>
+
+      <div class="opt">
+        <h2>2. 识别模式</h2>
+
+        <div class="field">
+          <span>用哪种方式识别</span>
+          <select id="mode">
+            <option value="layered" selected>分层加速 —— 快路径打底，难块才用大模型</option>
+            <option value="vl">整页大模型 —— 版面结构最完整，但慢得多</option>
+          </select>
+          <div class="tip" id="modeTip"></div>
+        </div>
+
+        <!-- 分层模式参数 -->
+        <div id="layeredBox">
+          <div class="field">
+            <span>难块的 VL 后端</span>
+            <select id="vlBackend">
+              <option value="vllm" selected>vLLM（WSL，每块约 0.2–1 秒）</option>
+              <option value="paddle">native（本机 8080，每块约 8–23 秒）</option>
+            </select>
+            <div class="tip" id="vlTip"></div>
+          </div>
+          <div class="field">
+            <span>升级阈值（低于此置信度的文本块送大模型）</span>
+            <input type="number" id="threshold" value="0.90" min="0.5" max="1" step="0.01">
+            <div class="tip">调高 = 更多块送大模型（更准更慢）；调低 = 更多块用快路径。印刷体清晰的文档可以调到 0.85。</div>
+          </div>
+          <div class="field">
+            <span>每页送大模型的块数上限（留空不限）</span>
+            <input type="number" id="vlLimit" placeholder="不限" min="0" step="1">
+            <div class="tip">兜住最坏情况耗时。设 5 表示每页最多 5 块走大模型，其余标为未处理。</div>
+          </div>
+        </div>
+
+        <!-- 整页模式参数 -->
+        <div id="vlBox" style="display:none">
+          <div class="field">
+            <span>速度档位</span>
+            <select id="speed">
+              <option value="turbo">极速 —— 最快，小字可能糊</option>
+              <option value="fast" selected>快速 —— 推荐（默认）</option>
+              <option value="standard">标准 —— 官方默认参数</option>
+              <option value="fine">精细 —— 最慢，手写/密集表格用</option>
+              <option value="custom">自定义</option>
+            </select>
+            <div class="tip" id="speedTip"></div>
+          </div>
+
+          <div class="field" id="customBox" style="display:none">
+            <span>图像像素上限（maxPixels）</span>
+            <input type="number" id="maxPixels" value="1000000" min="100000" step="100000">
+            <span style="margin-top:10px">块的最小像素（minPixels）</span>
+            <input type="number" id="minPixels" value="80000" min="3136" step="10000">
+            <div class="tip">
+              <b>minPixels 是最大的浪费来源</b>：小于它的块会被强行放大。
+              默认 112896 会把一行 9 千像素的署名撑到 13.8 万（15 倍），
+              而放大不增加信息。
+            </div>
+          </div>
+
+          <label class="row" style="margin-top:10px">
+            <input type="checkbox" id="skipLayout">
+            <span>按整块识别（不做版面分析）</span>
+          </label>
+          <div class="tip">勾上后把整张图当成一个区域直接识别。适用于已经裁好的单一字段。</div>
+        </div>
+      </div>
+
+      <button class="btn" id="go" disabled>开始识别</button>
+      <button class="btn danger" id="stop" style="display:none">停止识别</button>
+      <button class="btn ghost" id="demo">用小示例试一下（约 10 秒）</button>
+
+      <div id="prog">
+        <div class="t"><span id="pt">正在识别…</span><span class="pct" id="ppct"></span></div>
+        <div class="bar" id="pbar"><i></i></div>
+        <div class="s" id="ps">已用时 00:00</div>
+        <div class="pagelist" id="plist"></div>
+      </div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>说明</h2>
+      <div class="tip" style="margin:0">
+        <b>分层加速</b>（推荐）：轻量模型读全页，只有表格 / 公式 / 低置信度的块送大模型。
+        实测约 <b>6–9 秒/页</b>。<br>
+        块列表里的徽章会标出每块走的哪条路：<span class="rb fast">快路径</span>
+        <span class="rb vl">大模型</span> <span class="rb ph">占位</span>。<br><br>
+        <b>整页大模型</b>：版面结构最完整，约 <b>300 秒/页</b>。<br><br>
+        PDF 会逐页识别、逐页出结果，第一页出来就能看。
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>后端启动</h2>
+      <div class="tip" style="margin:0; line-height:2">
+        <b>vLLM（WSL，推荐）</b><br>
+        <code>&amp; $py D:\visonalbe\vl_service.py vllm start</code><br>
+        <b>native（本机 8080）</b><br>
+        <code>pwsh -File D:\visonalbe\serve.ps1</code><br>
+        顶部状态灯会显示两个后端各自是否在线。
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="card">
+      <div id="placeholder" class="empty">识别结果会显示在这里</div>
+
+      <div id="result">
+        <div class="tabs">
+          <button class="on" data-p="viz">版面定位</button>
+          <button data-p="list">内容清单</button>
+          <button data-p="md">Markdown</button>
+        </div>
+
+        <div class="pane on" id="pane-viz">
+          <div class="ptabs" id="ptabs"></div>
+          <div class="stage">
+            <img id="rimg" alt="">
+            <div class="ov" id="rov"></div>
+            <svg class="poly" id="rpoly" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+          </div>
+          <div class="legend" id="rlegend"></div>
+        </div>
+
+        <div class="pane" id="pane-list">
+          <div class="dl">
+            <button id="dlJson">下载 JSON</button>
+            <button id="dlMd">下载 Markdown</button>
+          </div>
+          <div class="lstats" id="lstats"></div>
+          <div style="max-height:72vh;overflow:auto"><table id="rtable">
+            <thead><tr><th>序</th><th>类型</th><th>内容</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+
+        <div class="pane" id="pane-md">
+          <pre class="md" id="rmd"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const CN = {
+  text:"正文", doc_title:"主标题", paragraph_title:"段落标题", title:"标题",
+  table:"表格", formula:"公式", image:"图片", chart:"图表", seal:"印章",
+  figure_title:"图注", vision_footnote:"图片说明", header:"页眉", footer:"页脚",
+  footnote:"脚注", aside_text:"旁注", number:"页码", reference:"参考文献",
+  reference_content:"参考内容", ocr:"文字", content:"内容", abstract:"摘要",
+  algorithm:"算法", display_formula:"公式", inline_formula:"行内公式",
+  header_image:"页眉图", footer_image:"页脚图", formula_number:"公式编号"
+};
+const COLOR = {
+  text:"#2563eb", doc_title:"#7c3aed", paragraph_title:"#7c3aed", title:"#7c3aed",
+  table:"#0f9d58", formula:"#d97706", display_formula:"#d97706",
+  inline_formula:"#d97706", formula_number:"#d97706", image:"#6b7280",
+  chart:"#0891b2", seal:"#dc2626", figure_title:"#8b5cf6",
+  vision_footnote:"#94a3b8", header:"#94a3b8", header_image:"#94a3b8",
+  footer:"#94a3b8", footer_image:"#94a3b8", footnote:"#cbd5e1",
+  aside_text:"#cbd5e1", number:"#cbd5e1", ocr:"#2563eb", content:"#2563eb"
+};
+const cn = k => CN[k] || k;
+const col = k => COLOR[k] || "#94a3b8";
+
+// 后端返回的 inputImage 是**裸 base64，没有 data: 前缀**。
+// 直接塞给 img.src 会被当成相对路径 -> 图片挂掉。
+function toDataUri(b64){
+  if (!b64) return "";
+  if (b64.startsWith("data:")) return b64;
+  const h = b64.slice(0, 8);
+  const mime = h.startsWith("iVBOR")  ? "image/png"
+             : h.startsWith("R0lGOD") ? "image/gif"
+             : h.startsWith("UklGR")  ? "image/webp"
+             : h.startsWith("Qk")     ? "image/bmp"
+             : "image/jpeg";
+  return `data:${mime};base64,${b64}`;
+}
+
+const $ = id => document.getElementById(id);
+const escapeHtml = s => String(s).replace(/[&<>"']/g,
+  c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let pickedFile = null;
+// 单张图片的本地 URL。服务端不再回传原图（那一步实测要 8 秒），
+// 浏览器本地已经有这个文件，直接用它显示。
+let localImageUrl = null;
+let pagesData = [];        // [{index, prunedResult, inputImage, markdown, error, _layered}]
+let totalPages = 0;
+let curPage = 0;
+let timer = null, t0 = 0, ctrl = null;
+let curMode = "layered";
+// ?tab=list 可以在结果出来后直接切到某个标签（截图 / 分享链接用）
+let wantTab = new URLSearchParams(location.search).get("tab");
+
+// ---------------------------------------------------------------- 服务状态
+let svcStatus = { paddle: false, vllm: false };
+
+async function health(){
+  try{
+    const s = await fetch("/api/status").then(r=>r.json());
+    svcStatus = s;
+    $("stext").textContent =
+      `native ${s.paddle ? "✓" : "✗"}   ·   vLLM ${s.vllm ? "✓" : "✗"}`;
+    $("dot").className = "dot " + ((s.paddle || s.vllm) ? "ok" : "bad");
+    applyMode();                      // 状态变了，选择框下面的提示要跟着更新
+  }catch(e){
+    $("dot").className = "dot bad";
+    $("stext").textContent = "界面服务异常";
+  }
+}
+
+// ---------------------------------------------------------------- 模式切换
+function applyMode(){
+  const layered = $("mode").value === "layered";
+  $("layeredBox").style.display = layered ? "block" : "none";
+  $("vlBox").style.display = layered ? "none" : "block";
+
+  $("modeTip").innerHTML = layered
+    ? "先用轻量模型把整页读一遍，<b>只有表格 / 公式 / 低置信度的块</b>才送大模型。" +
+      "实测 <b>约 6–9 秒/页</b>，是日常首选。"
+    : "整页交给 PaddleOCR-VL 产线，版面结构最完整（阅读顺序、表格、公式都还原）。" +
+      "实测 <b>约 300 秒/页</b>，只在质量优先时用。";
+
+  if (layered){
+    const be = $("vlBackend").value;
+    const ok = be === "vllm" ? svcStatus.vllm : svcStatus.paddle;
+    let extra = "";
+    if (ok){
+      if (svcStatus.autoStop){
+        const idle = (svcStatus.idle && svcStatus.idle[be]
+                      && svcStatus.idle[be].seconds) || 0;
+        const left = Math.max(0, (svcStatus.idleTimeout || 0) - idle);
+        extra = ` 空闲 <b>${Math.ceil(left / 60)} 分钟</b>后自动释放显存。`;
+      } else {
+        extra = " 空闲回收已关闭，会一直占用显存。";
+      }
+    }
+    $("vlTip").innerHTML =
+      (be === "vllm"
+        ? "WSL 里的 vLLM，每块约 <b>0.2–1 秒</b>。服务没起时会<b>自动拉起</b>（约 1 分钟）；<b>刚起时第一次调用</b>要编译内核，可能再等 1–2 分钟。"
+        : "本机 8080 上的 PaddleOCR 产线，每块约 <b>8–23 秒</b>。服务没起时会<b>自动拉起</b>（约 1–2 分钟）。")
+      + (ok
+         ? ` <span style="color:#0f9d58">当前可用</span>${extra}`
+         : ' <span style="color:#dc2626">当前未运行——发起识别时会自动启动</span>')
+      + '<br><span style="color:#8b93a1">native 与 vLLM 互斥：各需约 7.5 GB，'
+      + '启动一个会自动停掉另一个。</span>';
+  }
+  applySpeed();
+}
+
+$("mode").onchange = applyMode;
+$("vlBackend").onchange = applyMode;
+
+// ---------------------------------------------------------------- 选文件
+const drop = $("drop");
+drop.onclick = () => $("file").click();
+["dragenter","dragover"].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+$("file").onchange = e => { if (e.target.files[0]) loadFile(e.target.files[0]); };
+
+function sniff(buf, name){
+  const h = new Uint8Array(buf.slice(0,5));
+  const isPdf = h[0]===0x25 && h[1]===0x50 && h[2]===0x44 && h[3]===0x46;
+  return (isPdf || /\.pdf$/i.test(name)) ? 0 : 1;
+}
+
+function loadFile(f){
+  const fr = new FileReader();
+  fr.onload = () => {
+    const buf = fr.result;
+    let bin = "";
+    const u8 = new Uint8Array(buf);
+    for (let i = 0; i < u8.length; i += 8192)
+      bin += String.fromCharCode.apply(null, u8.subarray(i, i + 8192));
+    const ftype = sniff(buf, f.name);
+    if (localImageUrl) URL.revokeObjectURL(localImageUrl);
+    // PDF 的页图只有服务端有，这里不用建本地 URL
+    localImageUrl = (ftype === 1) ? URL.createObjectURL(f) : null;
+    pickedFile = { name: f.name, fileType: ftype, base64: btoa(bin), size: f.size };
+    showPicked();
+    $("go").disabled = false;
+    $("err").classList.remove("show");
+  };
+  fr.readAsArrayBuffer(f);
+}
+
+// 把服务端给的 base64 变成浏览器能显示的 URL（示例图走这条路）
+async function urlFromB64(b64, mime){
+  const bin = atob(b64);
+  const u8 = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return URL.createObjectURL(new Blob([u8], { type: mime || "image/png" }));
+}
+
+function showPicked(){
+  const t = pickedFile.fileType === 0 ? "PDF（将逐页识别）" : "图片";
+  $("picked").className = "picked show";
+  $("picked").innerHTML =
+    `已选择：<b>${escapeHtml(pickedFile.name)}</b><br>` +
+    `<span class="meta">类型 ${t} · ${(pickedFile.size/1024).toFixed(1)} KB ` +
+    `· 自动判定 fileType=${pickedFile.fileType}</span>`;
+}
+
+// ---------------------------------------------------------------- 示例
+$("demo").onclick = async () => {
+  $("demo").disabled = true;
+  try{
+    const s = await fetch("/api/sample").then(r=>r.json());
+    if (!s.file) throw new Error(s.msg || "没有示例");
+    if (localImageUrl) URL.revokeObjectURL(localImageUrl);
+    localImageUrl = s.fileType === 1 ? await urlFromB64(s.file) : null;
+    pickedFile = { name: s.name, fileType: s.fileType, base64: s.file,
+                   size: Math.floor(s.file.length*0.75) };
+    showPicked();
+    $("go").disabled = false;
+    run();
+  }catch(e){ fail(e.message); }
+  finally{ $("demo").disabled = false; }
+};
+
+// ---------------------------------------------------------------- 速度档位
+// maxPixels 影响视觉 token 总数（线性）；minPixels 决定小块被强行放大到多少，
+// 是块级识别最大的浪费来源；maxNewTokens 防止病态长生成（默认 8192 太宽）。
+const PRESETS = {
+  turbo:    { maxPixels: 500000,  minPixels: 40000,   maxNewTokens: 1024,
+              tip: "最快。maxPixels=50万、minPixels=4万。适合版面简单、字够大的文档；小字和手写会掉准确率。" },
+  fast:     { maxPixels: 1000000, minPixels: 80000,   maxNewTokens: 2048,
+              tip: "推荐。maxPixels=100万、minPixels=8万。比「标准」少约 1/3 视觉 token，常规文档够用。" },
+  standard: { maxPixels: 1003520, minPixels: 112896,  maxNewTokens: 8192,
+              tip: "官方默认参数（maxPixels=100万、minPixels=11.3万）。准确率基线，速度最慢。" },
+  fine:     { maxPixels: 2500000, minPixels: 112896,  maxNewTokens: 8192,
+              tip: "最慢。maxPixels=250万，字小、手写、密集表格用。显存峰值会明显升高（8GB 卡注意）。" },
+  custom:   { tip: "手动填下面的两个值。" }
+};
+
+function currentParams(){
+  const k = $("speed").value;
+  if (k === "custom"){
+    return {
+      maxPixels: parseInt($("maxPixels").value, 10) || 1000000,
+      minPixels: parseInt($("minPixels").value, 10) || 80000,
+      maxNewTokens: 2048
+    };
+  }
+  const p = PRESETS[k];
+  return { maxPixels: p.maxPixels, minPixels: p.minPixels, maxNewTokens: p.maxNewTokens };
+}
+
+function applySpeed(){
+  const k = $("speed").value;
+  $("customBox").style.display = (k === "custom") ? "block" : "none";
+  const p = currentParams();
+  const speed = k === "turbo" ? "最快" : k === "fast" ? "较快"
+              : k === "standard" ? "基线" : k === "fine" ? "最慢" : "自定义";
+  $("speedTip").innerHTML = PRESETS[k].tip +
+    (k !== "custom"
+      ? `<br><span style="color:#5b6472">实际参数：maxPixels=${p.maxPixels.toLocaleString()}
+         · minPixels=${p.minPixels.toLocaleString()} · maxNewTokens=${p.maxNewTokens}</span>`
+      : "");
+}
+$("speed").onchange = applySpeed;
+
+// ---------------------------------------------------------------- 流式识别
+$("go").onclick = run;
+$("stop").onclick = () => { if (ctrl) ctrl.abort(); };
+
+async function run(){
+  if (!pickedFile) return;
+  $("err").classList.remove("show");
+  $("go").disabled = true; $("demo").disabled = true;
+  $("stop").style.display = "block";
+  $("result").classList.remove("show");
+  $("placeholder").style.display = "block";
+  $("placeholder").textContent = "识别中…";
+
+  pagesData = []; totalPages = 0; curPage = 0;
+  $("plist").innerHTML = ""; $("ptabs").innerHTML = "";
+
+  const mode = $("mode").value;
+  const sp = currentParams();
+  const body = {
+    file: pickedFile.base64,
+    fileType: pickedFile.fileType,
+    returnMarkdownImages: false,
+    mode: mode
+  };
+  if (mode === "layered"){
+    body.vlBackend = $("vlBackend").value;
+    body.threshold = parseFloat($("threshold").value) || 0.90;
+    const lim = parseInt($("vlLimit").value, 10);
+    if (!isNaN(lim) && lim > 0) body.vlLimit = lim;
+  } else {
+    body.maxPixels = sp.maxPixels;
+    body.minPixels = sp.minPixels;
+    body.maxNewTokens = sp.maxNewTokens;
+    if ($("skipLayout").checked){
+      body.useLayoutDetection = false; body.promptLabel = "ocr";
+    }
+  }
+  const isLayered = mode === "layered";
+  curMode = mode;
+
+  t0 = Date.now();
+  $("prog").classList.add("show");
+  $("pbar").classList.add("indet");
+  $("ppct").textContent = "";
+  $("pt").textContent = isLayered
+    ? "分层识别中（快路径 + 难块升级）…"
+    : (pickedFile.fileType === 0 ? "正在拆页…" : "正在识别…");
+  tick();
+  timer = setInterval(tick, 1000);
+
+  ctrl = new AbortController();
+  try{
+    const resp = await fetch("/api/parse-stream", {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body), signal: ctrl.signal
+    });
+    if (!resp.ok){
+      const t = await resp.text();
+      throw new Error(`服务返回 HTTP ${resp.status}：${t.slice(0,200)}`);
+    }
+
+    const reader = resp.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    while (true){
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let nl;
+      while ((nl = buf.indexOf("\n")) >= 0){
+        const line = buf.slice(0, nl).trim();
+        buf = buf.slice(nl + 1);
+        if (line) { try { handleEvent(JSON.parse(line)); } catch(e){} }
+      }
+    }
+    if (totalPages && pagesData.filter(p=>!p.error).length === 0)
+      throw new Error("所有页面都识别失败，看下面的错误详情");
+    finish();
+  }catch(e){
+    clearInterval(timer);
+    $("prog").classList.remove("show");
+    if (e.name === "AbortError") {
+      $("pt").textContent = "已停止";
+      if (pagesData.length) { finish(); }
+      else { $("placeholder").textContent = "已停止，没有结果"; }
+    } else {
+      fail(e.message);
+    }
+  }finally{
+    ctrl = null;
+    $("go").disabled = false; $("demo").disabled = false;
+    $("stop").style.display = "none";
+    $("pbar").classList.remove("indet");
+  }
+}
+
+function handleEvent(ev){
+  if (ev.type === "stage"){
+    // 加载模型 / 启动 vLLM 这类耗时阶段，实时告诉用户在做哪一步
+    $("pt").textContent = ev.msg;
+    return;
+  }
+  if (ev.type === "start"){
+    totalPages = ev.pages;
+    $("pbar").classList.remove("indet");
+    $("pt").textContent = ev.isPdf
+      ? `共 ${totalPages} 页，逐页识别中…`
+      : "识别中…";
+    buildPageChips();
+    return;
+  }
+  if (ev.type === "error"){
+    pagesData.push({ index: ev.index, error: ev.msg });
+    markChip(ev.index, "bad");
+    showErr(`第 ${ev.index + 1} 页失败：${ev.msg}`);
+    updateProgress();
+    return;
+  }
+  if (ev.type === "page"){
+    const r = ev.result || {};
+    pagesData.push({
+      index: ev.index,
+      prunedResult: r.prunedResult || {},
+      inputImage: r.inputImage || "",
+      markdown: (r.markdown || {}).text || "",
+      _layered: r._layered || null
+    });
+    // 第一页到了就立刻显示，不等后面的
+    if ($("result").classList.contains("show") === false){
+      $("placeholder").style.display = "none";
+      $("result").classList.add("show");
+    }
+    if (pagesData.filter(p=>!p.error).length === 1) curPage = ev.index;
+    markChip(ev.index, "done");
+    renderTabs();
+    renderViz(curPage);
+    renderList();
+    renderMd();
+    updateProgress();
+    return;
+  }
+  if (ev.type === "done"){ /* finish() 统一收尾 */ }
+}
+
+function tick(){
+  const s = Math.floor((Date.now()-t0)/1000);
+  const mm = String(Math.floor(s/60)).padStart(2,"0");
+  const ss = String(s%60).padStart(2,"0");
+  const hint = curMode === "layered"
+    ? " · 分层约 6–9 秒/页（首次触发 vLLM 会多等 1–2 分钟编译内核）"
+    : (totalPages > 1 ? " · 每页 2–5 分钟" : " · 整页通常需要 2–5 分钟");
+  $("ps").textContent = `已用时 ${mm}:${ss}${hint}`;
+}
+
+function buildPageChips(){
+  if (totalPages <= 1) { $("plist").innerHTML = ""; return; }
+  $("plist").innerHTML = Array.from({length: totalPages},
+    (_, i) => `<span class="pg${i===0?" now":""}" data-p="${i}">${i+1}</span>`).join("");
+}
+function markChip(i, cls){
+  const el = $("plist").querySelector(`.pg[data-p="${i}"]`);
+  if (!el) return;
+  el.classList.remove("now"); el.classList.add(cls);
+  const next = $("plist").querySelector(`.pg[data-p="${i+1}"]`);
+  if (next && cls === "done") next.classList.add("now");
+}
+function updateProgress(){
+  const ok = pagesData.filter(p => !p.error).length;
+  const doneN = pagesData.length;
+  if (totalPages > 1){
+    $("pbar").querySelector("i").style.width = (doneN/totalPages*100) + "%";
+    $("ppct").textContent = `${doneN}/${totalPages} 页`;
+    $("pt").textContent = doneN < totalPages
+      ? `已完成 ${ok} 页，识别中…` : `全部 ${totalPages} 页完成`;
+  } else if (doneN >= 1){
+    $("pbar").querySelector("i").style.width = "100%";
+    $("ppct").textContent = "完成";
+  }
+}
+
+function finish(){
+  clearInterval(timer);
+  $("prog").classList.remove("show");
+  $("pbar").querySelector("i").style.width = "100%";
+  $("go").disabled = false; $("demo").disabled = false;
+  $("stop").style.display = "none";
+  if (pagesData.some(p => !p.error)){
+    $("placeholder").style.display = "none";
+    $("result").classList.add("show");
+    renderTabs(); renderViz(curPage); renderList(); renderMd();
+    if (wantTab){
+      const b = document.querySelector(`.tabs button[data-p="${wantTab}"]`);
+      if (b) b.click();
+      wantTab = null;
+    }
+  } else {
+    $("placeholder").textContent = "没有可用的结果";
+  }
+}
+
+function showErr(msg){
+  $("err").textContent = msg;
+  $("err").classList.add("show");
+}
+
+// ---------------------------------------------------------------- 渲染
+function renderTabs(){
+  const ok = pagesData.filter(p => !p.error);
+  if (ok.length <= 1){ $("ptabs").innerHTML = ""; return; }
+  $("ptabs").innerHTML = ok.map(p =>
+    `<button data-p="${p.index}" class="${p.index===curPage?"on":""}">第 ${p.index+1} 页</button>`
+  ).join("");
+  $("ptabs").querySelectorAll("button").forEach(b => {
+    b.onclick = () => { curPage = +b.dataset.p; renderTabs(); renderViz(curPage); };
+  });
+}
+
+function renderViz(idx){
+  const p = pagesData.find(x => x.index === idx && !x.error);
+  if (!p) return;
+  const pr = p.prunedResult || {};
+  const blocks = (pr.parsing_res_list || []).filter(b => b.block_bbox);
+  const W = pr.width || 1, H = pr.height || 1;
+
+  $("rimg").src = p.inputImage ? toDataUri(p.inputImage) : (localImageUrl || "");
+  const ov = $("rov"), poly = $("rpoly");
+  ov.innerHTML = ""; poly.innerHTML = "";
+  const legend = {};
+  blocks.forEach((b, i) => {
+    const lbl = b.block_label || "";
+    const c = col(lbl);
+    const [x1,y1,x2,y2] = b.block_bbox;
+    const d = document.createElement("div");
+    d.className = "box"; d.dataset.i = i;
+    d.style.cssText = `left:${x1/W*100}%;top:${y1/H*100}%;` +
+      `width:${(x2-x1)/W*100}%;height:${(y2-y1)/H*100}%;--c:${c}`;
+    d.title = cn(lbl);
+    if (b.block_order != null){
+      const n = document.createElement("span");
+      n.className = "n"; n.textContent = b.block_order;
+      d.appendChild(n);
+    }
+    ov.appendChild(d);
+    if (b.block_polygon_points && b.block_polygon_points.length){
+      const pg = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+      pg.setAttribute("points", b.block_polygon_points
+        .map(pt => `${pt[0]/W*100},${pt[1]/H*100}`).join(" "));
+      pg.setAttribute("fill","none"); pg.setAttribute("stroke",c);
+      pg.setAttribute("stroke-width","0.3");
+      pg.setAttribute("vector-effect","non-scaling-stroke");
+      poly.appendChild(pg);
+    }
+    legend[lbl] = (legend[lbl]||0) + 1;
+  });
+  $("rlegend").innerHTML = Object.entries(legend).sort((a,b)=>b[1]-a[1])
+    .map(([k,v]) => `<span class="lg" style="--c:${col(k)}"><i></i>` +
+      `${escapeHtml(cn(k))} <b>${v}</b></span>`).join("");
+}
+
+// 路由徽章：让用户一眼看到这一块走的是快路径还是大模型
+const ROUTE_BADGE = {
+  fast:        '<span class="rb fast" title="轻量模型直接读出，未动用大模型">快路径</span>',
+  vl:          '<span class="rb vl" title="轻量模型搞不定，升级到大模型">大模型</span>',
+  placeholder: '<span class="rb ph" title="只需占位（图片区），不做识别">占位</span>',
+  skipped:     '<span class="rb skip" title="未处理（--no-vl 或超出块数上限）">未处理</span>',
+  unavailable: '<span class="rb skip" title="VL 服务不可用">服务不可用</span>',
+};
+
+function renderLayeredStats(){
+  const lays = pagesData.map(p => p._layered).filter(Boolean);
+  const el = $("lstats");
+  if (!lays.length){ el.classList.remove("show"); return; }
+
+  const stages = {};
+  let fast = 0, vl = 0, ph = 0;
+  lays.forEach(l => {
+    for (const k in (l.stages || {})) stages[k] = (stages[k] || 0) + l.stages[k];
+    const s = l.summary || {};
+    fast += s.fast || 0; vl += s.vl || 0; ph += s.placeholder || 0;
+  });
+
+  el.innerHTML =
+    `<b>分层路由</b>：快路径 <b>${fast}</b> 块 · 升级大模型 <b>${vl}</b> 块 · 占位 <b>${ph}</b> 块`
+    + `<div class="row2">`
+    + `<span>版面检测 <b>${(stages.layout || 0).toFixed(1)}s</b></span>`
+    + `<span>轻量 OCR <b>${(stages.fast_ocr || 0).toFixed(1)}s</b></span>`
+    + `<span>大模型识别 <b>${(stages.vl_total || 0).toFixed(1)}s</b></span>`
+    + `<span>每页合计 <b>${(stages.page_total || 0).toFixed(1)}s</b></span>`
+    + `</div>`;
+  el.classList.add("show");
+}
+
+function renderList(){
+  renderLayeredStats();
+  const tb = $("rtable").querySelector("tbody");
+  tb.innerHTML = "";
+  const multi = pagesData.filter(p=>!p.error).length > 1 ||
+                pagesData.some(p=>p.error);
+  pagesData.forEach(p => {
+    if (p.error){
+      const tr = document.createElement("tr");
+      tr.className = "pagehead";
+      tr.innerHTML = `<td colspan="3">第 ${p.index+1} 页识别失败：${escapeHtml(p.error)}</td>`;
+      tb.appendChild(tr);
+      return;
+    }
+    const bs = (p.prunedResult || {}).parsing_res_list || [];
+    if (multi){
+      const tr = document.createElement("tr");
+      tr.className = "pagehead";
+      tr.innerHTML = `<td colspan="3">第 ${p.index+1} 页 · ${bs.length} 个块</td>`;
+      tb.appendChild(tr);
+    }
+    bs.forEach((b, i) => {
+      const lbl = b.block_label || "";
+      const content = (b.block_content || "").trim();
+      const tr = document.createElement("tr");
+      tr.dataset.page = p.index; tr.dataset.i = i;
+      tr.innerHTML =
+        `<td class="ord">${b.block_order != null ? b.block_order : "—"}</td>` +
+        `<td class="lbl"><span class="tag" style="--c:${col(lbl)}">${escapeHtml(cn(lbl))}</span>` +
+        (b.route
+          ? (ROUTE_BADGE[b.route] || `<span class="rb ph">${escapeHtml(b.route)}</span>`)
+              .replace('title="', `title="${escapeHtml(b.reason || "")} — `)
+          : "") +
+        `</td>` +
+        `<td class="cnt">${escapeHtml(content.slice(0,600)) ||
+            '<span style="color:#c7cdd6">（空）</span>'}</td>`;
+      tr.onmouseenter = () => { if (p.index === curPage)
+        { const bx = $("rov").querySelector(`.box[data-i="${i}"]`); if (bx) bx.classList.add("on"); } };
+      tr.onmouseleave = () => { const bx = $("rov").querySelector(`.box[data-i="${i}"]`);
+        if (bx) bx.classList.remove("on"); };
+      tb.appendChild(tr);
+    });
+  });
+}
+
+function renderMd(){
+  $("rmd").textContent = pagesData.map(p => {
+    if (p.error) return `<!-- 第 ${p.index+1} 页识别失败: ${p.error} -->`;
+    return (pagesData.filter(x=>!x.error).length > 1 ? `<!-- 第 ${p.index+1} 页 -->\n` : "")
+      + (p.markdown || "");
+  }).join("\n\n");
+}
+
+function fail(msg){
+  showErr("识别失败：" + msg);
+  $("placeholder").textContent = "识别失败";
+}
+
+// ---------------------------------------------------------------- 交互
+document.querySelectorAll(".tabs button").forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("on"));
+    document.querySelectorAll(".pane").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    $("pane-" + b.dataset.p).classList.add("on");
+  };
+});
+$("dlJson").onclick = () => download(
+  (pickedFile ? pickedFile.name.replace(/\.[^.]+$/,"") : "result") + "_result.json",
+  JSON.stringify(pagesData.map(p => p.prunedResult || {}), null, 2));
+$("dlMd").onclick = () => download(
+  (pickedFile ? pickedFile.name.replace(/\.[^.]+$/,"") : "result") + ".md",
+  pagesData.map(p => p.markdown || "").join("\n\n"));
+
+function download(name, text){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type:"text/plain;charset=utf-8"}));
+  a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 3000);
+}
+
+$("rov").addEventListener("click", e => {
+  const box = e.target.closest(".box");
+  if (!box) return;
+  const tr = $("rtable").querySelector(
+    `tbody tr[data-page="${curPage}"][data-i="${box.dataset.i}"]`);
+  if (tr){
+    document.querySelector('.tabs button[data-p="list"]').click();
+    tr.scrollIntoView({block:"center"});
+    tr.style.transition = "background .4s";
+    tr.style.background = "#eff4ff";
+    setTimeout(()=>tr.style.background="", 900);
+  }
+});
+
+applyMode();
+health();
+setInterval(health, 15000);
+if (new URLSearchParams(location.search).get("demo") === "1")
+  window.addEventListener("load", () => $("demo").click());
+</script>
+</body>
+</html>
