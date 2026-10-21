@@ -162,6 +162,22 @@ bin/medrec doctor                     # 产线自检：列数 / 服务 / 产物�
 要点：装抽取模型要 **≥105 GB** 空闲盘；只要 OCR 和宽表就加 `--skip-strata`（15 GB）；
 内存不够 62 GB 时装 `STRATA_MODEL=auto bash install.sh` 让它按内存挑档；装完 `bash health.sh` 自检。
 
+### 包在哪、怎么拿
+
+包在本仓库的 **Releases**（tag `v1.0.1-r54`）。GitHub 单个 Release 资产上限实测 **2 GiB**
+（API 报 `size must be less than 2147483648`），3.64 GB 的整包传不上去 ⇒ 以**两个分卷**发布：
+
+```bash
+cat medrec-deploy-1.0.1-r54-2xl40.tar.gz.part00 \
+    medrec-deploy-1.0.1-r54-2xl40.tar.gz.part01 \
+  > medrec-deploy-1.0.1-r54-2xl40.tar.gz
+sha256sum -c SHA256SUMS.parts                              # 分卷本身没坏
+sha256sum -c medrec-deploy-1.0.1-r54-2xl40.tar.gz.sha256   # 整包 = bd254b3b…3392
+```
+
+合并后的 sha256 与 `deploy/QUICKSTART.txt` 里那个是同一个数 —— 分卷只是 GitHub 传输限制下的搬运方式，
+不是包结构变化。内网直接拷整包就不用合并这一步。
+
 ## 11. 已知限制（不是 bug）
 
 - `bin/medrec run` 的 stdout 会带含姓名的 case 目录名（网页显示时打码，原始日志未改）。
@@ -179,4 +195,3 @@ bin/medrec doctor                     # 产线自检：列数 / 服务 / 产物�
 | 安全边界、隔离跑法、审计 | `docs/security.md` |
 | 新机器部署全过程 | `deploy/QUICKSTART.txt`、`deploy/DELIVERY.md` |
 | 当前状态与待办 | `reports/` 下最新一份 |
-
