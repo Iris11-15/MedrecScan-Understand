@@ -163,7 +163,7 @@ bin/medrec doctor                     # 产线自检：列数 / 服务 / 产物�
 ```bash
 export MEDREC_PAT=<你的 GitHub PAT>        # 仓库设成公开后这一行可以去掉
 curl -fsSL -H "Authorization: Bearer $MEDREC_PAT" -H "Accept: application/octet-stream" \
-  https://api.github.com/repos/Iris11-15/MedrecScan-Understand/releases/assets/661145943 \
+  https://api.github.com/repos/Iris11-15/MedrecScan-Understand/releases/assets/661152249 \
   | bash -s -- --dry-run                  # 先只看计划；确认后去掉 --dry-run 再跑一次
 ```
 
@@ -188,9 +188,9 @@ curl -fsSL -H "Authorization: Bearer $MEDREC_PAT" -H "Accept: application/octet-
 
 | 资产 | 是什么 |
 |---|---|
-| `medrec-deploy-1.0.1-r54-slim-2xl40.tar.gz` | **推荐**：框架 1.5 MB（1,534,649 B / `2cedc7ed…92aec`），权重安装时在线拉 |
+| `medrec-deploy-1.0.1-r54-slim-2xl40.tar.gz` | **推荐**：框架 1.5 MB（1,534,970 B / `d011cccd…a387f`），权重安装时在线拉 |
 | `…slim-2xl40.tar.gz.sha256` | 上面那个包的校验行 |
-| `bootstrap.sh` | 一行安装的入口脚本（asset_id 661145943） |
+| `bootstrap.sh` | 一行安装的入口脚本（asset_id 661152249） |
 | `…2xl40.tar.gz.part00` + `.part01` | 离线整包 3.64 GB（权重在包里），下载后 `cat` 合并 |
 | `SHA256SUMS.parts` / `…2xl40.tar.gz.sha256` | 分卷校验行 / 合并后整包校验行 |
 
