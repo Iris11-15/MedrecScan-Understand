@@ -5,15 +5,27 @@ set -euo pipefail
 
 MEDREC_ROOT="${MEDREC_ROOT:-$HOME/medrec}"
 STRATA_HOME="${STRATA_HOME:-$HOME/Strata}"
-STRATA_CFG="${STRATA_CFG:-$STRATA_HOME/strata-iq3_s.json}"
-PY="${MEDREC_PY:-/home/ubuntu/anaconda3/envs/vl-env/bin/python}"
-PY_VLLM="${PY_VLLM:-/home/ubuntu/anaconda3/envs/qwen-env/bin/python}"
+# round54 P1-4：档位文件名必须和 install.sh 同一个算法（install.sh:35 strata_cfg_path
+# = 档位名整串小写）。写死 strata-iq3_s.json ⇒ QUICKSTART 里 STRATA_MODEL=IQ3_XXS
+# 装完必挂在「找不到配置文件」。
+STRATA_MODEL="${STRATA_MODEL:-IQ3_S}"
+STRATA_CFG="${STRATA_CFG:-$STRATA_HOME/strata-$(printf "%s" "$STRATA_MODEL" | tr "A-Z" "a-z").json}"
+# round54 P1-4：conda 位置必须动态发现（install.sh 用 conda info --base）。
+# 写死 /home/ubuntu/anaconda3 ⇒ 目标机 conda 换个位置，三个服务全起不来。
+CONDA_BASE_RESOLVED="$(conda info --base 2>/dev/null || true)"
+[ -n "$CONDA_BASE_RESOLVED" ] || CONDA_BASE_RESOLVED="${CONDA_BASE:-$HOME/anaconda3}"
+PY="${MEDREC_PY:-$CONDA_BASE_RESOLVED/envs/vl-env/bin/python}"
+PY_VLLM="${PY_VLLM:-$CONDA_BASE_RESOLVED/envs/qwen-env/bin/python}"
 OCR_MODEL="${OCR_MODEL:-$MEDREC_ROOT/models/models/PaddlePaddle--PaddleOCR-VL-1.6/snapshots/master}"
 LOGD="${LOG_DIR:-$MEDREC_ROOT/logs}"
 
 P_STRATA="${PORT_STRATA:-8080}"
 P_VLLM="${PORT_OCR_VL:-8110}"
 P_WEB="${PORT_WEBUI:-8090}"
+
+[ -x "$PY" ] || { echo "[FAIL] 找不到 vl-env 的 python：$PY（conda base=$CONDA_BASE_RESOLVED）" >&2
+                   echo "       补救：MEDREC_PY=/你的/conda/envs/vl-env/bin/python bash start-all.sh" >&2
+                   exit 1; }
 
 # —— brief 3.5 陷阱修正后的默认值（2xL40 拓扑：卡0=OCR，卡1=Strata）——
 OCR_GPU="${OCR_VLLM_GPU:-0}"
@@ -95,7 +107,7 @@ else
     echo "[FAIL] $OCR_MODEL 里没有 config.json —— 十有八九是指到了上一级目录（见 brief 3.2）" >&2
     exit 1
   fi
-  VLLM_BIN="${VLLM_BIN:-/home/ubuntu/anaconda3/envs/qwen-env/bin/vllm}"
+  VLLM_BIN="${VLLM_BIN:-$CONDA_BASE_RESOLVED/envs/qwen-env/bin/vllm}"
   [ -x "$VLLM_BIN" ] || { echo "[FAIL] 找不到 $VLLM_BIN（qwen-env 的 vllm 没装）" >&2; exit 1; }
   echo "[..] 启动 vLLM：GPU=$OCR_GPU gmu=$GMU max-num-seqs=$MAXSEQS max-num-batched-tokens=$MAXBATCHED"
   launch "$MEDREC_ROOT" "$LOGD/ocr_vllm.log" env "CUDA_VISIBLE_DEVICES=$OCR_GPU" "$PY_VLLM" "$VLLM_BIN" serve "$OCR_MODEL" \
@@ -116,7 +128,16 @@ if alive_http "$P_WEB"; then
   record_pid "$P_WEB" webui
 else
   [ -d "$MEDREC_ROOT/webui/static" ] || { echo "[FAIL] 找不到 $MEDREC_ROOT/webui/static —— server.py 用相对路径找 static/，必须 cd 进 webui 再起" >&2; exit 1; }
-  launch "$MEDREC_ROOT/webui" "$LOGD/webui.log" "$PY" server.py
+  # round54 P0-3：交付默认禁掉一切明文出口（含 /api/raw 逐格明文）。
+  # 要临时看明文：WEBUI_DISABLE_PLAIN=0 bash start-all.sh（每次访问都进 _audit.jsonl）。
+  WEBUI_ARGS=()
+  if [ "${WEBUI_DISABLE_PLAIN:-1}" = "1" ]; then
+    WEBUI_ARGS+=(--disable-plain)
+    echo "[..] webui 以 --disable-plain 启动：明文出口全关（含 /api/raw）"
+  else
+    echo "[WARN] WEBUI_DISABLE_PLAIN=0 ⇒ 明文出口开启，任何能访问 $P_WEB 的人都能拖走全表 PII"
+  fi
+  launch "$MEDREC_ROOT/webui" "$LOGD/webui.log" "$PY" server.py ${WEBUI_ARGS[@]+"${WEBUI_ARGS[@]}"}
   wait_for webui "$P_WEB" alive_http "$WEB_WAIT"
   record_pid "$P_WEB" webui
 fi

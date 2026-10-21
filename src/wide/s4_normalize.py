@@ -482,6 +482,13 @@ def process_case(row: dict, cfg: dict, cols_cfg: dict, mapping: dict, batch_dir:
 
     fp = C.read_json(src / "frontpage.json")
     pn = C.read_json(src / "first_progress.json")
+    # round54 P0-1：阶段③自报「没跑完」的两个标记，全仓以前没有任何读取方 ⇒
+    # 首程抽取失败的例带着半成品静默进宽表。这里不拦（不减少行数，红线⑦），
+    # 但必须记账 + 明打一行，让 s5 的 qc_flags 和操作员都看得见。
+    stage3_flags = [m for m in (".incomplete", ".progress_failed") if (src / m).exists()]
+    if stage3_flags:
+        C.warn(f"{case}: 阶段③自报不完整（{'/'.join(stage3_flags)}）"
+               " ⇒ 首程来源的列按缺失处理，已记进 04_norm/_manifest.json 与 QC 台账")
     strategies, llm = fp.get("strategies", {}), fp.get("llm", {})
     null_tokens = list(cfg["normalize"]["null_tokens"])
     priority = list(cfg["normalize"]["merge_priority"])
@@ -742,6 +749,7 @@ def process_case(row: dict, cfg: dict, cols_cfg: dict, mapping: dict, batch_dir:
     n_guarded = sum(1 for f in fields.values() if f.get("raw_rejected"))
     C.write_json(dst / "_manifest.json", {"case_id": case, "n_columns": len(fields),
                                           "n_null": n_null, "n_guarded_null": n_guarded,
+                                          "stage3_flags": stage3_flags,
                                           "n_date_normalized": sum(
                                               1 for x in date_norm_log
                                               if x["action"] == "normalized"),

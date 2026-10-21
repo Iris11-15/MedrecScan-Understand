@@ -54,6 +54,9 @@ OCR_GMU="${OCR_VLLM_GMU:-0.22}"
 OCR_MAX_SEQS="${OCR_MAX_SEQS:-64}"
 OCR_BATCHED_TOKENS="${OCR_BATCHED_TOKENS:-16384}"
 STRATA_GPU="${STRATA_GPU:-1}"
+# round54 P1-5：preflight 的驱动下限。包内 wheel 钉死 CUDA 13.0（qwen-env）+ CUDA 12.9
+# （vl-env paddle），取最严的一条。换更老的 wheel 时才需要下调这个键。
+DRV_MIN="${DRV_MIN:-580.65}"
 
 # ★ 三个状态文件可被环境覆盖：演练时每个假根各带一份记账，回滚才不会把别的根的记账
 #   当成本次安装的动作（实测：一份共享 ledger 让回滚打出 18 条 [KEEP] 噪音）。
@@ -146,10 +149,25 @@ preflight() {
   # ② 驱动
   if ! command -v nvidia-smi >/dev/null 2>&1; then
     f=$((f+1)); bad "② 驱动：找不到 nvidia-smi"
-    say "       补救：装 NVIDIA 驱动（vLLM 0.30 + CUDA 12.x 需要 >=535），装完重跑 preflight"
+    say "       补救：装 NVIDIA 驱动（本包钉死 CUDA 13.0/12.9 wheel，需要 >=${DRV_MIN}），装完重跑 preflight"
   else
     drv="$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null | head -1 || true)"
-    if [ -n "$drv" ]; then ok "② 驱动：$drv"; else f=$((f+1)); bad "② 驱动：nvidia-smi 存在但查不到版本号"; say "       补救：确认 GPU 可被 nvidia-smi 枚举（lspci | grep -i nvidia）"; fi
+    # round54 P1-5：以前只判「有没有版本号」——550.90.07 也算通过（DELIVERY §5 那个假
+    # nvidia-smi 就是 550，preflight 7/7 绿），要到第 3 步建环境/起 vLLM 才炸。
+    # 下限来自包内钉死的 wheel：env/install-qwen-env.txt:100 nvidia-cuda-runtime==13.0.96
+    # （torch 2.13.0+cu130）与 env/install-vl-env.txt:219 nvidia-cuda-runtime-cu12==12.9.37
+    # （paddlepaddle-gpu cu129）。取最严的那条：CUDA 13.0 ⇒ 驱动 >=580.65。
+    if [ -z "$drv" ]; then
+      f=$((f+1)); bad "② 驱动：nvidia-smi 存在但查不到版本号"
+      say "       补救：确认 GPU 可被 nvidia-smi 枚举（lspci | grep -i nvidia）"
+    elif [ "$(printf "%s\n%s\n" "$drv" "$DRV_MIN" | sort -V | head -1)" = "$DRV_MIN" ]; then
+      ok "② 驱动：$drv（要求 >=$DRV_MIN，来自 CUDA 13.0 wheel）"
+    else
+      f=$((f+1)); bad "② 驱动：$drv 低于 $DRV_MIN —— 包内 wheel 是 CUDA 13.0/12.9，跑不起来"
+      say "       补救：升到 >=$DRV_MIN（nvidia-driver-580-server 或更高），装完重跑 preflight"
+      say "       为什么现在拦：不拦的话要到第 3 步 pip 装 wheel / 起 vLLM 才报"
+      say "       「CUDA driver version is insufficient」，那时更难查"
+    fi
   fi
 
   # ③ 卡数与型号：必须恰好 2 张、型号含 L40

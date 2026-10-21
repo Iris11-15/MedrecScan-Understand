@@ -1,12 +1,21 @@
-medrec 部署包 medrec-deploy-1.0.0-r52-2xl40 —— 2×L40 目标机一键安装
+medrec 部署包 medrec-deploy-1.0.1-r54-2xl40 —— 2×L40 目标机一键安装
 ==================================================================
 
+本版 1.0.1-r54：相对 1.0.0-r52 只改 6 处，全是缺陷修复，没有提速/少跑页的改动
+   · s3 超时或半成品的例不再静默进宽表 —— .incomplete 标记现在由 s5_qc 读并记 QC
+   · 收尾 s5/s6 失败不再 exit 0（宽表断链时看板不再全绿），run_steps 非零退出 + 打 [FAIL]
+   · s4 的缺页告警同时写进 RUN_META.warnings（以前只写文件，跑批看不出来）
+   · webui /api/raw 现在过明文闸门 —— 无鉴权拖走全表 PII 的口子已闭
+   · start-all.sh 不再硬编码 /home/ubuntu/anaconda3，conda 装在别处也能起服务
+   · install.sh 增加驱动下限校验（默认 ≥580.65，cu129 wheel 需要），第 3 步才炸的坑提前到 preflight
+ ★ 已在跑的老机器：webui 那条要重启 8090 才生效；新装的目标机装完就是新代码，不用管。
+
 0) 先验包没坏（sha256 与 bundle 同目录，一起发过去的）：
-     sha256sum -c medrec-deploy-1.0.0-r52-2xl40.tar.gz.sha256
+    sha256sum -c medrec-deploy-1.0.1-r54-2xl40.tar.gz.sha256
    ★ 这个 sidecar 是权威值；DELIVERY.md 里的 sha 只是快照（那份文档在包内，改它就变）。
 
-1) 把 medrec-deploy-1.0.0-r52-2xl40.tar.gz 拷到目标机任意目录，解压：
-     tar -xzf medrec-deploy-1.0.0-r52-2xl40.tar.gz && cd medrec-deploy-1.0.0-r52-2xl40
+1) 把 medrec-deploy-1.0.1-r54-2xl40.tar.gz 拷到目标机任意目录，解压：
+     tar -xzf medrec-deploy-1.0.1-r54-2xl40.tar.gz && cd medrec-deploy-1.0.1-r54-2xl40
 
 ★ 磁盘先看清：装 Strata 需要 ≥105 GB 空闲（包+解压 15 GB + Strata 90 GB）；
   只要 OCR+宽表不要 Strata 就 15 GB（第 3 步加 --skip-strata）。

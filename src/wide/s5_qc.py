@@ -270,6 +270,14 @@ def summarize(batch_dir: Path, cols_cfg: dict, cfg: dict, cases: list[str]) -> d
         fields = rec.get("fields", {})
         flags = check_case(fields, cfg, cols_cfg, label_owner)
         flags = flags + page_flags(batch_dir / "02_text" / c)
+        # round54 P0-1：阶段③自报不完整的例以前对 QC 完全静默（标记没人读）。
+        # 不删行、不改值（红线⑦），只让它进 qc_flags.csv 台账 —— 看得见才算数。
+        for _mk, _kind in ((".incomplete", "stage3_incomplete"),
+                           (".progress_failed", "stage3_progress_failed")):
+            if (batch_dir / "03_extract" / c / _mk).exists():
+                flags.append({"column_id": PAGE_FLAG_COL, "kind": _kind,
+                              "detail": f"03_extract/{c}/{_mk} 存在 ⇒ 阶段③自报未跑完，"
+                                        "首程来源的列按缺失处理，需人工确认"})
         C.write_json(batch_dir / STAGE / c / "qc.json",
                      {"case_id": c, "flags": flags,
                       "n_flags": len(flags), "mapping_version": rec.get("mapping_version")})

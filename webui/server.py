@@ -627,6 +627,10 @@ class Handler(BaseHTTPRequestHandler):
         col = q.get("col") or ""
         if not b or row < 0 or not col:
             return self.fail(400, "需要 batch / row(≥0) / col")
+        # round54 P0-3：这一口回的是**未打码原值**（artifacts.view_raw 不做 mask），
+        # 以前它是唯一不过 _plain_gate 的出口 ⇒ --disable-plain 也拦不住逐格遍历。
+        if not self._plain_gate(True, b, "view_raw"):
+            return self.fail(403, "明文（不打码）已被启动参数 --disable-plain 关闭")
         try:
             value = artifacts.view_raw(b, row, col)
         except (OSError, ValueError, FileNotFoundError, LookupError) as exc:

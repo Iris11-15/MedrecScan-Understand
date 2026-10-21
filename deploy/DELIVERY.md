@@ -5,10 +5,29 @@
 > 依据：`medrec-round52-deploy-tune-brief.md`（下称 brief）+ `medrec-round52-codex-task.md`
 > ★ 本轮**没有**改源机器的任何配置、没有重启任何服务、没有删任何文件（副作用披露见 §6-5）
 
+## §0 1.0.1-r54 变更（本轮，2026-10-21）
+
+**只改 6 处，全是缺陷修复**；没有动并发/裁剪/守卫，因此不存在「变快了但少抽了」的风险（红线⑦）。
+取证与夹具见 `workspace/round54/FINDINGS.md`，补丁见 `workspace/round54/patches/01..06-*.patch`。
+
+| # | 落点 | 症状（改前） | 改后 |
+|---|---|---|---|
+| P0-1 | `src/wide/s5_qc.py` | s3 写的 `.incomplete` 标记**没有任何读取方** ⇒ Strata 超时的例带半成品静默进宽表 | s5 读该标记并记 QC `stage3_incomplete`；`s4_normalize.py` 同时把缺页告警写进 `RUN_META.warnings` |
+| P0-2 | `src/wide/tools/run_steps.py` | 收尾 s5/s6 的 rc 不进退出码 ⇒ 宽表断链时 `exit 0`、看板全绿 | 收尾失败 ⇒ 打 `[FAIL] 批次收尾失败：…` 并非零退出 |
+| P0-3 | `webui/server.py` | `/api/raw` 是唯一不过 `_plain_gate` 的出口 ⇒ 任何能访问本机的人可遍历行列拖全表 PII，审计记不到人 | `/api/raw` 走 `_plain_gate(True, b, "view_raw")`，与其余端点同一闸门 |
+| P1-4 | `deploy/start-all.sh` | 硬编码源机 `/home/ubuntu/anaconda3` ⇒ 目标机 conda 换位置全部服务起不来 | 与 `install.sh` 一致的 conda 动态发现 + `[ -x "$PY" ]` 守卫；webui 带 `WEBUI_DISABLE_PLAIN` |
+| P1-5 | `deploy/install.sh` | preflight 不校验驱动 vs cu129 wheel ⇒ 到第 3 步 pip 才炸 | preflight 加 `DRV_MIN`（默认 580.65）比较（`sort -V`） |
+| P1-6 | — | 「默认跑法 batch_run 阶段失败不阻断」 | **核查不成立**：现链已有阻断，未改（见 FINDINGS §2.6） |
+
+★ 已在跑的老机器上，P0-3 要**重启 webui（8090）**才生效；新装的目标机装完就是新代码。
+★ 下面 §1/§2 的 sha 快照与验收记录是 **1.0.0-r52** 那一次的历史证据，**不改写**；
+  1.0.1 的 code 包 sha 见包内 `VERSION` 的 `code_sha256_12`，bundle 一律认包外 sidecar。
+★ 本轮**没有跑新批次**，因此「字段命中数不降」这条回归在 1.0.1 上仍是**未验证项**（见 §5）。
+
 ## §1 交付物：一个 bundle，里面两个包
 
-**要发出去的就是一个文件**：`medrec-deploy-1.0.0-r52-2xl40.tar.gz` —— 解压出同名目录
-`medrec-deploy-1.0.0-r52-2xl40/`，进去 `bash install.sh` 就把环境装好（conda 环境 + 权重 + Strata + 起服务 + 冒烟）。
+**要发出去的就是一个文件**：`medrec-deploy-1.0.1-r54-2xl40.tar.gz` —— 解压出同名目录
+`medrec-deploy-1.0.1-r54-2xl40/`，进去 `bash install.sh` 就把环境装好（conda 环境 + 权重 + Strata + 起服务 + 冒烟）。
 
 发布名 = `medrec-deploy-<版本>-<构建>-<目标机>`。改名不用改脚本：
 `RELEASE_VERSION=1.1.0 RELEASE_BUILD=r53 RELEASE_TARGET=4xl40 bash make_bundle.sh`。
@@ -16,12 +35,12 @@
   证据不改写，看到旧名别当成另一个包。
 
 ★★ **本文档在包内** ⇒ 改它一个字节，bundle 的 size/sha256 就变。所以
-**权威 sha256 写在包外**：`medrec-deploy-1.0.0-r52-2xl40.tar.gz.sha256`（与 bundle 同目录，发过去时一起发）。
+**权威 sha256 写在包外**：`medrec-deploy-1.0.1-r54-2xl40.tar.gz.sha256`（与 bundle 同目录，发过去时一起发）。
 下表与下文里的 sha 是「最后一次打包」那一刻的快照，核对时以 sidecar 为准。
 
 | 包 | 压缩后 | sha256（前 12） | 条目 / 成员 | 解压后 |
 |---|---|---|---|---|
-| **`medrec-deploy-1.0.0-r52-2xl40.tar.gz`** | 见 sidecar | 见 sidecar | **19 条目 / 17 文件 / 16 必需成员** | **3.4 GB** |
+| **`medrec-deploy-1.0.1-r54-2xl40.tar.gz`** | 见 sidecar | 见 sidecar | **19 条目 / 17 文件 / 16 必需成员** | **3.4 GB** |
 | `medrec-code-round52.tar.gz` | 792,077 B（0.76 MB） | `8c17a7f0fdae` | 149 / 138 | 2,477,507 B |
 | `medrec-assets-round52.tar.gz` | 3,637,990,435 B（3.39 GB） | `5f3ed519fad1` | 178 / 134 | 4,529,681,952 B（4.22 GB） |
 

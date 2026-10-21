@@ -533,7 +533,11 @@ def pipeline_run(a, cfg, steps: list, src_root: Path) -> tuple[list, int, dict]:
         print(f"  [s6_final] rc={rc} {tail[-1]['wall_ms']} ms", flush=True)
     records.extend(tail)
 
-    rc_all = 1 if failed else 0
+    tail_bad = [t for t in tail if t["rc"] != 0]
+    if tail_bad:
+        C.err("批次收尾失败：" + ", ".join(f"{t['step']} rc={t['rc']}" for t in tail_bad)
+              + " ⇒ 宽表/QC 可能断链，整批判失败（以前收尾的 rc 不进退出码，看板全绿）")
+    rc_all = 1 if (failed or tail_bad) else 0
     by_step: dict = {}
     for r in records:
         by_step.setdefault(r["step"].replace("_final", "").replace("_incr", ""), 0)
