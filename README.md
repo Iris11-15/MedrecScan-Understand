@@ -178,6 +178,31 @@ sha256sum -c medrec-deploy-1.0.1-r54-2xl40.tar.gz.sha256   # 整包 = bd254b3b�
 合并后的 sha256 与 `deploy/QUICKSTART.txt` 里那个是同一个数 —— 分卷只是 GitHub 传输限制下的搬运方式，
 不是包结构变化。内网直接拷整包就不用合并这一步。
 
+### 一键部署（推荐）
+
+上面那套要手敲合卷、验 sha、解包三步。嫌麻烦就用引导脚本，一条命令做完：
+
+```bash
+curl -fsSL -o bootstrap.sh \
+  https://raw.githubusercontent.com/Iris11-15/MedrecScan-Understand/main/deploy/bootstrap.sh
+bash bootstrap.sh
+```
+
+脚本会自动：挑可用空间最大的分区作工作目录 → 下载两个分卷（**默认断点续传**，断网重跑同一条命令接着来）
+→ 合并 → 验 sha256（字节数 + 哈希两道）→ 解包 → 跑 `install.sh --dry-run` 看 preflight 是否 7/7
+→ 问你是否真装。真装那段直接交棒给 `deploy/install.sh`，不重复实现、不绕过任何检查。
+
+常用变体：
+
+```bash
+bash bootstrap.sh --preflight      # 只到 preflight，不真装（第一次建议先摸底）
+bash bootstrap.sh --yes            # 不问，直接装
+bash bootstrap.sh --skip-strata    # 只要 OCR+宽表，省 90 GB 磁盘
+WORK_ROOT=/data bash bootstrap.sh  # 指定工作分区（默认自动挑最大的）
+```
+
+完整前置条件清单、耗时预估、故障排查见 [`docs/INSTALL-GPU-SERVER.md`](docs/INSTALL-GPU-SERVER.md)。
+
 ## 11. 已知限制（不是 bug）
 
 - `bin/medrec run` 的 stdout 会带含姓名的 case 目录名（网页显示时打码，原始日志未改）。

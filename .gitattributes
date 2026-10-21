@@ -1,0 +1,18 @@
+# 换行符策略：避免 Windows 上编辑后把 CRLF 带进服务器导致
+# "bash: ./bootstrap.sh: /usr/bin/env: bad interpreter: No such file or directory"
+*.sh   text eol=lf
+*.py   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.txt  text eol=lf
+*.md   text eol=lf
+
+# .bat 必须 CRLF，否则 cmd.exe 解析 goto/label 会出错
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# 交付包与二进制不走换行符转换
+*.tar.gz    binary
+*.tar.gz.*  binary
+*.gguf      binary
+*.bin       binary
